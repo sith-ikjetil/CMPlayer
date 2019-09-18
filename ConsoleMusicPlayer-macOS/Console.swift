@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 enum ConsoleColor : Int {
     case black = 0
     case red = 1
@@ -21,13 +22,13 @@ enum ConsoleColor : Int {
 enum ConsoleColorModifier : Int {
     case none = 0
     case bold = 1
-    case dim = 2
-    case italic = 3
-    case underline = 4
-    case blink = 5
-    case inverse = 7
-    case hidden = 8
-    case strikethrough = 9
+    //case dim = 2
+    //case italic = 3
+    //case underline = 4
+    //case blink = 5
+    //case inverse = 7
+    //case hidden = 8
+    //case strikethrough = 9
 }
 
 internal class Console {

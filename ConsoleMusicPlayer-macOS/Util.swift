@@ -82,6 +82,7 @@ internal extension String {
             if Double(ulen) < len {
                 len -= 1
             }
+            len -= Double(msg.count) / 2
             let si = str.index(str.startIndex, offsetBy: Int(len))
             str.insert(contentsOf: msg, at: si)
             return String(str[str.startIndex..<str.index(str.startIndex, offsetBy: maxLength)])
