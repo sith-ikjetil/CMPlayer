@@ -102,3 +102,121 @@ internal extension String {
         }
     }
 }
+
+//
+// Split ms to its parts
+//
+internal func itsSplitMsToHourMinuteSeconds(_ time_ms: UInt64 ) -> (part_hours: UInt64,part_minutes: UInt64,part_seconds: UInt64,part_ms: UInt64)
+{
+    let seconds: UInt64 = time_ms / 1000
+    
+    var part_hours: UInt64 = 0
+    var part_minutes: UInt64 = 0
+    var part_seconds: UInt64 = 0
+    var part_ms: UInt64 = 0
+    
+    part_hours = seconds / 3600;
+    part_minutes = ( seconds - ( part_hours * 3600 ) ) / 60;
+    part_seconds = seconds - ( part_hours * 3600 ) - ( part_minutes * 60 );
+    part_ms = time_ms - ( part_seconds * 1000 ) - ( part_minutes * 60 * 1000 ) - ( part_hours * 3600 * 1000 );
+    
+    return (part_hours, part_minutes, part_seconds, part_ms)
+}
+
+internal func itsSplitHourToYearWeekDayHour(_ houIn: UInt64 ) -> (houRest: UInt64, day: UInt64, week: UInt64, year: UInt64)
+{
+    var houRest: UInt64 = houIn;
+    
+    var day: UInt64 = houIn / 24;
+    var week: UInt64 = day / 7;
+    let year: UInt64 = week / 52;
+    
+    day -= ( week * 7 );
+    
+    week -= ( year * 52 );
+    
+    houRest -= week * 7 * 24;
+    houRest -= day * 24;
+    houRest -= year * 52 * 7 * 24;
+    
+    return (houRest, day, week, year)
+}
+
+internal func itsRenderMsToFullString(_ milliseconds: UInt64,_ bWithMilliseconds: Bool) -> String
+{
+    let (part_hours, min, sec, ms) = itsSplitMsToHourMinuteSeconds(milliseconds)
+    let (houRest, day, week, year) = itsSplitHourToYearWeekDayHour(part_hours)
+    
+    var ss: String = ""
+    
+    if (year > 0) {
+        if (year == 1)
+        {
+            ss += String(year) + " year "
+        }
+        else
+        {
+            ss += String(year) + " years "
+        }
+    }
+    if (week > 0 || year > 0) {
+        if (week == 1 || week == 0) {
+            ss += String(week) + " week "
+        }
+        else
+        {
+            ss += String(week) + " weeks "
+        }
+    }
+    if (day > 0 || week > 0 || year > 0) {
+        if (day == 1 || day == 0)
+        {
+            ss += String(day) + " day "
+        }
+        else
+        {
+            ss += String(day) + " days "
+        }
+    }
+    if (houRest > 0 || day > 0 || week > 0 || year > 0)
+    {
+        if (houRest == 1 || houRest == 0)
+        {
+            ss += String(houRest) + " hour "
+        }
+        else
+        {
+            ss += String(houRest) + " hours "
+        }
+    }
+    
+    if (min < 10) {
+        ss += "0" + String(min) + ":"
+    }
+    else
+    {
+        ss += String(min) + ":"
+    }
+    if (sec < 10) {
+        ss += "0" + String(sec);
+    }
+    else
+    {
+        ss += String(sec);
+    }
+    
+    if (bWithMilliseconds)
+    {
+        if (ms < 10) {
+            ss += ".00" + String(ms);
+        }
+        else if (ms < 100) {
+            ss += ".0" + String(ms);
+        }
+        else {
+            ss += "." + String(ms);
+        }
+    }
+    
+    return ss
+}

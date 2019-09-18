@@ -21,6 +21,10 @@ class Player {
     private var playtime2: Int64 = 0
     private var quit: Bool = false
     private var exitCode: Int32 = 0
+    private let widthSongNo: Int = 8
+    private let widthArtist: Int = 33
+    private let widthSong: Int = 33
+    private let widthTime: Int = 5
     
     func initialize() -> Void {
         self.clearScreen()
@@ -38,7 +42,7 @@ class Player {
         print("\u{001B}[2J")
     }
     
-    func printXY(_ x: Int32,_ y: Int32,_ text: String,_ maxLength: Int,_ padding: PrintPadding,_ paddingChar: Character, _ bgColor: ConsoleColor, _ modifierBg: ConsoleColorModifier, _ colorText: ConsoleColor,_ modifierText: ConsoleColorModifier) -> Void {
+    func printXY(_ x: Int,_ y: Int,_ text: String,_ maxLength: Int,_ padding: PrintPadding,_ paddingChar: Character, _ bgColor: ConsoleColor, _ modifierBg: ConsoleColorModifier, _ colorText: ConsoleColor,_ modifierText: ConsoleColorModifier) -> Void {
         let nmsg = text.convertStringToLengthPaddedString(maxLength, padding, paddingChar)
         print("\u{001B}[(\(y);\(x))H\(Console.applyTextColor(colorBg: bgColor, modifierBg: modifierBg, colorText: colorText, modifierText: modifierText, text: nmsg))")
     }
@@ -53,8 +57,33 @@ class Player {
     }
     
     func renderFrame() {
-        printXY(1,1,"Console Music Player v0.1", 80, .Center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        printXY(1,1,"Console Music Player v0.1", 80, .Center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        printXY(10,22,"12345", 10, .Right, "0", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        printXY(1,4,"Sang No.", widthSongNo, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+        printXY(10,4,"Artist", widthArtist, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+        printXY(43,4,"Song", widthSong, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+        printXY(76,4,"Time", widthTime, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+        printXY(1,5,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none  , ConsoleColor.cyan, ConsoleColorModifier.bold)
+    
+        //
+        // ADD DEMO SONGS
+        //
+        renderSong(6, 123, "Vamp", "Still going strong", 444)
+        renderSong(7, 333, "Dum Dum Boys", "Help", 201)
+    }
+    
+    func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64)
+    {
+        printXY(1, y, String(songNo), widthSongNo, .Left, "0", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        printXY(10, y, artist, widthArtist, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        printXY(43, y, song, widthSong, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        printXY(76, y, itsRenderMsToFullString(time, false), widthTime, .Ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
 }
