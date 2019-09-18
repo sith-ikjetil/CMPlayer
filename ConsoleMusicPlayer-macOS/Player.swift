@@ -7,21 +7,15 @@
 //
 
 import Foundation
-// Color codes
-// black   30
-// red     31
-// green   32
-// yellow  33
-// blue    34
-// magenta 35
-// cyan    36
-// white   37
+import AVFoundation
+import CoreMedia
+
 class Player {
-    private var playtime1: UInt64 = 0
-    private var playtime2: UInt64 = 0
+    private var audio1: AVAudioPlayer? = nil
+    private var audio2: AVAudioPlayer? = nil
     private var quit: Bool = false
     private var exitCode: Int32 = 0
-    private let widthSongNo: Int = 8
+    private let widthSongNo: Int = 7
     private let widthArtist: Int = 33
     private let widthSong: Int = 33
     private let widthTime: Int = 5
@@ -41,30 +35,28 @@ class Player {
     }
     
     func run() -> Int32 {
-        repeat {
+        //repeat {
             renderScreen()
-        } while !quit
-        
+        //} while !quit
+        readLine()
         return exitCode
     }
     
     
     
     func renderScreen() {
-        renderFrame()
         
-        //
-        // ADD DEMO SONGS
-        //
-        
-        renderSong(6, 123, "Vamp", "Still going strong", 444)
-        renderSong(7, 333, "Dum Dum Boys", "Help", 201)
-        
-        var idx: Int = 8
+        var idx: Int = 6
         for s in self.songs {
-            renderSong(idx, idx, "TEST", "SONG", s.playtime)
+            if idx == 23 {
+                break
+            }
+            
+            renderSong(idx, idx, s.artist, s.title, s.duration)
             idx += 1
         }
+        
+        renderFrame()
     }
     
     func renderFrame() {
@@ -78,14 +70,16 @@ class Player {
         
         Console.printXY(76,4,"Time", widthTime, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(1,5,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none  , ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,5,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        
+        Console.printXY(1,23,">:",2, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64)
     {
         Console.printXY(1, y, " ", 82, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1, y, String(songNo), widthSongNo, .Left, "0", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, y, String(songNo), widthSongNo, .Right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(10, y, artist, widthArtist, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
@@ -108,7 +102,6 @@ class Player {
         var results: [String] = []
         do
         {
-            // DEBUG
             let result = try FileManager.default.contentsOfDirectory(atPath: path)
             for r in result {
                 
