@@ -33,6 +33,18 @@ enum ConsoleColorModifier : Int {
 
 internal class Console {
     
+    static func clearScreen() -> Void {
+        print("\u{001B}[2J")
+    }
+    
+    static func hideCursor() -> Void {
+        print("\u{001B}[?25l")
+    }
+    
+    static func showCursor() -> Void {
+        print("\u{001B}[?25h")
+    }
+    
     static func applyTextColor(colorBg: ConsoleColor, modifierBg:  ConsoleColorModifier, colorText: ConsoleColor, modifierText: ConsoleColorModifier, text: String) -> String {
         
         var addToText = 30
@@ -54,4 +66,8 @@ internal class Console {
         return "\u{001B}[\(colorText.rawValue+addToText)m\u{001B}[\(colorBg.rawValue+addToBg)m\(text)"
     }
     
+    static func printXY(_ x: Int,_ y: Int,_ text: String,_ maxLength: Int,_ padding: PrintPadding,_ paddingChar: Character, _ bgColor: ConsoleColor, _ modifierBg: ConsoleColorModifier, _ colorText: ConsoleColor,_ modifierText: ConsoleColorModifier) -> Void {
+        let nmsg = text.convertStringToLengthPaddedString(maxLength, padding, paddingChar)
+        print("\u{001B}[(\(y);\(x))H\(Console.applyTextColor(colorBg: bgColor, modifierBg: modifierBg, colorText: colorText, modifierText: modifierText, text: nmsg))")
+    }
 }
