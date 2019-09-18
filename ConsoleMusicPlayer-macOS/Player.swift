@@ -17,16 +17,25 @@ import Foundation
 // cyan    36
 // white   37
 class Player {
-    private var playtime1: Int64 = 0
-    private var playtime2: Int64 = 0
+    private var playtime1: UInt64 = 0
+    private var playtime2: UInt64 = 0
     private var quit: Bool = false
     private var exitCode: Int32 = 0
     private let widthSongNo: Int = 8
     private let widthArtist: Int = 33
     private let widthSong: Int = 33
     private let widthTime: Int = 5
+    private var musicFormats: [String] = []
+    private var songs: [SongEntry] = []
     
     func initialize() -> Void {
+        PlayerDirectories.ensureDirectoriesExistence()
+        PlayerPreferences.ensureLoadPreferences()
+        
+        self.musicFormats = PlayerPreferences.musicFormats.components(separatedBy: ";")
+        
+        self.initializeSongs()
+
         Console.hideCursor()
         Console.clearScreen()
     }
@@ -44,10 +53,18 @@ class Player {
     func renderScreen() {
         renderFrame()
         
+        //
+        // ADD DEMO SONGS
+        //
         
-        //Console.printXY(10,1,"12345", 10, .Right, "0", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        renderSong(6, 123, "Vamp", "Still going strong", 444)
+        renderSong(7, 333, "Dum Dum Boys", "Help", 201)
         
-        //printXY(20,3,"12345", 10, .Right, "0", ConsoleColor.white, ConsoleColorModifier.none, ConsoleColor.magenta, ConsoleColorModifier.bold)
+        var idx: Int = 8
+        for s in self.songs {
+            renderSong(idx, idx, "TEST", "SONG", s.playtime)
+            idx += 1
+        }
     }
     
     func renderFrame() {
@@ -62,12 +79,6 @@ class Player {
         Console.printXY(76,4,"Time", widthTime, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         Console.printXY(1,5,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none  , ConsoleColor.cyan, ConsoleColorModifier.bold)
-    
-        //
-        // ADD DEMO SONGS
-        //
-        renderSong(6, 123, "Vamp", "Still going strong", 444)
-        renderSong(7, 333, "Dum Dum Boys", "Help", 201)
     }
     
     func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64)
@@ -81,5 +92,58 @@ class Player {
         Console.printXY(43, y, song, widthSong, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(76, y, itsRenderMsToFullString(time, false), widthTime, .Ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+    }
+    
+    func initializeSongs() {
+        // DEBUG
+        let result = findSongs(path: "/Users/kjetilso/Music")
+        //let result = findSongs(path: PlayerPreferences.musicRootPath)
+        for r in result {
+            self.songs.append(SongEntry(path: URL(fileURLWithPath: r)))
+        }
+    }
+    
+    func findSongs(path: String) -> [String]
+    {
+        var results: [String] = []
+        do
+        {
+            // DEBUG
+            let result = try FileManager.default.contentsOfDirectory(atPath: path)
+            for r in result {
+                
+                var nr = "\(path)/\(r)"
+                if path.hasSuffix("/") {
+                    nr = "\(path)\(r)"
+                }
+                
+                if isDirectory(path: nr) {
+                    results.append(contentsOf: findSongs(path: nr))
+                }
+                else {
+                    if FileManager.default.isReadableFile(atPath: nr) {
+                        for f in self.musicFormats {
+                            if r.hasSuffix(f) {
+                                results.append(nr)
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch {
+            print("ERROR findSongs: \(error)")
+            readLine()
+            exit(1)
+        }
+        
+        return results
+    }
+    
+    func isDirectory(path: String) -> Bool {
+        var isDirectory: ObjCBool = true
+        FileManager().fileExists(atPath: path, isDirectory: &isDirectory)
+        return isDirectory.boolValue
     }
 }

@@ -12,6 +12,9 @@
 		D0ED143A23320B4D00FB51C8 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED143723320B4D00FB51C8 /* Player.swift */; };
 		D0ED143B23320B4D00FB51C8 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED143823320B4D00FB51C8 /* Util.swift */; };
 		D0ED143C23320B4D00FB51C8 /* PrintPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED143923320B4D00FB51C8 /* PrintPadding.swift */; };
+		D0ED143E23323C5000FB51C8 /* SongEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED143D23323C5000FB51C8 /* SongEntry.swift */; };
+		D0ED144023323DC400FB51C8 /* PlayerDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED143F23323DC400FB51C8 /* PlayerDirectories.swift */; };
+		D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +36,9 @@
 		D0ED143723320B4D00FB51C8 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		D0ED143823320B4D00FB51C8 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		D0ED143923320B4D00FB51C8 /* PrintPadding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrintPadding.swift; sourceTree = "<group>"; };
+		D0ED143D23323C5000FB51C8 /* SongEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongEntry.swift; sourceTree = "<group>"; };
+		D0ED143F23323DC400FB51C8 /* PlayerDirectories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDirectories.swift; sourceTree = "<group>"; };
+		D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPreferences.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +76,9 @@
 				D0ED143823320B4D00FB51C8 /* Util.swift */,
 				D0ED143523320B4600FB51C8 /* Console.swift */,
 				D0ED142E23320B1B00FB51C8 /* main.swift */,
+				D0ED143D23323C5000FB51C8 /* SongEntry.swift */,
+				D0ED143F23323DC400FB51C8 /* PlayerDirectories.swift */,
+				D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */,
 			);
 			path = "ConsoleMusicPlayer-macOS";
 			sourceTree = "<group>";
@@ -132,6 +141,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0ED142F23320B1B00FB51C8 /* main.swift in Sources */,
+				D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */,
+				D0ED144023323DC400FB51C8 /* PlayerDirectories.swift in Sources */,
+				D0ED143E23323C5000FB51C8 /* SongEntry.swift in Sources */,
 				D0ED143A23320B4D00FB51C8 /* Player.swift in Sources */,
 				D0ED143623320B4600FB51C8 /* Console.swift in Sources */,
 				D0ED143C23320B4D00FB51C8 /* PrintPadding.swift in Sources */,
