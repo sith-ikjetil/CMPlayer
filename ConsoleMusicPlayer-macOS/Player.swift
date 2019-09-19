@@ -30,6 +30,8 @@ class Player {
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.console.music.player.macos.2", attributes: .concurrent)
     private var currentChar: Int32 = -1
+    private let EXIT_CODE_ERROR_FINDING_FILES: Int32 = 1
+    private let EXIT_CODE_ERROR_PLAYING_FILE: Int32 = 2
     
     func initialize() -> Void {
         PlayerDirectories.ensureDirectoriesExistence()
@@ -57,8 +59,8 @@ class Player {
                     self.audio1?.play()
                 }
                 catch {
-                    print("error playing player \(player) on index \(playlistIndex) and error is \(error)")
-                    exit(1)
+                    printErrorMessage(text: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
             else {
@@ -68,8 +70,8 @@ class Player {
                     self.audio1?.play()
                 }
                 catch {
-                    print("error playing player \(player) on index \(playlistIndex) and error is \(error)")
-                    exit(1)
+                    printErrorMessage(text: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
         }
@@ -80,8 +82,8 @@ class Player {
                     self.audio2?.play()
                 }
                 catch {
-                    print("error playing player \(player) on index \(playlistIndex) and error is \(error)")
-                    exit(1)
+                    printErrorMessage(text: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
             else {
@@ -91,14 +93,14 @@ class Player {
                     self.audio2?.play()
                 }
                 catch {
-                    print("error playing player \(player) on index \(playlistIndex) and error is \(error)")
-                    exit(1)
+                    printErrorMessage(text: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
         }
     }
     
-    func skip() -> Void {
+    func skip(crossfade: Bool = true) -> Void {
         self.playlist.removeFirst()
         if self.playlist.count < 2 {
             self.playlist.append( self.songs.randomElement()! )
@@ -109,13 +111,23 @@ class Player {
         
         if self.audioPlayerActive == -1 || self.audioPlayerActive == 2 {
             if self.audio2!.isPlaying {
-                self.audio2!.stop()
+                if !PlayerPreferences.crossfadeSongs || !crossfade {
+                    self.audio2!.stop()
+                }
+                else {
+                    self.audio2!.setVolume(0.0, fadeDuration: Double(PlayerPreferences.crossfadeTimeInSeconds) )
+                }
             }
             self.play(player: 1, playlistIndex: 0)
         }
         else if self.audioPlayerActive == 1 {
             if self.audio1!.isPlaying {
-                self.audio1!.stop()
+                if !PlayerPreferences.crossfadeSongs || !crossfade {
+                    self.audio1!.stop()
+                }
+                else {
+                    self.audio1!.setVolume(0.0, fadeDuration: Double(PlayerPreferences.crossfadeTimeInSeconds) )
+                }
             }
             self.play(player: 2, playlistIndex: 0)
         }
@@ -142,9 +154,10 @@ class Player {
                         self.playlist[0].duration = UInt64(Double(self.playlist[0].length) - time * Double(1000))
                     }
                     
-                    if self.playlist[0].duration <= 2000 {
+                    if (PlayerPreferences.crossfadeSongs && self.playlist[0].duration <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
+                        || self.playlist[0].duration <= 2000 {
                         self.playlist[0].duration = self.playlist[0].length
-                        self.skip()
+                        self.skip(crossfade: PlayerPreferences.crossfadeSongs)
                     }
                 }
                 
@@ -174,7 +187,7 @@ class Player {
                     self.quit = true
                 }
                 if self.isCommandInCommands(self.currentCommand, self.commandsNextSong) {
-                    self.skip()
+                    self.skip(crossfade: false)
                 }
                 
                 self.currentCommand = ""
@@ -253,7 +266,7 @@ class Player {
     
     func initializeSongs() {
         // DEBUG
-        let result = findSongs(path: "/Users/kjetilso/Music")
+        let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
         //let result = findSongs(path: PlayerPreferences.musicRootPath)
         var i: Int = 1
         for r in result {
@@ -304,9 +317,8 @@ class Player {
             }
         }
         catch {
-            print("ERROR findSongs: \(error)")
-            readLine()
-            exit(1)
+            printErrorMessage(text: "EXIT_CODE_ERROR_FINDING_FILES\n\(error)")
+            exit(EXIT_CODE_ERROR_FINDING_FILES)
         }
         
         return results
@@ -316,5 +328,15 @@ class Player {
         var isDirectory: ObjCBool = true
         FileManager().fileExists(atPath: path, isDirectory: &isDirectory)
         return isDirectory.boolValue
+    }
+    
+    func printErrorMessage(text: String) -> Void {
+        Console.clearScreen()
+        Console.printXY(1, 1, "Console Music Player Error", 80, .Center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, 3, text, 80, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.red, ConsoleColorModifier.bold)
+        print("")
+        print("")
+        print(Console.applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white, modifierText: ConsoleColorModifier.bold, text: "> Press ENTER Key To Continue <"))
+        _ = readLine()
     }
 }

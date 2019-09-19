@@ -14,7 +14,7 @@ internal class PlayerDirectories {
         return FileManager.default.homeDirectoryForCurrentUser
     }
     internal static var consoleMusicPlayerDirectory: URL {
-        return PlayerDirectories.homeDirectory.appendingPathComponent("ConsoleMusicPlayer", isDirectory: true)
+        return PlayerDirectories.homeDirectory.appendingPathComponent(".console-music-player", isDirectory: true)
     }
     //internal static var ignitionDirectory: URL {
     //    return IgnitionDirectories.racecore24Directory.appendingPathComponent("Ignition", isDirectory: true)

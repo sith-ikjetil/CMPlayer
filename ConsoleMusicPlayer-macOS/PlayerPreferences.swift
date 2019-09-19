@@ -24,7 +24,8 @@ internal class PlayerPreferences {
     internal static var musicRootPath: String = "~/Music/"
     internal static var musicFormats: String = "mp3;mp2;m4a"
     internal static var autoplayOnStartup: Bool = true
-    internal static var enableBetaFirmware: Bool = false
+    internal static var crossfadeSongs: Bool = true
+    internal static var crossfadeTimeInSeconds: Int = 5
     internal static var logInformation: Bool = true
     internal static var logWarning: Bool = true
     internal static var logError: Bool = true
@@ -49,9 +50,6 @@ internal class PlayerPreferences {
             if elements.count == 1 {
                 let xeGeneral: XMLElement = elements[0]
                 
-                if let aEnableBetaFirmware = xeGeneral.attribute(forName: "enableBetaFirmware") {
-                    PlayerPreferences.enableBetaFirmware = Bool(aEnableBetaFirmware.stringValue ?? "false") ?? false
-                }
                 if let aMusicRootPath = xeGeneral.attribute(forName: "musicRootPath") {
                     PlayerPreferences.musicRootPath = aMusicRootPath.stringValue!
                 }
@@ -60,6 +58,15 @@ internal class PlayerPreferences {
                 }
                 if let aAutoplayOnStartup = xeGeneral.attribute(forName: "autoplayOnStartup" ) {
                     PlayerPreferences.autoplayOnStartup = Bool(aAutoplayOnStartup.stringValue ?? "false") ?? false
+                }
+                if let aCrossfadeSongs = xeGeneral.attribute(forName: "crossfadeSongs" ) {
+                    PlayerPreferences.crossfadeSongs = Bool(aCrossfadeSongs.stringValue ?? "false") ?? false
+                }
+                if let aCrossfadeTimeInSeconds = xeGeneral.attribute(forName: "crossfadeTimeInSeconds" ) {
+                    PlayerPreferences.crossfadeTimeInSeconds = Int(aCrossfadeTimeInSeconds.stringValue ?? "2") ?? 2
+                    if PlayerPreferences.crossfadeTimeInSeconds > 10 {
+                        PlayerPreferences.crossfadeTimeInSeconds = 2
+                    }
                 }
             }
             
@@ -117,11 +124,6 @@ internal class PlayerPreferences {
         let xeGeneral: XMLElement = XMLElement(name: "general")
         xeRoot.addChild(xeGeneral)
         
-        let xnEnableBetaFirmware: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
-        xnEnableBetaFirmware.name = "enableBetaFirmware"
-        xnEnableBetaFirmware.setStringValue(String(PlayerPreferences.enableBetaFirmware), resolvingEntities: true)
-        xeGeneral.addAttribute(xnEnableBetaFirmware)
-        
         let xnMusicRootPath: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
         xnMusicRootPath.name = "musicRootPath"
         xnMusicRootPath.setStringValue(PlayerPreferences.musicRootPath, resolvingEntities: true)
@@ -137,6 +139,15 @@ internal class PlayerPreferences {
         xnAutoplayOnStartup.setStringValue(String(PlayerPreferences.autoplayOnStartup), resolvingEntities: true)
         xeGeneral.addAttribute(xnAutoplayOnStartup)
         
+        let xnCrossfadeSongs: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+        xnCrossfadeSongs.name = "crossfadeSongs"
+        xnCrossfadeSongs.setStringValue(String(PlayerPreferences.crossfadeSongs), resolvingEntities: true)
+        xeGeneral.addAttribute(xnCrossfadeSongs)
+        
+        let xnCrossfadeTimeInSeconds: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+        xnCrossfadeTimeInSeconds.name = "crossfadeTimeInSeconds"
+        xnCrossfadeTimeInSeconds.setStringValue(String(PlayerPreferences.crossfadeTimeInSeconds), resolvingEntities: true)
+        xeGeneral.addAttribute(xnCrossfadeTimeInSeconds)
         
         //
         // log
