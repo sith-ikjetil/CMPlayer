@@ -46,12 +46,12 @@ class Player {
         self.renderScreen()
         
         //
-        // Count down songs
+        // Count down and render songs
         //
         concurrentQueue1.async {
             while !self.quit {
                 
-                self.renderScreen()
+                self.renderSongs()//Screen()
                 
                 if self.playlist.count > 0 {
                     self.playlist[0].duration -= 150
@@ -64,36 +64,28 @@ class Player {
         
         
         //
-        // Get Input
-        //
-        concurrentQueue2.async {
-            while !self.quit {
-        
-                if !self.currentCommandReady {
-                    self.currentChar = getchar()
-                    if self.currentChar != EOF && self.currentChar != 10 {
-                        self.currentCommand.append(String(UnicodeScalar(UInt32(self.currentChar))!))
-                        Console.printXY(1, 2, self.currentCommand, 80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-                    }
-                    else if self.currentChar == 10 {
-                        self.currentCommandReady = true
-                    }
-                }
-            }
-        }
-        
-        //
-        // Act on input
+        // Get Input and Process
         //
         while !self.quit {
-            if self.currentCommandReady {
+
+            self.currentChar = getchar()
+            if self.currentChar != EOF && self.currentChar != 10 && self.currentChar != 127 {
+                self.currentCommand.append(String(UnicodeScalar(UInt32(self.currentChar))!))
+                //Console.printXY(1, 2, self.currentCommand, 80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            }
+            else if self.currentChar == 127 {
+                if self.currentCommand.count > 0 {
+                    self.currentCommand.removeLast()
+                }
+            }
+            else if self.currentChar == 10 {
                 if self.isCommandInCommands(self.currentCommand,self.commandsExit) {
                     self.quit = true
                 }
                 
                 self.currentCommand = ""
-                self.currentCommandReady = false
             }
+            self.renderCommandLine()
         }
         
         return self.exitCode
@@ -111,6 +103,7 @@ class Player {
     func renderScreen() {
         renderFrame()
         renderSongs()
+        renderCommandLine()
     }
     
     func renderSongs() {
@@ -137,8 +130,6 @@ class Player {
         Console.printXY(76,3,"Time", widthTime, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         Console.printXY(1,4,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-        
-        Console.printXY(1,23,">: " + self.currentCommand,80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64)
@@ -152,6 +143,11 @@ class Player {
         Console.printXY(43, y, song, widthSong, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(76, y, itsRenderMsToFullString(time, false), widthTime, .Ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+    }
+    
+    func renderCommandLine()
+    {
+        Console.printXY(1,23,">: " + self.currentCommand,80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     func initializeSongs() {
