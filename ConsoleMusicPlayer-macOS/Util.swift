@@ -61,7 +61,7 @@ internal extension String {
         }
     }
     
-    func convertStringToLengthPaddedString(_ maxLength: Int,_ padding: PrintPadding,_ paddingChar: Character) -> String {
+    func convertStringToLengthPaddedString(_ maxLength: Int,_ padding: PrintPaddingTextAlign,_ paddingChar: Character) -> String {
         let msg: String = self
         if msg.count >= maxLength {
             return msg

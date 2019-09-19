@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum PrintPadding {
+enum PrintPaddingTextAlign {
     case Left
     case Right
     case Center

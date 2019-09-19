@@ -21,6 +21,7 @@ class Player {
     private let widthTime: Int = 5
     private var musicFormats: [String] = []
     private var songs: [SongEntry] = []
+    private var playlist: [SongEntry] = []
     
     func initialize() -> Void {
         PlayerDirectories.ensureDirectoriesExistence()
@@ -35,42 +36,47 @@ class Player {
     }
     
     func run() -> Int32 {
-        //repeat {
-            renderScreen()
-        //} while !quit
-        readLine()
+        self.renderScreen()
+        
+        repeat {
+            Console.printXY(1,23,">: ",3, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            
+            let cmd = readLine(strippingNewline: true)
+            if cmd == "quit" || cmd == "exit" {
+                self.quit = true
+            }
+        } while !self.quit
+        
         return exitCode
     }
     
-    
-    
     func renderScreen() {
         
-        var idx: Int = 6
+        renderFrame()
+        
+        var idx: Int = 5
         for s in self.songs {
             if idx == 23 {
                 break
             }
             
-            renderSong(idx, idx, s.artist, s.title, s.duration)
+            renderSong(idx, idx-4, s.artist, s.title, s.duration)
             idx += 1
         }
-        
-        renderFrame()
     }
     
     func renderFrame() {
         Console.printXY(1,1,"Console Music Player v0.1", 80, .Center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1,4,"Sang No.", widthSongNo, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,3,"Sang No.", widthSongNo, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(10,4,"Artist", widthArtist, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(10,3,"Artist", widthArtist, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(43,4,"Song", widthSong, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(43,3,"Song", widthSong, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(76,4,"Time", widthTime, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(76,3,"Time", widthTime, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(1,5,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,4,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
         
         Console.printXY(1,23,">:",2, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
