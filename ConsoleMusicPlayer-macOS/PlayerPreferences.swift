@@ -23,6 +23,7 @@ internal class PlayerPreferences {
     internal static let preferencesFilename: String = "ConsoleMediaPlayer.Preferences.xml"
     internal static var musicRootPath: String = "~/Music/"
     internal static var musicFormats: String = "mp3;mp2;m4a"
+    internal static var autoplayOnStartup: Bool = true
     internal static var enableBetaFirmware: Bool = false
     internal static var logInformation: Bool = true
     internal static var logWarning: Bool = true
@@ -56,6 +57,9 @@ internal class PlayerPreferences {
                 }
                 if let aMusicFormats = xeGeneral.attribute(forName: "musicFormats") {
                     PlayerPreferences.musicFormats = aMusicFormats.stringValue!
+                }
+                if let aAutoplayOnStartup = xeGeneral.attribute(forName: "autoplayOnStartup" ) {
+                    PlayerPreferences.autoplayOnStartup = Bool(aAutoplayOnStartup.stringValue ?? "false") ?? false
                 }
             }
             
@@ -127,6 +131,12 @@ internal class PlayerPreferences {
         xnMusicFormats.name = "musicFormats"
         xnMusicFormats.setStringValue(PlayerPreferences.musicFormats, resolvingEntities: true)
         xeGeneral.addAttribute(xnMusicFormats)
+        
+        let xnAutoplayOnStartup: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+        xnAutoplayOnStartup.name = "autoplayOnStartup"
+        xnAutoplayOnStartup.setStringValue(String(PlayerPreferences.autoplayOnStartup), resolvingEntities: true)
+        xeGeneral.addAttribute(xnAutoplayOnStartup)
+        
         
         //
         // log

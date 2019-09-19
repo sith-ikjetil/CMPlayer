@@ -13,6 +13,7 @@ import CoreMedia
 class Player {
     private var audio1: AVAudioPlayer? = nil
     private var audio2: AVAudioPlayer? = nil
+    private var audioPlayerActive: Int = -1
     private var quit: Bool = false
     private var exitCode: Int32 = 0
     private let widthSongNo: Int = 8
@@ -24,6 +25,7 @@ class Player {
     private var playlist: [SongEntry] = []
     private var currentCommand: String = ""
     private let commandsExit: [String] = ["exit", "quit"]
+    private let commandsNextSong: [String] = ["next", "skip"]
     private var currentCommandReady: Bool = false
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.console.music.player.macos.2", attributes: .concurrent)
@@ -36,10 +38,87 @@ class Player {
         self.musicFormats = PlayerPreferences.musicFormats.components(separatedBy: ";")
         
         self.initializeSongs()
+        
+        if PlayerPreferences.autoplayOnStartup && self.playlist.count > 0 {
+            self.play(player: 1, playlistIndex: 0)
+        }
 
         Console.hideCursor()
         Console.clearScreen()
         Console.echoOff()
+    }
+    
+    func play(player: Int, playlistIndex: Int) -> Void {
+        self.audioPlayerActive = player
+        if player == 1 {
+            if self.audio1 == nil {
+                do {
+                    self.audio1 = try AVAudioPlayer(contentsOf:self.playlist[playlistIndex].fileURL!)
+                    self.audio1?.play()
+                }
+                catch {
+                    print("error playing player \(player) on index \(playlistIndex) and error is \(error)")
+                    exit(1)
+                }
+            }
+            else {
+                do {
+                    self.audio1?.stop()
+                    self.audio1 = try AVAudioPlayer(contentsOf: self.playlist[playlistIndex].fileURL!)
+                    self.audio1?.play()
+                }
+                catch {
+                    print("error playing player \(player) on index \(playlistIndex) and error is \(error)")
+                    exit(1)
+                }
+            }
+        }
+        else if player == 2 {
+            if self.audio2 == nil {
+                do {
+                    self.audio2 = try AVAudioPlayer(contentsOf:self.playlist[playlistIndex].fileURL!)
+                    self.audio2?.play()
+                }
+                catch {
+                    print("error playing player \(player) on index \(playlistIndex) and error is \(error)")
+                    exit(1)
+                }
+            }
+            else {
+                do {
+                    self.audio2?.stop()
+                    self.audio2 = try AVAudioPlayer(contentsOf: self.playlist[playlistIndex].fileURL!)
+                    self.audio2?.play()
+                }
+                catch {
+                    print("error playing player \(player) on index \(playlistIndex) and error is \(error)")
+                    exit(1)
+                }
+            }
+        }
+    }
+    
+    func skip() -> Void {
+        self.playlist.removeFirst()
+        if self.playlist.count < 2 {
+            self.playlist.append( self.songs.randomElement()! )
+            if self.playlist.count < 2 {
+                self.playlist.append( self.songs.randomElement()! )
+            }
+        }
+        
+        if self.audioPlayerActive == -1 || self.audioPlayerActive == 2 {
+            if self.audio2!.isPlaying {
+                self.audio2!.stop()
+            }
+            self.play(player: 1, playlistIndex: 0)
+        }
+        else if self.audioPlayerActive == 1 {
+            if self.audio1!.isPlaying {
+                self.audio1!.stop()
+            }
+            self.play(player: 2, playlistIndex: 0)
+        }
     }
     
     func run() -> Int32 {
@@ -54,11 +133,23 @@ class Player {
                 self.renderSongs()//Screen()
                 
                 if self.playlist.count > 0 {
-                    self.playlist[0].duration -= 150
+                    if self.audioPlayerActive == 1 {
+                        let time = self.audio1!.currentTime.magnitude
+                        self.playlist[0].duration = UInt64(Double(self.playlist[0].length) - time * Double(1000))
+                    }
+                    else if self.audioPlayerActive == 2 {
+                        let time = self.audio2!.currentTime.magnitude
+                        self.playlist[0].duration = UInt64(Double(self.playlist[0].length) - time * Double(1000))
+                    }
+                    
+                    if self.playlist[0].duration <= 2000 {
+                        self.playlist[0].duration = self.playlist[0].length
+                        self.skip()
+                    }
                 }
                 
                 let second: Double = 1000000
-                usleep(useconds_t(0.150 * second))
+                usleep(useconds_t(0.050 * second))
             }
         }
         
@@ -79,8 +170,11 @@ class Player {
                 }
             }
             else if self.currentChar == 10 {
-                if self.isCommandInCommands(self.currentCommand,self.commandsExit) {
+                if self.isCommandInCommands(self.currentCommand, self.commandsExit) {
                     self.quit = true
+                }
+                if self.isCommandInCommands(self.currentCommand, self.commandsNextSong) {
+                    self.skip()
                 }
                 
                 self.currentCommand = ""
