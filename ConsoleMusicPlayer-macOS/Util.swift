@@ -68,13 +68,13 @@ internal extension String {
         }
         
         switch padding {
-        case .Ignore:
+        case .ignore:
             if msg.count < maxLength {
                 return msg
             }
             let idx = msg.index(msg.startIndex, offsetBy: maxLength)
             return String(msg[msg.startIndex..<idx])
-        case .Center:
+        case .center:
             var str = String(repeating: paddingChar, count: maxLength)
             var len: Double = Double(maxLength)
             len = len / 2.0
@@ -86,13 +86,13 @@ internal extension String {
             let si = str.index(str.startIndex, offsetBy: Int(len))
             str.insert(contentsOf: msg, at: si)
             return String(str[str.startIndex..<str.index(str.startIndex, offsetBy: maxLength)])
-        case .Left:
+        case .left:
             var str = String(repeating: paddingChar, count: maxLength)
             let len = 0
             let si = str.index(str.startIndex, offsetBy: len)
             str.insert(contentsOf: msg, at: si)
             return String(str[str.startIndex..<str.index(str.startIndex, offsetBy: maxLength)])
-        case .Right:
+        case .right:
             var str = String(repeating: paddingChar, count: maxLength)
             let len = maxLength-msg.count
             let si = str.index(str.startIndex, offsetBy: len)

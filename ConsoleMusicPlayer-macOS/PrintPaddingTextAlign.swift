@@ -9,8 +9,8 @@
 import Foundation
 
 enum PrintPaddingTextAlign {
-    case Left
-    case Right
-    case Center
-    case Ignore
+    case left
+    case right
+    case center
+    case ignore
 }

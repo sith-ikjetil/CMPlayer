@@ -34,6 +34,7 @@ enum ConsoleColorModifier : Int {
 internal class Console {
     
     static func clearScreen() -> Void {
+        print(applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
         print("\u{001B}[2J")
     }
     

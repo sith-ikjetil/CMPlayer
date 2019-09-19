@@ -26,12 +26,16 @@ class Player {
     private var currentCommand: String = ""
     private let commandsExit: [String] = ["exit", "quit"]
     private let commandsNextSong: [String] = ["next", "skip"]
+    private let commandsHelp: [String] = ["help","?"]
+    private let commandsPause: [String] = ["pause"]
+    private let commandsResume: [String] = ["resume"]
     private var currentCommandReady: Bool = false
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.console.music.player.macos.2", attributes: .concurrent)
     private var currentChar: Int32 = -1
     private let EXIT_CODE_ERROR_FINDING_FILES: Int32 = 1
     private let EXIT_CODE_ERROR_PLAYING_FILE: Int32 = 2
+    private var isShowingTopWindow = false
     
     func initialize() -> Void {
         PlayerDirectories.ensureDirectoriesExistence()
@@ -100,13 +104,42 @@ class Player {
         }
     }
     
+    func pause() -> Void {
+        if self.audio1 != nil {
+            if self.audio1?.isPlaying ?? false {
+                audio1?.pause()
+            }
+        }
+        
+        if self.audio2 != nil {
+            if self.audio2?.isPlaying ?? false {
+                audio2?.pause()
+            }
+        }
+    }
+    
+    func resume() -> Void {
+        if self.audio1 != nil && self.audioPlayerActive == 1 {
+            if self.audio1?.currentTime.magnitude ?? 0 > 0 {
+                audio1?.play()
+            }
+        }
+        
+        if self.audio2 != nil && self.audioPlayerActive == 2 {
+            if self.audio2?.currentTime.magnitude ?? 0 > 0 {
+                audio2?.play()
+            }
+        }
+    }
+    
     func skip(crossfade: Bool = true) -> Void {
         self.playlist.removeFirst()
         if self.playlist.count < 2 {
-            self.playlist.append( self.songs.randomElement()! )
-            if self.playlist.count < 2 {
-                self.playlist.append( self.songs.randomElement()! )
+            var s = self.songs.randomElement()!
+            while s.fileURL?.absoluteString == self.playlist[0].fileURL?.absoluteString {
+                s = self.songs.randomElement()!
             }
+            self.playlist.append(s)
         }
         
         if self.audioPlayerActive == -1 || self.audioPlayerActive == 2 {
@@ -142,7 +175,9 @@ class Player {
         concurrentQueue1.async {
             while !self.quit {
                 
-                self.renderSongs()//Screen()
+                if !self.isShowingTopWindow {
+                    self.renderSongs()
+                }
                 
                 if self.playlist.count > 0 {
                     if self.audioPlayerActive == 1 {
@@ -172,28 +207,46 @@ class Player {
         //
         while !self.quit {
 
-            self.currentChar = getchar()
-            if self.currentChar != EOF && self.currentChar != 10 && self.currentChar != 127 {
-                self.currentCommand.append(String(UnicodeScalar(UInt32(self.currentChar))!))
-                //Console.printXY(1, 2, self.currentCommand, 80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-            }
-            else if self.currentChar == 127 {
-                if self.currentCommand.count > 0 {
-                    self.currentCommand.removeLast()
+            if !self.isShowingTopWindow {
+                self.currentChar = getchar()
+                if self.currentChar != EOF && self.currentChar != 10 && self.currentChar != 127 {
+                    self.currentCommand.append(String(UnicodeScalar(UInt32(self.currentChar))!))
+                    //Console.printXY(1, 2, self.currentCommand, 80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
                 }
-            }
-            else if self.currentChar == 10 {
-                if self.isCommandInCommands(self.currentCommand, self.commandsExit) {
-                    self.quit = true
+                else if self.currentChar == 127 {
+                    if self.currentCommand.count > 0 {
+                        self.currentCommand.removeLast()
+                    }
                 }
-                if self.isCommandInCommands(self.currentCommand, self.commandsNextSong) {
-                    self.skip(crossfade: false)
+                else if self.currentChar == 10 {
+                    if self.isCommandInCommands(self.currentCommand, self.commandsExit) {
+                        self.quit = true
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsNextSong) {
+                        self.skip(crossfade: false)
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsPause) {
+                        self.pause()
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsResume) {
+                        self.resume()
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsHelp) {
+                        self.isShowingTopWindow = true
+                        self.renderHelp()
+                        var ch = getchar()
+                        while ch == EOF {
+                            ch = getchar()
+                        }
+                        self.isShowingTopWindow = false
+                        Console.clearScreen()
+                        self.renderScreen()
+                    }
+                    self.currentCommand = ""
                 }
-                
-                self.currentCommand = ""
+                self.renderCommandLine()
+                self.renderStatusLine()
             }
-            self.renderCommandLine()
-            self.renderStatusLine()
         }
         
         return self.exitCode
@@ -227,41 +280,63 @@ class Player {
         }
     }
     
-    func renderFrame() {
-        Console.printXY(1,1,"Console Music Player v0.1", 80, .Center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+    func renderFrame() -> Void {
+        Console.printXY(1,1,"Console Music Player v0.1", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1,3,"Sang No.", widthSongNo, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,3,"Song No.", widthSongNo, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(10,3,"Artist", widthArtist, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(10,3,"Artist", widthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(43,3,"Song", widthSong, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(43,3,"Song", widthSong, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(76,3,"Time", widthTime, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(76,3,"Time", widthTime, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(1,4,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,4,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
-    func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64)
+    func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64) -> Void
     {
         //Console.printXY(1, y, " ", 82, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1, y, String(songNo)+" ", widthSongNo+1, .Right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, y, String(songNo)+" ", widthSongNo+1, .right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(10, y, artist, widthArtist, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(10, y, artist, widthArtist, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(43, y, song, widthSong, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(43, y, song, widthSong, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(76, y, itsRenderMsToFullString(time, false), widthTime, .Ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(76, y, itsRenderMsToFullString(time, false), widthTime, .ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
-    func renderCommandLine()
+    func renderCommandLine() -> Void
     {
-        Console.printXY(1,23,">: " + self.currentCommand,80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,23,">: " + self.currentCommand,80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
-    func renderStatusLine()
+    func renderStatusLine() -> Void
     {
-        Console.printXY(1,24,"Files Found: \(self.songs.count)",80, .Center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"Files Found: \(self.songs.count)",80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+    }
+    
+    func renderHelp() -> Void {
+        Console.clearScreen()
+        Console.printXY(1,1,"Console Music Player v0.1", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.printXY(1,3,"### HELP ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+        Console.printXY(1,5," exit, quit", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,6," :: exits application", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.printXY(1,8," next, skip", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,9," :: plays next song", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.printXY(1,11," pause, resume", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,12," :: pauses or resumes playback", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.printXY(1,14," help", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,15," :: shows this help screen while music plays in background", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        
+        Console.printXY(1,23,"PRESS ANY KEY TO EXIT HELP", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     func initializeSongs() {
@@ -332,8 +407,8 @@ class Player {
     
     func printErrorMessage(text: String) -> Void {
         Console.clearScreen()
-        Console.printXY(1, 1, "Console Music Player Error", 80, .Center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        Console.printXY(1, 3, text, 80, .Ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.red, ConsoleColorModifier.bold)
+        Console.printXY(1, 1, "Console Music Player Error", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, 3, text, 80, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.red, ConsoleColorModifier.bold)
         print("")
         print("")
         print(Console.applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white, modifierText: ConsoleColorModifier.bold, text: "> Press ENTER Key To Continue <"))
