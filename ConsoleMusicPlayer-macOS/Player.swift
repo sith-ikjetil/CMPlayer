@@ -180,6 +180,7 @@ class Player {
                 self.currentCommand = ""
             }
             self.renderCommandLine()
+            self.renderStatusLine()
         }
         
         return self.exitCode
@@ -198,6 +199,7 @@ class Player {
         renderFrame()
         renderSongs()
         renderCommandLine()
+        renderStatusLine()
     }
     
     func renderSongs() {
@@ -242,6 +244,11 @@ class Player {
     func renderCommandLine()
     {
         Console.printXY(1,23,">: " + self.currentCommand,80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+    }
+    
+    func renderStatusLine()
+    {
+        Console.printXY(1,24,"Files Found: \(self.songs.count)",80, .Center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     func initializeSongs() {
