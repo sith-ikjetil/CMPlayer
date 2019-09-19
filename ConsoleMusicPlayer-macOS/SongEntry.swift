@@ -10,6 +10,7 @@ import Foundation
 import AVFoundation
 
 internal class SongEntry {
+    var number: Int = 0
     var artist: String = ""
     var title: String = ""
     var duration: UInt64 = 0
@@ -17,14 +18,16 @@ internal class SongEntry {
     
     init()
     {
+        self.number = 0
         self.artist = "<UNKNOWN>"
         self.title = "<UNKNOWN>"
         self.duration = 0
         self.fileURL = nil
     }
     
-    init(path: URL?)
+    init(path: URL?, num: Int)
     {
+        self.number = num
         self.fileURL = path!
         
         let playerItem = AVPlayerItem(url: self.fileURL!)

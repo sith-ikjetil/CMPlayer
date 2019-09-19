@@ -15,7 +15,7 @@ class Player {
     private var audio2: AVAudioPlayer? = nil
     private var quit: Bool = false
     private var exitCode: Int32 = 0
-    private let widthSongNo: Int = 7
+    private let widthSongNo: Int = 8
     private let widthArtist: Int = 33
     private let widthSong: Int = 33
     private let widthTime: Int = 5
@@ -24,7 +24,11 @@ class Player {
     private var playlist: [SongEntry] = []
     private var currentCommand: String = ""
     private let commandsExit: [String] = ["exit", "quit"]
-    private let concurrentQueue = DispatchQueue(label: "cqueue.console.music.player.macos", attributes: .concurrent)
+    private var currentCommandReady: Bool = false
+    private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1", attributes: .concurrent)
+    private let concurrentQueue2 = DispatchQueue(label: "cqueue.console.music.player.macos.2", attributes: .concurrent)
+    private var currentChar: Int32 = -1
+    
     func initialize() -> Void {
         PlayerDirectories.ensureDirectoriesExistence()
         PlayerPreferences.ensureLoadPreferences()
@@ -35,51 +39,64 @@ class Player {
 
         Console.hideCursor()
         Console.clearScreen()
-        
-        var c: cc_t = 0
-        var cct = (c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c)
-        var oldt: termios = termios(c_iflag: 0, c_oflag: 0, c_cflag: 0, c_lflag: 0, c_cc: cct, c_ispeed: 0, c_ospeed: 0)
-        
-        tcgetattr(STDIN_FILENO, &oldt) // 1473
-        var newt = oldt
-        
-        newt.c_lflag = newt.c_lflag & ~UInt(ECHO) //1217  // Reset ICANON and Echo off
-        tcsetattr( STDIN_FILENO, TCSANOW, &newt)
+        Console.echoOff()
     }
     
     func run() -> Int32 {
         self.renderScreen()
         
-        concurrentQueue.async {
+        //
+        // Count down songs
+        //
+        concurrentQueue1.async {
             while !self.quit {
+                
                 self.renderScreen()
-                sleep(1)
+                
+                if self.playlist.count > 0 {
+                    self.playlist[0].duration -= 150
+                }
+                
+                let second: Double = 1000000
+                usleep(useconds_t(0.150 * second))
             }
         }
         
-        repeat {
-            Console.printXY(1,23,">: ",80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-            Console.gotoXY(4, 23);
-            
-            var buf = String()
-            var c = getchar()
-            while c != EOF && c != 10 {
-                buf.append(String(UnicodeScalar(UInt32(c))!))
-                c = getchar()
-            }
-            currentCommand = buf
-            
-            self.songs[0].duration -= 1000
-            
-            
-            Console.printXY(1,2,currentCommand,80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-            
-            if isCommandInCommands(currentCommand,commandsExit) {
-                self.quit = true
-            }
-        } while !self.quit
         
-        return exitCode
+        //
+        // Get Input
+        //
+        concurrentQueue2.async {
+            while !self.quit {
+        
+                if !self.currentCommandReady {
+                    self.currentChar = getchar()
+                    if self.currentChar != EOF && self.currentChar != 10 {
+                        self.currentCommand.append(String(UnicodeScalar(UInt32(self.currentChar))!))
+                        Console.printXY(1, 2, self.currentCommand, 80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                    }
+                    else if self.currentChar == 10 {
+                        self.currentCommandReady = true
+                    }
+                }
+            }
+        }
+        
+        //
+        // Act on input
+        //
+        while !self.quit {
+            if self.currentCommandReady {
+                if self.isCommandInCommands(self.currentCommand,self.commandsExit) {
+                    self.quit = true
+                }
+                
+                self.currentCommand = ""
+                self.currentCommandReady = false
+            }
+        }
+        
+        return self.exitCode
     }
     
     func isCommandInCommands(_ command: String, _ commands: [String]) -> Bool {
@@ -98,12 +115,12 @@ class Player {
     
     func renderSongs() {
         var idx: Int = 5
-        for s in self.songs {
+        for s in self.playlist {
             if idx == 23 {
                 break
             }
             
-            renderSong(idx, idx-4, s.artist, s.title, s.duration)
+            renderSong(idx, s.number, s.artist, s.title, s.duration)
             idx += 1
         }
     }
@@ -121,14 +138,14 @@ class Player {
         
         Console.printXY(1,4,"=", 80, .Left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
         
-        Console.printXY(1,23,">: ",80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,23,">: " + self.currentCommand,80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64)
     {
-        Console.printXY(1, y, " ", 82, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        //Console.printXY(1, y, " ", 82, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1, y, String(songNo), widthSongNo, .Right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, y, String(songNo)+" ", widthSongNo+1, .Right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(10, y, artist, widthArtist, .Left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
@@ -141,8 +158,23 @@ class Player {
         // DEBUG
         let result = findSongs(path: "/Users/kjetilso/Music")
         //let result = findSongs(path: PlayerPreferences.musicRootPath)
+        var i: Int = 1
         for r in result {
-            self.songs.append(SongEntry(path: URL(fileURLWithPath: r)))
+            self.songs.append(SongEntry(path: URL(fileURLWithPath: r),num: i))
+            i += 1
+        }
+        
+        if self.songs.count > 2 {
+            let r1 = self.songs.randomElement()
+            let r2 = self.songs.randomElement()
+            
+            self.playlist.append(r1!)
+            self.playlist.append(r2!)
+        }
+        else if self.songs.count == 1 {
+            let r1 = self.songs[0]
+            
+            self.playlist.append(r1)
         }
     }
     

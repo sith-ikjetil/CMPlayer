@@ -45,6 +45,19 @@ internal class Console {
         print("\u{001B}[?25h")
     }
     
+    static func echoOff() -> Void {
+        let c: cc_t = 0
+        let cct = (c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c)
+        var oldt: termios = termios(c_iflag: 0, c_oflag: 0, c_cflag: 0, c_lflag: 0, c_cc: cct, c_ispeed: 0, c_ospeed: 0)
+        
+        tcgetattr(STDIN_FILENO, &oldt) // 1473
+        var newt = oldt
+        
+        newt.c_lflag = newt.c_lflag & ~UInt(ECHO) //1217  // Reset ICANON and Echo off
+        newt.c_lflag = newt.c_lflag & ~UInt(ICANON) //1217  // Reset ICANON and Echo off
+        tcsetattr( STDIN_FILENO, TCSANOW, &newt)
+    }
+    
     static func applyTextColor(colorBg: ConsoleColor, modifierBg:  ConsoleColorModifier, colorText: ConsoleColor, modifierText: ConsoleColorModifier, text: String) -> String {
         
         var addToText = 30
