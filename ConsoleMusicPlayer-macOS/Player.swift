@@ -382,24 +382,28 @@ class Player {
     
     func renderSongs() {
         var idx: Int = 5
-        for s in self.playlist {
-            if idx == 22 {
-                break
-            }
-            
-            if idx == 5 {
-                if audioPlayerActive == 1 {
-                    renderSong(idx, s.number, s.artist, s.title, self.durationAudioPlayer1)
+        var index: Int = 0
+        while idx < 22 {
+            if index < self.playlist.count {
+                let s = self.playlist[index]
+                
+                if idx == 5 {
+                    if audioPlayerActive == 1 {
+                        renderSong(idx, s.number, s.artist, s.title, self.durationAudioPlayer1)
+                    }
+                    else if audioPlayerActive == 2 {
+                        renderSong(idx, s.number, s.artist, s.title, self.durationAudioPlayer2)
+                    }
                 }
-                else if audioPlayerActive == 2 {
-                    renderSong(idx, s.number, s.artist, s.title, self.durationAudioPlayer2)
+                else {
+                    renderSong(idx, s.number, s.artist, s.title, s.duration)
                 }
             }
             else {
-                renderSong(idx, s.number, s.artist, s.title, s.duration)
+                Console.printXY(1, idx, " ", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             }
-            
             idx += 1
+            index += 1
         }
     }
     
