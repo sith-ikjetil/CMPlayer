@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum PrintPaddingTextAlign {
+    case left
+    case right
+    case center
+    case ignore
+}
 
 internal extension String {
     func itsToInt32() -> Int32 {
