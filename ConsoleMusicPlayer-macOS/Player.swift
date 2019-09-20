@@ -254,7 +254,11 @@ class Player {
 
             if !self.isShowingTopWindow {
                 self.currentChar = getchar()
-                if self.currentChar != EOF && self.currentChar != 10 && self.currentChar != 127 {
+                if self.currentChar != EOF
+                    && self.currentChar != 10
+                    && self.currentChar != 127
+                    && self.currentChar != 27
+                {
                     self.currentCommand.append(String(UnicodeScalar(UInt32(self.currentChar))!))
                     //Console.printXY(1, 2, self.currentCommand, 80, .Left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
                 }
@@ -262,6 +266,10 @@ class Player {
                     if self.currentCommand.count > 0 {
                         self.currentCommand.removeLast()
                     }
+                }
+                else if self.currentChar == 27 {
+                    _ = getchar()
+                    _ = getchar()
                 }
                 else if self.currentChar == 10 {
                     let parts = self.currentCommand.components(separatedBy: " ")
