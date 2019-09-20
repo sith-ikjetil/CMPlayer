@@ -21,6 +21,8 @@ class Player {
     private let widthSong: Int = 33
     private let widthTime: Int = 5
     private var musicFormats: [String] = []
+    private var durationAudioPlayer1: UInt64 = 0
+    private var durationAudioPlayer2: UInt64 = 0
     private var songs: [SongEntry] = []
     private var playlist: [SongEntry] = []
     private var searchResult: [SongEntry] = []
@@ -71,6 +73,7 @@ class Player {
             if self.audio1 == nil {
                 do {
                     self.audio1 = try AVAudioPlayer(contentsOf:self.playlist[playlistIndex].fileURL!)
+                    self.durationAudioPlayer1 = self.playlist[playlistIndex].duration
                     self.audio1?.play()
                 }
                 catch {
@@ -82,6 +85,7 @@ class Player {
                 do {
                     self.audio1?.stop()
                     self.audio1 = try AVAudioPlayer(contentsOf: self.playlist[playlistIndex].fileURL!)
+                    self.durationAudioPlayer1 = self.playlist[playlistIndex].duration
                     self.audio1?.play()
                 }
                 catch {
@@ -94,6 +98,7 @@ class Player {
             if self.audio2 == nil {
                 do {
                     self.audio2 = try AVAudioPlayer(contentsOf:self.playlist[playlistIndex].fileURL!)
+                    self.durationAudioPlayer2 = self.playlist[playlistIndex].duration
                     self.audio2?.play()
                 }
                 catch {
@@ -105,6 +110,7 @@ class Player {
                 do {
                     self.audio2?.stop()
                     self.audio2 = try AVAudioPlayer(contentsOf: self.playlist[playlistIndex].fileURL!)
+                    self.durationAudioPlayer2 = self.playlist[playlistIndex].duration
                     self.audio2?.play()
                 }
                 catch {
@@ -193,16 +199,15 @@ class Player {
                 if self.playlist.count > 0 {
                     if self.audioPlayerActive == 1 {
                         let time = self.audio1!.currentTime.magnitude
-                        self.playlist[0].duration = UInt64(Double(self.playlist[0].length) - time * Double(1000))
+                        self.durationAudioPlayer1 = UInt64(Double(self.playlist[0].duration) - time * Double(1000))
                     }
                     else if self.audioPlayerActive == 2 {
                         let time = self.audio2!.currentTime.magnitude
-                        self.playlist[0].duration = UInt64(Double(self.playlist[0].length) - time * Double(1000))
+                        self.durationAudioPlayer2 = UInt64(Double(self.playlist[0].duration) - time * Double(1000))
                     }
                     
                     if (PlayerPreferences.crossfadeSongs && self.playlist[0].duration <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
                         || self.playlist[0].duration <= 2000 {
-                        self.playlist[0].duration = self.playlist[0].length
                         self.skip(crossfade: PlayerPreferences.crossfadeSongs)
                     }
                 }
@@ -374,7 +379,18 @@ class Player {
                 break
             }
             
-            renderSong(idx, s.number, s.artist, s.title, s.duration)
+            if idx == 5 {
+                if audioPlayerActive == 1 {
+                    renderSong(idx, s.number, s.artist, s.title, self.durationAudioPlayer1)
+                }
+                else if audioPlayerActive == 2 {
+                    renderSong(idx, s.number, s.artist, s.title, self.durationAudioPlayer2)
+                }
+            }
+            else {
+                renderSong(idx, s.number, s.artist, s.title, s.duration)
+            }
+            
             idx += 1
         }
     }
@@ -478,7 +494,7 @@ class Player {
 
             Console.printXY(43, index_screen_lines, "\(se.title)", widthSong, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
-            Console.printXY(76, index_screen_lines, itsRenderMsToFullString(se.length, false), widthTime, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(76, index_screen_lines, itsRenderMsToFullString(se.duration, false), widthTime, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
             index_screen_lines += 1
             index_search += 1

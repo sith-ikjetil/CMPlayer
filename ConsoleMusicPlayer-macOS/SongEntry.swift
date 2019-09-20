@@ -14,7 +14,6 @@ internal class SongEntry {
     var artist: String = ""
     var title: String = ""
     var duration: UInt64 = 0
-    var length: UInt64 = 0
     var fileURL: URL? = nil
     
     init()
@@ -35,7 +34,6 @@ internal class SongEntry {
         
         let audioAsset = AVURLAsset.init(url: self.fileURL!, options: nil)
         self.duration = UInt64(CMTimeGetSeconds(audioAsset.duration) * Float64(1000))
-        self.length = self.duration
         
         let metadataList = playerItem.asset.metadata
         
