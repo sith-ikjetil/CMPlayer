@@ -32,7 +32,14 @@ class Player {
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
     private let commandsRepaint: [String] = ["repaint","redraw"]
+    private let helpText: [(String, String)] = [(" exit, quit", " :: exits application"),
+                                                (" next, skip", " :: plays next song"),
+                                                (" pause, resume", " :: pauses or resumes playback"),
+                                                (" search [<words>]", " :: searches artist and title for a match. case insensitive"),
+                                                (" help"," :: shows this help screen"),
+                                                (" repaint", " :: clears and repaints entire console window")]
     private var searchIndex: Int = 0
+    private var helpIndex: Int = 0
     private var currentCommandReady: Bool = false
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.console.music.player.macos.2", attributes: .concurrent)
@@ -250,10 +257,30 @@ class Player {
                         }
                     }
                     if self.isCommandInCommands(self.currentCommand, self.commandsHelp) {
+                        self.helpIndex = 0
                         self.isShowingTopWindow = true
                         self.renderHelp()
                         var ch = getchar()
-                        while ch == EOF {
+                        while ch == EOF || ch == 27 || ch == 91 || ch == 65 || ch == 66 {
+                            if ch == 27 {
+                                ch = getchar()
+                            }
+                            if ch == 91 {
+                                ch = getchar()
+                            }
+                            
+                            if ch == 66 { // DOWN
+                                if (self.helpIndex + 17) < self.helpText.count {
+                                    self.helpIndex += 1
+                                    self.renderHelp()
+                                }
+                            }
+                            if ch == 65 { // UP
+                                if self.helpIndex > 0 {
+                                    self.helpIndex -= 1
+                                    self.renderHelp()
+                                }
+                            }
                             ch = getchar()
                         }
                         self.isShowingTopWindow = false
@@ -400,23 +427,28 @@ class Player {
         
         Console.printXY(1,3,"### HELP ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(1,5," exit, quit", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-        Console.printXY(1,6," :: exits application", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        var index_screen_lines: Int = 5
+        var index_search: Int = helpIndex
+        let max = helpIndex + 21
+        while index_search < max {
+            if index_screen_lines == 22 {
+                break
+            }
+            
+            if index_search > helpText.count - 1 {
+                break
+            }
+            
+            let se = helpText[index_search]
+            
+            Console.printXY(1, index_screen_lines, "\(se.0) ", 20, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            Console.printXY(20, index_screen_lines, "\(se.1)", 60, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            
+            index_screen_lines += 1
+            index_search += 1
+        }
         
-        Console.printXY(1,8," next, skip", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-        Console.printXY(1,9," :: plays next song", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        Console.printXY(1,11," pause, resume", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-        Console.printXY(1,12," :: pauses or resumes playback", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        Console.printXY(1,14," search <word 1>...<word n>", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-        Console.printXY(1,15," :: searches artist and title for a match. case insensitive", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        Console.printXY(1,17," help", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-        Console.printXY(1,18," :: shows this help screen while music plays in background", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        
-        Console.printXY(1,23,"PRESS ANY KEY TO EXIT HELP", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE RESULTS. OTHER KEY TO EXIT HELP.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     func renderSearch() -> Void {
@@ -453,6 +485,8 @@ class Player {
         }
         
         Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE RESULTS. OTHER KEY TO EXIT SEARCH RESULT.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.printXY(1,24,"Results Found: \(self.searchResult.count)",80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     func initializeSongs() {
