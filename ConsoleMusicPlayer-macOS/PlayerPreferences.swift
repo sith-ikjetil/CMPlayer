@@ -21,7 +21,7 @@ internal enum LogApplicationStartLoadType: String {
 
 internal class PlayerPreferences {
     internal static let preferencesFilename: String = "ConsoleMediaPlayer.Preferences.xml"
-    internal static var musicRootPath: String = "~/Music/"
+    internal static var musicRootPath: String = "/Users/kjetilso/Music/"
     internal static var musicFormats: String = "mp3;mp2;m4a"
     internal static var autoplayOnStartup: Bool = true
     internal static var crossfadeSongs: Bool = true

@@ -519,8 +519,11 @@ class Player {
     
     func initializeSongs() {
         // DEBUG
-        let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
-        //let result = findSongs(path: PlayerPreferences.musicRootPath)
+        #if DEBUG
+            let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
+        #else
+            let result = findSongs(path: PlayerPreferences.musicRootPath)
+        #endif
         var i: Int = 1
         for r in result {
             self.songs.append(SongEntry(path: URL(fileURLWithPath: r),num: i))
