@@ -68,6 +68,7 @@ class Player {
     func initialize() -> Void {
         PlayerDirectories.ensureDirectoriesExistence()
         PlayerPreferences.ensureLoadPreferences()
+        Console.initialize()
         
         self.musicFormats = PlayerPreferences.musicFormats.components(separatedBy: ";")
         
@@ -81,7 +82,7 @@ class Player {
         if PlayerPreferences.autoplayOnStartup && self.playlist.count > 0 {
             self.play(player: 1, playlistIndex: 0)
         }
-
+        
         Console.hideCursor()
         Console.clearScreen()
         Console.echoOff()

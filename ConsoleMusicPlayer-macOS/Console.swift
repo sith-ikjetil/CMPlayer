@@ -89,4 +89,22 @@ internal class Console {
         let nmsg = text.convertStringToLengthPaddedString(maxLength, padding, paddingChar)
         print("\u{001B}[(\(y);\(x))H\(Console.applyTextColor(colorBg: bgColor, modifierBg: modifierBg, colorText: colorText, modifierText: modifierText, text: nmsg))", terminator: "")
     }
+    
+    static private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1.console", attributes: .concurrent)
+    static private let sigintSrc = DispatchSource.makeSignalSource(signal: Int32(SIGWINCH), queue: Console.concurrentQueue1)
+    static func initialize() -> Void {
+        sigintSrc.setEventHandler {
+            //var w = winsize()
+            //if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
+            //    if w.ws_row != 24 || w.ws_col != 80 {
+            //        w.ws_row = 24
+            //        w.ws_col = 80
+            //        _ = ioctl(STDOUT_FILENO, TIOCSWINSZ, &w)
+            //    }
+            //}
+            Console.clearScreen()
+            g_player.renderScreen()
+        }
+        sigintSrc.resume()
+    }
 }
