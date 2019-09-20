@@ -30,16 +30,30 @@ class Player {
     private let commandsExit: [String] = ["exit", "quit"]
     private let commandsNextSong: [String] = ["next", "skip"]
     private let commandsHelp: [String] = ["help","?"]
+    private let commandsPlay: [String] = ["play"]
     private let commandsPause: [String] = ["pause"]
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
     private let commandsRepaint: [String] = ["repaint","redraw"]
+    private let commandsSetMusicRootPath: [String] = ["set", "mrp"]
+    private let commandsSetCrossfadeTimeInSeconds: [String] = ["set", "cft"]
+    private let commandsEnableCrossfade: [String] = ["enable crossfade"]
+    private let commandsDisableCrossfade: [String] = ["disable crossfade"]
+    private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
+    private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
+    
     private let helpText: [(String, String)] = [(" exit, quit", " :: exits application"),
                                                 (" next, skip", " :: plays next song"),
-                                                (" pause, resume", " :: pauses or resumes playback"),
+                                                (" play, pause, resume", " :: plays, pauses or resumes playback"),
                                                 (" search [<words>]", " :: searches artist and title for a match. case insensitive"),
                                                 (" help"," :: shows this help screen"),
-                                                (" repaint", " :: clears and repaints entire console window")]
+                                                (" repaint", " :: clears and repaints entire console window"),
+                                                (" set mrp <path>", " :: sets the path to the root folder where the music resides"),
+                                                (" set cft <seconds>", " :: sets the crossfade time in seconds (1-10 seconds)"),
+                                                (" enable crossfade"," :: enables crossfade"),
+                                                (" disable crossfade", " :: disables crossfade"),
+                                                (" enable aos", " :: enables autoplay when application starts"),
+                                                (" disable aos", " :: disables autoplay when application starts")]
     private var searchIndex: Int = 0
     private var helpIndex: Int = 0
     private var currentCommandReady: Bool = false
@@ -48,6 +62,7 @@ class Player {
     private var currentChar: Int32 = -1
     private let EXIT_CODE_ERROR_FINDING_FILES: Int32 = 1
     private let EXIT_CODE_ERROR_PLAYING_FILE: Int32 = 2
+    private let EXIT_CODE_ERROR_NOT_ENOUGH_MUSIC: Int32 = 3
     private var isShowingTopWindow = false
     
     func initialize() -> Void {
@@ -57,6 +72,11 @@ class Player {
         self.musicFormats = PlayerPreferences.musicFormats.components(separatedBy: ";")
         
         self.initializeSongs()
+        
+        if self.songs.count < 2 {
+            self.printErrorMessage(text: "There must be at least two music files in musicRootPath.\nmusicRootPath is now: \(PlayerPreferences.musicRootPath)")
+            exit(EXIT_CODE_ERROR_NOT_ENOUGH_MUSIC)
+        }
         
         if PlayerPreferences.autoplayOnStartup && self.playlist.count > 0 {
             self.play(player: 1, playlistIndex: 0)
@@ -243,11 +263,24 @@ class Player {
                     }
                 }
                 else if self.currentChar == 10 {
+                    let parts = self.currentCommand.components(separatedBy: " ")
+                    
                     if self.isCommandInCommands(self.currentCommand, self.commandsExit) {
                         self.quit = true
                     }
                     if self.isCommandInCommands(self.currentCommand, self.commandsNextSong) {
                         self.skip(crossfade: false)
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsPlay) {
+                        if self.audioPlayerActive == -1 {
+                            self.play(player: 1, playlistIndex: 0)
+                        }
+                        else if self.audioPlayerActive == 1 {
+                            self.resume()
+                        }
+                        else if self.audioPlayerActive == 2 {
+                            self.resume()
+                        }
                     }
                     if self.isCommandInCommands(self.currentCommand, self.commandsPause) {
                         self.pause()
@@ -267,6 +300,32 @@ class Player {
                                     break
                                 }
                             }
+                        }
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsEnableCrossfade) {
+                        PlayerPreferences.crossfadeSongs = true
+                        PlayerPreferences.savePreferences()
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsDisableCrossfade) {
+                        PlayerPreferences.crossfadeSongs = false
+                        PlayerPreferences.savePreferences()
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsEnableAutoPlayOnStartup) {
+                        PlayerPreferences.autoplayOnStartup = true
+                        PlayerPreferences.savePreferences()
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsDisableAutoPlayOnStartup) {
+                        PlayerPreferences.autoplayOnStartup = false
+                        PlayerPreferences.savePreferences()
+                    }
+                    if parts.count == 3 && parts[0] == self.commandsSetMusicRootPath[0] && parts[1] == self.commandsSetMusicRootPath[1] {
+                        PlayerPreferences.musicRootPath = parts[2]
+                        PlayerPreferences.savePreferences()
+                    }
+                    if parts.count == 3 && parts[0] == self.commandsSetCrossfadeTimeInSeconds[0] && parts[1] == self.commandsSetCrossfadeTimeInSeconds[1] {
+                        if let ctis = Int(parts[2]) {
+                            PlayerPreferences.crossfadeTimeInSeconds = ctis
+                            PlayerPreferences.savePreferences()
                         }
                     }
                     if self.isCommandInCommands(self.currentCommand, self.commandsHelp) {
@@ -300,12 +359,15 @@ class Player {
                         Console.clearScreen()
                         self.renderScreen()
                     }
-                    var parts = self.currentCommand.components(separatedBy: " ")
                     if parts.count > 1 {
                         if self.isCommandInCommands(parts[0], self.commandsSearch) {
-                            _ = parts.removeFirst()
+                            var p : [String] = []
+                            for px in parts {
+                                p.append(px)
+                            }
+                            _ = p.removeFirst()
                             self.searchIndex = 0
-                            self.performSearch(terms: parts)
+                            self.performSearch(terms: p)
                             self.isShowingTopWindow = true
                             self.renderSearch()
                             var ch = getchar()
@@ -469,8 +531,8 @@ class Player {
             
             let se = helpText[index_search]
             
-            Console.printXY(1, index_screen_lines, "\(se.0) ", 20, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-            Console.printXY(20, index_screen_lines, "\(se.1)", 60, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1, index_screen_lines, "\(se.0) ", 21, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            Console.printXY(21, index_screen_lines, "\(se.1)", 59, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
             index_screen_lines += 1
             index_search += 1
@@ -589,7 +651,7 @@ class Player {
     func printErrorMessage(text: String) -> Void {
         Console.clearScreen()
         Console.printXY(1, 1, "Console Music Player Error", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        Console.printXY(1, 3, text, 80, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.red, ConsoleColorModifier.bold)
+        Console.printXY(1, 3, text, 800, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.red, ConsoleColorModifier.bold)
         print("")
         print("")
         print(Console.applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white, modifierText: ConsoleColorModifier.bold, text: "> Press ENTER Key To Continue <"))
