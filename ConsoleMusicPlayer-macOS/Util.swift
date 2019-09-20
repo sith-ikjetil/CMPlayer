@@ -221,3 +221,61 @@ internal func itsRenderMsToFullString(_ milliseconds: UInt64,_ bWithMilliseconds
     
     return ss
 }
+
+internal extension Float {
+    func itsToString() -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US")
+        return formatter.string(from: NSNumber(value: self))!
+    }
+}
+
+
+internal extension Double {
+    func itsToString() -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US")
+        return formatter.string(from: NSNumber(value: self))!
+    }
+}
+
+internal extension Date {
+    func itsToString(includeMs: Bool) -> String {
+        let dateFormatter = DateFormatter()
+        if includeMs {
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        }
+        else {
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        }
+        return dateFormatter.string(from: self)
+    }
+}
+
+internal extension Int64 {
+    func itsToString() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "nb_NO")
+        return formatter.string(from: NSNumber(value: self))!
+    }
+}
+
+internal extension Int32 {
+    func itsToString() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "nb_NO")
+        formatter.thousandSeparator = " "
+        return formatter.string(from: NSNumber(value: self))!
+    }
+}
+
+internal extension Int {
+    func itsToString() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "nb_NO")
+        return formatter.string(from: NSNumber(value: self))!
+    }
+}
