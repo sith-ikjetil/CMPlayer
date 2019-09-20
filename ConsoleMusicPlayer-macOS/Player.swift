@@ -206,9 +206,17 @@ class Player {
                         self.durationAudioPlayer2 = UInt64(Double(self.playlist[0].duration) - time * Double(1000))
                     }
                     
-                    if (PlayerPreferences.crossfadeSongs && self.playlist[0].duration <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                        || self.playlist[0].duration <= 2000 {
-                        self.skip(crossfade: PlayerPreferences.crossfadeSongs)
+                    if self.audioPlayerActive == 1 {
+                        if (PlayerPreferences.crossfadeSongs && self.durationAudioPlayer1 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
+                            || self.playlist[0].duration <= 2000 {
+                            self.skip(crossfade: PlayerPreferences.crossfadeSongs)
+                        }
+                    }
+                    else if self.audioPlayerActive == 2 {
+                        if (PlayerPreferences.crossfadeSongs && self.durationAudioPlayer2 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
+                            || self.playlist[0].duration <= 2000 {
+                            self.skip(crossfade: PlayerPreferences.crossfadeSongs)
+                        }
                     }
                 }
                 
