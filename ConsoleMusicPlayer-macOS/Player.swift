@@ -31,6 +31,7 @@ class Player {
     private let commandsPause: [String] = ["pause"]
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
+    private let commandsRepaint: [String] = ["repaint","redraw"]
     private var searchIndex: Int = 0
     private var currentCommandReady: Bool = false
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1", attributes: .concurrent)
@@ -233,6 +234,10 @@ class Player {
                     }
                     if self.isCommandInCommands(self.currentCommand, self.commandsResume) {
                         self.resume()
+                    }
+                    if self.isCommandInCommands(self.currentCommand, self.commandsRepaint) {
+                        Console.clearScreen()
+                        self.renderScreen()
                     }
                     if let num = Int32(self.currentCommand) {
                         if num > 0 {
