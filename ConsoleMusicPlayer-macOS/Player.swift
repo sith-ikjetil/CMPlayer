@@ -208,13 +208,13 @@ class Player {
                     
                     if self.audioPlayerActive == 1 {
                         if (PlayerPreferences.crossfadeSongs && self.durationAudioPlayer1 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || self.playlist[0].duration <= 2000 {
+                            || self.durationAudioPlayer1 <= 2000 {
                             self.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
                     else if self.audioPlayerActive == 2 {
                         if (PlayerPreferences.crossfadeSongs && self.durationAudioPlayer2 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || self.playlist[0].duration <= 2000 {
+                            || self.durationAudioPlayer2 <= 2000 {
                             self.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
