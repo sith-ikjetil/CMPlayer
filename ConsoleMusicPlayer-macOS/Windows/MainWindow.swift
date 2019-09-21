@@ -19,6 +19,7 @@ internal class MainWindow {
     private let commandsPause: [String] = ["pause"]
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
+    private let commandsAbout: [String] = ["about"]
     private let commandsRepaint: [String] = ["repaint","redraw"]
     private let commandsSetMusicRootPath: [String] = ["set", "mrp"]
     private let commandsSetCrossfadeTimeInSeconds: [String] = ["set", "cft"]
@@ -248,6 +249,14 @@ internal class MainWindow {
                     if isCommandInCommands(self.currentCommand, self.commandsHelp) {
                         self.isShowingTopWindow = true
                         let wnd: HelpWindow = HelpWindow()
+                        wnd.showWindow()
+                        Console.clearScreen()
+                        self.renderScreen()
+                        self.isShowingTopWindow = false
+                    }
+                    if isCommandInCommands(self.currentCommand, self.commandsAbout) {
+                        self.isShowingTopWindow = true
+                        let wnd: AboutWindow = AboutWindow()
                         wnd.showWindow()
                         Console.clearScreen()
                         self.renderScreen()

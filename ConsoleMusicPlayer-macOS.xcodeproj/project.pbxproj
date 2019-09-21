@@ -10,6 +10,7 @@
 		D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */; };
 		D093D0B12335E51E001842D6 /* InitialSetupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0B02335E51E001842D6 /* InitialSetupWindow.swift */; };
 		D093D0B323361497001842D6 /* PlayerLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0B223361497001842D6 /* PlayerLibrary.swift */; };
+		D0A58DBB233644D8008868CE /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A58DBA233644D8008868CE /* AboutWindow.swift */; };
 		D0C499F6233536F4001232A9 /* HelpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F5233536F4001232A9 /* HelpWindow.swift */; };
 		D0C499F82335370B001232A9 /* SearchWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F72335370B001232A9 /* SearchWindow.swift */; };
 		D0C499FA23353721001232A9 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F923353721001232A9 /* MainWindow.swift */; };
@@ -38,6 +39,7 @@
 		D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorWindow.swift; sourceTree = "<group>"; };
 		D093D0B02335E51E001842D6 /* InitialSetupWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialSetupWindow.swift; sourceTree = "<group>"; };
 		D093D0B223361497001842D6 /* PlayerLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLibrary.swift; sourceTree = "<group>"; };
+		D0A58DBA233644D8008868CE /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		D0C499F5233536F4001232A9 /* HelpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpWindow.swift; sourceTree = "<group>"; };
 		D0C499F72335370B001232A9 /* SearchWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWindow.swift; sourceTree = "<group>"; };
 		D0C499F923353721001232A9 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 				D0C499F923353721001232A9 /* MainWindow.swift */,
 				D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */,
 				D093D0B02335E51E001842D6 /* InitialSetupWindow.swift */,
+				D0A58DBA233644D8008868CE /* AboutWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -176,6 +179,7 @@
 				D093D0B12335E51E001842D6 /* InitialSetupWindow.swift in Sources */,
 				D0C499FA23353721001232A9 /* MainWindow.swift in Sources */,
 				D0ED144023323DC400FB51C8 /* PlayerDirectories.swift in Sources */,
+				D0A58DBB233644D8008868CE /* AboutWindow.swift in Sources */,
 				D0ED143E23323C5000FB51C8 /* SongEntry.swift in Sources */,
 				D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */,
 				D093D0B323361497001842D6 /* PlayerLibrary.swift in Sources */,
