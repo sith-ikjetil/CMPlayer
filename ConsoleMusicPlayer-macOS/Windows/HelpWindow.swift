@@ -10,18 +10,18 @@ import Foundation
 
 internal class HelpWindow {
     private var helpIndex: Int = 0
-    private let helpText: [(String, String)] = [(" exit, quit", " :: exits application"),
-                                                (" next, skip", " :: plays next song"),
-                                                (" play, pause, resume", " :: plays, pauses or resumes playback"),
-                                                (" search [<words>]", " :: searches artist and title for a match. case insensitive"),
-                                                (" help"," :: shows this help screen"),
-                                                (" repaint", " :: clears and repaints entire console window"),
-                                                (" set mrp <path>", " :: sets the path to the root folder where the music resides"),
-                                                (" set cft <seconds>", " :: sets the crossfade time in seconds (1-10 seconds)"),
-                                                (" enable crossfade"," :: enables crossfade"),
-                                                (" disable crossfade", " :: disables crossfade"),
-                                                (" enable aos", " :: enables autoplay when application starts"),
-                                                (" disable aos", " :: disables autoplay when application starts")]
+    private let helpText: [String] = [" exit, quit", " :: exits application",
+                                                " next, skip", " :: plays next song",
+                                                " play, pause, resume", " :: plays, pauses or resumes playback",
+                                                " search [<words>]", " :: searches artist and title for a match. case insensitive",
+                                                " help"," :: shows this help screen",
+                                                " repaint", " :: clears and repaints entire console window",
+                                                " set mrp <path>", " :: sets the path to the root folder where the music resides",
+                                                " set cft <seconds>", " :: sets the crossfade time in seconds (1-10 seconds)",
+                                                " enable crossfade"," :: enables crossfade",
+                                                " disable crossfade", " :: disables crossfade",
+                                                " enable aos", " :: enables playing on application startup",
+                                                " disable aos", " :: disables playing on application startup"]
     
     
     func showWindow() {
@@ -51,8 +51,12 @@ internal class HelpWindow {
             
             let se = helpText[index_search]
             
-            Console.printXY(1, index_screen_lines, "\(se.0) ", 21, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-            Console.printXY(21, index_screen_lines, "\(se.1)", 59, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            if index_search % 2 == 0 {
+                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            }
+            else {
+                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            }
             
             index_screen_lines += 1
             index_search += 1
