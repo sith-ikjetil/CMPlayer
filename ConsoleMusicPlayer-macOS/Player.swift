@@ -214,10 +214,8 @@ internal class Player {
             let u: URL = URL(fileURLWithPath: r)
             if let se = g_library.find(url: u) {
                 g_songs.append(se)
-                print("J")
             }
             else {
-                print("N")
                 g_songs.append(SongEntry(path: URL(fileURLWithPath: r),num: g_library.nextAvailableNumber()))
             }
             

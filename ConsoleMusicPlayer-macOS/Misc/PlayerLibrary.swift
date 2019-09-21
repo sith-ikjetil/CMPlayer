@@ -12,12 +12,19 @@ internal class PlayerLibrary {
     private let filename: String = "CMPLayer.Library.xml"
     var library: [SongEntry] = []
     var numbers: [Int] = []
+    private var dictionary: [String: Int] = [:]
     
     init() {
         
     }
     
     func find(url: URL) -> SongEntry? {
+        if let item = self.dictionary[url.path] {
+            if self.library.count > item {
+                return self.library[item]
+            }
+        }
+        
         for s in self.library {
             if s.fileURL != nil {
                 if ( s.fileURL! == url ) {
@@ -50,6 +57,8 @@ internal class PlayerLibrary {
         if FileManager.default.fileExists(atPath: fileUrl.path) {
             do {
                 self.numbers.removeAll()
+                self.dictionary.removeAll()
+                
                 let xd: XMLDocument = try XMLDocument(contentsOf: fileUrl)
                 let xeSongLibrary = xd.rootElement()!
             
@@ -79,7 +88,11 @@ internal class PlayerLibrary {
                     }
                     
                     self.numbers.append(number)
-                    self.library.append(SongEntry(number: number, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url)))
+                    let se = SongEntry(number: number, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url))
+                    self.library.append(se)
+                    if url.count > 0 {
+                        self.dictionary[url] = self.library.count-1
+                    }
                 }
             }
             catch {
