@@ -18,12 +18,12 @@ internal class Player {
     private var musicFormats: [String] = []
     var durationAudioPlayer1: UInt64 = 0
     var durationAudioPlayer2: UInt64 = 0
-    
+    private let initSongLibraryText: String = "Initializing Song Library"
     private var helpIndex: Int = 0
     private var currentCommandReady: Bool = false
     private let EXIT_CODE_ERROR_FINDING_FILES: Int32 = 1
     private let EXIT_CODE_ERROR_PLAYING_FILE: Int32 = 2
-    private let EXIT_CODE_ERROR_NOT_ENOUGH_MUSIC: Int32 = 3
+    //private let EXIT_CODE_ERROR_NOT_ENOUGH_MUSIC: Int32 = 3
     
     
     func initialize() -> Void {
@@ -33,21 +33,36 @@ internal class Player {
         
         self.musicFormats = PlayerPreferences.musicFormats.components(separatedBy: ";")
         
+        Console.hideCursor()
+        Console.echoOff()
+        
+        Console.clearScreen()
+        MainWindow.renderHeader()
         self.initializeSongs()
         
         if g_songs.count < 2 {
-            let wnd: ErrorWindow = ErrorWindow()
-            wnd.showWindow(message: "There must be at least two music files in musicRootPath.\nmusicRootPath is now: \(PlayerPreferences.musicRootPath)")
-            exit(EXIT_CODE_ERROR_NOT_ENOUGH_MUSIC)
+            let wnd: InitialSetupWindow = InitialSetupWindow()
+            if wnd.showWindow() {
+                Console.clearScreen()
+                MainWindow.renderHeader()
+                self.initializeSongs()
+            }
+            if g_songs.count < 2 {
+                let wnd: ErrorWindow = ErrorWindow()
+                wnd.showWindow(message: "Could not find any music.\nThere must be at least two music files in musicRootPath.\nmusicRootPath was: \(PlayerPreferences.musicRootPath)")
+                exit(EXIT_CODE_ERROR_FINDING_FILES)
+            }
+            else {
+                PlayerPreferences.savePreferences()
+            }
         }
         
         if PlayerPreferences.autoplayOnStartup && g_playlist.count > 0 {
             self.play(player: 1, playlistIndex: 0)
         }
         
-        Console.hideCursor()
+        
         Console.clearScreen()
-        Console.echoOff()
     }
     
     func play(player: Int, playlistIndex: Int) -> Void {
@@ -178,6 +193,8 @@ internal class Player {
     
     
     func initializeSongs() {
+        g_songs.removeAll()
+        g_playlist.removeAll()
         // DEBUG
         #if DEBUG
             let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
@@ -186,6 +203,7 @@ internal class Player {
         #endif
         var i: Int = 1
         for r in result {
+            printWorkingInitializationSongs( completed: Int(Double(i) * Double(100.0) / Double(result.count)))
             g_songs.append(SongEntry(path: URL(fileURLWithPath: r),num: i))
             i += 1
         }
@@ -196,11 +214,6 @@ internal class Player {
             
             g_playlist.append(r1!)
             g_playlist.append(r2!)
-        }
-        else if g_songs.count == 1 {
-            let r1 = g_songs[0]
-            
-            g_playlist.append(r1)
         }
     }
     
@@ -216,6 +229,8 @@ internal class Player {
                 if path.hasSuffix("/") {
                     nr = "\(path)\(r)"
                 }
+                
+                printWorkingInitializationSongs(completed: 0)
                 
                 if isDirectory(path: nr) {
                     results.append(contentsOf: findSongs(path: nr))
@@ -233,12 +248,19 @@ internal class Player {
             }
         }
         catch {
-            let wnd: ErrorWindow = ErrorWindow()
-            wnd.showWindow(message: "EXIT_CODE_ERROR_FINDING_FILES\n\(error)")
-            exit(EXIT_CODE_ERROR_FINDING_FILES)
+            results.removeAll()
+            
+            //let wnd: ErrorWindow = ErrorWindow()
+            //wnd.showWindow(message: "EXIT_CODE_ERROR_FINDING_FILES\n\(error)")
+            //exit(EXIT_CODE_ERROR_FINDING_FILES)
         }
         
         return results
+    }
+    
+    func printWorkingInitializationSongs(completed: Int) {
+        let pst: String = "\(completed)%"
+        Console.printXY(1, 2, initSongLibraryText + " " + pst, initSongLibraryText.count + pst.count + 1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     func isDirectory(path: String) -> Bool {

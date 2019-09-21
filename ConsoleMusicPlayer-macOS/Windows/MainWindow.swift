@@ -38,7 +38,7 @@ internal class MainWindow {
     }
     
     static func renderHeader() -> Void {
-        Console.printXY(1,1,"Console Music Player | 1.0.0.1", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,1,"Console Music Player | 1.0.1.0", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     func renderFrame() -> Void {

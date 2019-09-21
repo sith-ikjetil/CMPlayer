@@ -27,6 +27,7 @@ internal class HelpWindow {
     func showWindow() {
         self.helpIndex = 0
         self.renderHelp()
+        self.run()
     }
     
     func renderHelp() -> Void {
