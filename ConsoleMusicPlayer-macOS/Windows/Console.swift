@@ -103,7 +103,7 @@ internal class Console {
             //    }
             //}
             Console.clearScreen()
-            g_player.renderScreen()
+            g_mainWindow?.renderScreen()
         }
         sigintSrc.resume()
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */; };
 		D0C499F6233536F4001232A9 /* HelpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F5233536F4001232A9 /* HelpWindow.swift */; };
 		D0C499F82335370B001232A9 /* SearchWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F72335370B001232A9 /* SearchWindow.swift */; };
 		D0C499FA23353721001232A9 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F923353721001232A9 /* MainWindow.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorWindow.swift; sourceTree = "<group>"; };
 		D0C499F5233536F4001232A9 /* HelpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpWindow.swift; sourceTree = "<group>"; };
 		D0C499F72335370B001232A9 /* SearchWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWindow.swift; sourceTree = "<group>"; };
 		D0C499F923353721001232A9 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				D0C499F5233536F4001232A9 /* HelpWindow.swift */,
 				D0C499F72335370B001232A9 /* SearchWindow.swift */,
 				D0C499F923353721001232A9 /* MainWindow.swift */,
+				D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -132,7 +135,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1030;
-				LastUpgradeCheck = 1030;
+				LastUpgradeCheck = 1100;
 				ORGANIZATIONNAME = "Kjetil Kr Solberg";
 				TargetAttributes = {
 					D0ED142A23320B1B00FB51C8 = {
@@ -167,6 +170,7 @@
 				D0C499FA23353721001232A9 /* MainWindow.swift in Sources */,
 				D0ED144023323DC400FB51C8 /* PlayerDirectories.swift in Sources */,
 				D0ED143E23323C5000FB51C8 /* SongEntry.swift in Sources */,
+				D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */,
 				D0C499F6233536F4001232A9 /* HelpWindow.swift in Sources */,
 				D0C499F82335370B001232A9 /* SearchWindow.swift in Sources */,
 				D0ED143A23320B4D00FB51C8 /* Player.swift in Sources */,
@@ -296,6 +300,7 @@
 		D0ED143323320B1B00FB51C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P788A4MVAS;
 				PRODUCT_NAME = CMPlayer;
@@ -306,6 +311,7 @@
 		D0ED143423320B1B00FB51C8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P788A4MVAS;
 				PRODUCT_NAME = CMPlayer;

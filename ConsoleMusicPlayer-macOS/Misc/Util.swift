@@ -8,11 +8,25 @@
 
 import Foundation
 
-enum PrintPaddingTextAlign {
+internal let widthSongNo: Int = 8
+internal let widthArtist: Int = 33
+internal let widthSong: Int = 33
+internal let widthTime: Int = 5
+
+internal enum PrintPaddingTextAlign {
     case left
     case right
     case center
     case ignore
+}
+
+internal func isCommandInCommands(_ command: String, _ commands: [String]) -> Bool {
+    for c in commands {
+        if command == c {
+            return true
+        }
+    }
+    return false
 }
 
 internal extension String {

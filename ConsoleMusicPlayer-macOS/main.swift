@@ -8,6 +8,10 @@
 
 import Foundation
 
+var g_songs: [SongEntry] = []
+var g_playlist: [SongEntry] = []
+var g_searchResult: [SongEntry] = []
+var g_mainWindow: MainWindow?
 let g_player: Player = Player()
 g_player.initialize()
 exit(g_player.run())
