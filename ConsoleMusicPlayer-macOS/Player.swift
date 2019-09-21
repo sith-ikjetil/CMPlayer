@@ -273,8 +273,15 @@ internal class Player {
     }
     
     func printWorkingInitializationSongs(completed: Int) {
+        MainWindow.renderHeader()
+        
+        Console.printXY(1,3,"### INITIALIZING ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+        
         let pst: String = "\(completed)%"
-        Console.printXY(1, 2, initSongLibraryText + " " + pst, initSongLibraryText.count + pst.count + 1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, 5, initSongLibraryText + " " + pst, initSongLibraryText.count + pst.count + 1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.printXY(1,23,"PLEASE BE PATIENT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     func isDirectory(path: String) -> Bool {

@@ -11,7 +11,7 @@ import Foundation
 internal class PlayerLibrary {
     private let filename: String = "CMPLayer.Library.xml"
     var library: [SongEntry] = []
-    var numbers: [Int] = []
+    private var nextNumber: Int = 0
     private var dictionary: [String: Int] = [:]
     
     init() {
@@ -36,27 +36,14 @@ internal class PlayerLibrary {
     }
     
     func nextAvailableNumber() -> Int {
-        for number in 1..<Int.max  {
-            var hit = false
-            for n in self.numbers {
-                if n == number {
-                    hit = true
-                    break
-                }
-            }
-            if hit == false {
-                self.numbers.append(number)
-                return number
-            }
-        }
-        return 0
+        self.nextNumber += 1
+        return self.nextNumber
     }
     
     func load() {
         let fileUrl: URL = PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent("CMPlayer.Library.xml", isDirectory: false)
         if FileManager.default.fileExists(atPath: fileUrl.path) {
             do {
-                self.numbers.removeAll()
                 self.dictionary.removeAll()
                 
                 let xd: XMLDocument = try XMLDocument(contentsOf: fileUrl)
@@ -87,7 +74,9 @@ internal class PlayerLibrary {
                         url = aUrl.stringValue ?? ""
                     }
                     
-                    self.numbers.append(number)
+                    if number > self.nextNumber {
+                        self.nextNumber = number
+                    }
                     let se = SongEntry(number: number, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url))
                     self.library.append(se)
                     if url.count > 0 {

@@ -35,12 +35,15 @@ internal class SongEntry {
     
     init(path: URL?, num: Int)
     {
+        //
+        // MEMORY LEAK IN THIS METHOD
+        //
         self.number = num
         self.fileURL = path!
         
         let playerItem = AVPlayerItem(url: self.fileURL!)
         
-        let audioAsset = AVURLAsset.init(url: self.fileURL!, options: nil)
+        let audioAsset = AVURLAsset(url: self.fileURL!, options: nil)
         self.duration = UInt64(CMTimeGetSeconds(audioAsset.duration) * Float64(1000))
         
         let metadataList = playerItem.asset.metadata
