@@ -25,6 +25,14 @@ internal class SongEntry {
         self.fileURL = nil
     }
     
+    init(number: Int, artist: String, title: String, duration: UInt64, url: URL?) {
+        self.number = number
+        self.artist = artist
+        self.title = title
+        self.duration = duration
+        self.fileURL = url
+    }
+    
     init(path: URL?, num: Int)
     {
         self.number = num

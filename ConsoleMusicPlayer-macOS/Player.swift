@@ -190,17 +190,24 @@ internal class Player {
         return g_mainWindow?.showWindow() ?? 0
     }
     
+    func loadLastLibrary() -> Void {
+        let fname = PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent("CMPlayer.Library.xml", isDirectory: false)
+        FileManager.default.fileExists(atPath: <#T##String#>)
+    }
     
-    
-    func initializeSongs() {
+    func initializeSongs() -> Void {
         g_songs.removeAll()
         g_playlist.removeAll()
-        // DEBUG
+        
+        self.loadLastLibrary()
+        
         #if DEBUG
             let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
         #else
             let result = findSongs(path: PlayerPreferences.musicRootPath)
         #endif
+        
+        
         var i: Int = 1
         for r in result {
             printWorkingInitializationSongs( completed: Int(Double(i) * Double(100.0) / Double(result.count)))
