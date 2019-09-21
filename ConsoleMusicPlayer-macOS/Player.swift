@@ -36,6 +36,8 @@ internal class Player {
         Console.hideCursor()
         Console.echoOff()
         
+        g_library.load()
+        
         Console.clearScreen()
         MainWindow.renderHeader()
         self.initializeSongs()
@@ -56,6 +58,9 @@ internal class Player {
                 PlayerPreferences.savePreferences()
             }
         }
+        
+        g_library.library = g_songs
+        g_library.save()
         
         if PlayerPreferences.autoplayOnStartup && g_playlist.count > 0 {
             self.play(player: 1, playlistIndex: 0)
@@ -190,16 +195,10 @@ internal class Player {
         return g_mainWindow?.showWindow() ?? 0
     }
     
-    func loadLastLibrary() -> Void {
-        let fname = PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent("CMPlayer.Library.xml", isDirectory: false)
-        FileManager.default.fileExists(atPath: <#T##String#>)
-    }
-    
+   
     func initializeSongs() -> Void {
         g_songs.removeAll()
         g_playlist.removeAll()
-        
-        self.loadLastLibrary()
         
         #if DEBUG
             let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
@@ -211,7 +210,17 @@ internal class Player {
         var i: Int = 1
         for r in result {
             printWorkingInitializationSongs( completed: Int(Double(i) * Double(100.0) / Double(result.count)))
-            g_songs.append(SongEntry(path: URL(fileURLWithPath: r),num: i))
+            
+            let u: URL = URL(fileURLWithPath: r)
+            if let se = g_library.find(url: u) {
+                g_songs.append(se)
+                print("J")
+            }
+            else {
+                print("N")
+                g_songs.append(SongEntry(path: URL(fileURLWithPath: r),num: g_library.nextAvailableNumber()))
+            }
+            
             i += 1
         }
         

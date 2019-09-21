@@ -17,46 +17,69 @@ internal class PlayerLibrary {
         
     }
     
+    func find(url: URL) -> SongEntry? {
+        for s in self.library {
+            if s.fileURL != nil {
+                if ( s.fileURL! == url ) {
+                    return s
+                }
+            }
+        }
+        return nil
+    }
+    
+    func nextAvailableNumber() -> Int {
+        for number in 1..<Int.max  {
+            var hit = false
+            for n in self.numbers {
+                if n == number {
+                    hit = true
+                    break
+                }
+            }
+            if hit == false {
+                self.numbers.append(number)
+                return number
+            }
+        }
+        return 0
+    }
+    
     func load() {
         let fileUrl: URL = PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent("CMPlayer.Library.xml", isDirectory: false)
         if FileManager.default.fileExists(atPath: fileUrl.path) {
             do {
                 self.numbers.removeAll()
                 let xd: XMLDocument = try XMLDocument(contentsOf: fileUrl)
-                let xeRoot = xd.rootElement()!
+                let xeSongLibrary = xd.rootElement()!
+            
+                let xeSongs = xeSongLibrary.elements(forName: "Song")
                 
-                // General
-                let elements: [XMLElement] = xeRoot.elements(forName: "SongLibrary")
-                if elements.count == 1 {
-                    let xeSongLibrary: XMLElement = elements[0]
-                    let xeSongs = xeSongLibrary.elements(forName: "Song")
+                for s in xeSongs {
+                    var number: Int = 0
+                    var artist: String = ""
+                    var title: String = ""
+                    var url: String = ""
+                    var duration: UInt64 = 0
                     
-                    for s in xeSongs {
-                        var number: Int = 0
-                        var artist: String = ""
-                        var title: String = ""
-                        var url: String = ""
-                        var duration: UInt64 = 0
-                        
-                        if let aNumber = s.attribute(forName: "number") {
-                            number = Int(aNumber.stringValue ?? "0") ?? 0
-                        }
-                        if let aArtist = s.attribute(forName: "artist") {
-                            artist = aArtist.stringValue ?? "<UNKNOWN>"
-                        }
-                        if let aTitle = s.attribute(forName: "title") {
-                            title = aTitle.stringValue ?? "<UNKNOWN>"
-                        }
-                        if let aDuration = s.attribute(forName: "duration") {
-                            duration = UInt64(aDuration.stringValue ?? "0") ?? 0
-                        }
-                        if let aUrl = s.attribute(forName: "url") {
-                            url = aUrl.stringValue ?? ""
-                        }
-                        
-                        self.numbers.append(number)
-                        self.library.append(SongEntry(number: number, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url)))
+                    if let aNumber = s.attribute(forName: "number") {
+                        number = Int(aNumber.stringValue ?? "0") ?? 0
                     }
+                    if let aArtist = s.attribute(forName: "artist") {
+                        artist = aArtist.stringValue ?? "<UNKNOWN>"
+                    }
+                    if let aTitle = s.attribute(forName: "title") {
+                        title = aTitle.stringValue ?? "<UNKNOWN>"
+                    }
+                    if let aDuration = s.attribute(forName: "duration") {
+                        duration = UInt64(aDuration.stringValue ?? "0") ?? 0
+                    }
+                    if let aUrl = s.attribute(forName: "url") {
+                        url = aUrl.stringValue ?? ""
+                    }
+                    
+                    self.numbers.append(number)
+                    self.library.append(SongEntry(number: number, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url)))
                 }
             }
             catch {
