@@ -62,33 +62,32 @@ internal class SongEntry {
     ///
     init(path: URL?, songNo: Int)
     {
-        //
-        // MEMORY LEAK IN THIS METHOD
-        //
         self.songNo = songNo
         self.fileURL = path!
         
-        let playerItem = AVPlayerItem(url: self.fileURL!)
-        
-        let audioAsset = AVURLAsset(url: self.fileURL!, options: nil)
-        self.duration = UInt64(CMTimeGetSeconds(audioAsset.duration) * Float64(1000))
-        
-        let metadataList = playerItem.asset.metadata
-        
-        for item in metadataList {
-            if let keyValue = item.commonKey?.rawValue {
-                if keyValue == "title" {
-                    self.title = item.stringValue!
-                    if self.title.count > 32 {
-                        self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
+        autoreleasepool {
+            let playerItem = AVPlayerItem(url: self.fileURL!)
+            
+            let audioAsset = AVURLAsset(url: self.fileURL!, options: nil)
+            self.duration = UInt64(CMTimeGetSeconds(audioAsset.duration) * Float64(1000))
+            
+            let metadataList = playerItem.asset.metadata
+            
+            for item in metadataList {
+                if let keyValue = item.commonKey?.rawValue {
+                    if keyValue == "title" {
+                        self.title = item.stringValue!
+                        if self.title.count > 32 {
+                            self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
+                        }
                     }
                 }
-            }
-            if let keyValue = item.commonKey?.rawValue {
-                if keyValue == "artist" {
-                    self.artist = item.stringValue!
-                    if self.artist.count > 32 {
-                        self.artist = String(artist[artist.startIndex..<artist.index(artist.startIndex, offsetBy: 32)])
+                if let keyValue = item.commonKey?.rawValue {
+                    if keyValue == "artist" {
+                        self.artist = item.stringValue!
+                        if self.artist.count > 32 {
+                            self.artist = String(artist[artist.startIndex..<artist.index(artist.startIndex, offsetBy: 32)])
+                        }
                     }
                 }
             }
