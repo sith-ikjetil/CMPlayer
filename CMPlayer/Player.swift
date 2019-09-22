@@ -53,14 +53,14 @@ internal class Player {
         g_library.load()
         
         Console.clearScreen()
-        MainWindow.renderHeader()
+        MainWindow.renderHeader(showTime: false)
         self.initializeSongs()
         
         if g_songs.count < 2 {
             let wnd: InitialSetupWindow = InitialSetupWindow()
             if wnd.showWindow() {
                 Console.clearScreen()
-                MainWindow.renderHeader()
+                MainWindow.renderHeader(showTime: false)
                 self.initializeSongs()
             }
             if g_songs.count < 2 {
@@ -321,7 +321,7 @@ internal class Player {
     /// parameters: Int. Percent completed.
     ///
     func printWorkingInitializationSongs(completed: Int) -> Void {
-        MainWindow.renderHeader()
+        MainWindow.renderHeader(showTime: false)
         
         Console.printXY(1,3,"### INITIALIZING ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         

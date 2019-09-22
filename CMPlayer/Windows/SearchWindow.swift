@@ -57,7 +57,7 @@ class SearchWindow {
     func renderSearch() -> Void {
         Console.clearScreen()
         
-        MainWindow.renderHeader()
+        MainWindow.renderHeader(showTime: false)
         
         Console.printXY(1,3,"### SEARCH RESULTS ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         

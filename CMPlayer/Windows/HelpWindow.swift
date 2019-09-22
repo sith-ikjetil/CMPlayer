@@ -49,7 +49,7 @@ internal class HelpWindow {
     func renderHelp() -> Void {
         Console.clearScreen()
         
-        MainWindow.renderHeader()
+        MainWindow.renderHeader(showTime: false)
         
         Console.printXY(1,3,"### HELP ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         

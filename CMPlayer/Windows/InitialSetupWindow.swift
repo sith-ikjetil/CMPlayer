@@ -35,7 +35,7 @@ internal class InitialSetupWindow {
     func renderInitialSetup(path: String) -> Void {
         Console.clearScreen()
         
-        MainWindow.renderHeader()
+        MainWindow.renderHeader(showTime: false)
         
         Console.printXY(1,3,"### SETUP ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         

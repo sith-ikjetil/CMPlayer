@@ -36,11 +36,13 @@ internal class MainWindow {
     private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
     private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
-    private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1", attributes: .concurrent)
-    private let concurrentQueue2 = DispatchQueue(label: "cqueue.console.music.player.macos.2", attributes: .concurrent)
+    private let concurrentQueue1 = DispatchQueue(label: "cqueue.cmplayer.macos.1", attributes: .concurrent)
+    private let concurrentQueue2 = DispatchQueue(label: "cqueue.cmplayer.macos.2", attributes: .concurrent)
+    //private let concurrentQueue3 = DispatchQueue(label: "cqueue.cmplayer.macos.3", attributes: .concurrent)
     private var currentChar: Int32 = -1
     private var exitCode: Int32 = 0
     private var isShowingTopWindow = false
+    static private var timeElapsedMs: UInt64 = 0
     
     ///
     /// Shows this MainWindow on screen.
@@ -51,12 +53,17 @@ internal class MainWindow {
         self.renderScreen()
         return self.run()
     }
-    
+
     ///
     /// Renders header on screen
     ///
-    static func renderHeader() -> Void {
-        Console.printXY(1,1,"CMPlayer | \(g_versionString)", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+    static func renderHeader(showTime: Bool) -> Void {
+        if showTime {
+            Console.printXY(1,1,"CMPlayer | \(g_versionString) | \(itsRenderMsToFullString(MainWindow.timeElapsedMs, false))", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        }
+        else {
+            Console.printXY(1,1,"CMPlayer | \(g_versionString)", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        }
     }
     
     ///
@@ -64,7 +71,7 @@ internal class MainWindow {
     ///
     func renderFrame() -> Void {
         
-        MainWindow.renderHeader()
+        MainWindow.renderHeader(showTime: true)
         
         Console.printXY(1,3,"Song No.", widthSongNo, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
@@ -163,6 +170,7 @@ internal class MainWindow {
             while !self.quit {
                 
                 if !self.isShowingTopWindow {
+                    MainWindow.renderHeader(showTime: true)
                     self.renderSongs()
                 }
                 
@@ -192,6 +200,17 @@ internal class MainWindow {
                 
                 let second: Double = 1_000_000
                 usleep(useconds_t(0.050 * second))
+            }
+        }
+        
+        //
+        // Count down and render songs
+        //
+        concurrentQueue2.async {
+            while !self.quit {
+                let second: Double = 1_000_000
+                usleep(useconds_t(0.150 * second))
+                MainWindow.timeElapsedMs += 150
             }
         }
         
