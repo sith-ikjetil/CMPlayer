@@ -5,11 +5,15 @@
 //  Created by Kjetil Kr Solberg on 20/09/2019.
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
-
 import Foundation
 
+///
+/// Represents CMPlayer MainWindow
+///
 internal class MainWindow {
-    
+    //
+    // Private properties
+    //
     private var quit: Bool = false
     private var currentCommand: String = ""
     private let commandsExit: [String] = ["exit", "quit"]
@@ -27,21 +31,33 @@ internal class MainWindow {
     private let commandsDisableCrossfade: [String] = ["disable crossfade"]
     private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
     private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
+    private let commandsRebuildSongNo: [String] = ["rebuild songno"]
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.console.music.player.macos.2", attributes: .concurrent)
     private var currentChar: Int32 = -1
     private var exitCode: Int32 = 0
     private var isShowingTopWindow = false
     
+    ///
+    /// Shows this MainWindow on screen and runs the keyboard and screen inpu/feedback
+    ///
+    /// returns: ExitCode,  Int32
+    ///
     func showWindow() -> Int32 {
         self.renderScreen()
         return self.run()
     }
     
+    ///
+    /// Renders header on screen
+    ///
     static func renderHeader() -> Void {
         Console.printXY(1,1,"Console Music Player | 1.0.1.0", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
+    ///
+    /// Renders main window frame on screen
+    ///
     func renderFrame() -> Void {
         
         MainWindow.renderHeader()
@@ -56,7 +72,10 @@ internal class MainWindow {
         
         Console.printXY(1,4,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
-    
+
+    ///
+    /// Renders a song on screen
+    ///
     func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64) -> Void
     {
 
@@ -69,17 +88,26 @@ internal class MainWindow {
         Console.printXY(76, y, itsRenderMsToFullString(time, false), widthTime, .ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
+    ///
+    /// Renders the command line on screen
+    ///
     func renderCommandLine() -> Void
     {
         Console.printXY(1,23,">: " + self.currentCommand,80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
+    ///
+    /// Renders the status line on screen
+    ///
     func renderStatusLine() -> Void
     {
         Console.printXY(1,24,"Songs Found: \(g_songs.count.itsToString())", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
-    func renderSongs() {
+    ///
+    /// Traverses all songs and ask the screen renderer to render them on screen
+    ///
+    func renderSongs() -> Void {
         var idx: Int = 5
         var index: Int = 0
         while idx < 22 {
@@ -106,13 +134,21 @@ internal class MainWindow {
         }
     }
     
-    func renderScreen() {
+    ///
+    /// Renders screen output. Does not clear screen first.
+    ///
+    func renderScreen() -> Void {
         renderFrame()
         renderSongs()
         renderCommandLine()
         renderStatusLine()
     }
     
+    ///
+    /// Runs MainWindow keyboard input and feedback. Delegation to other windows and command processing.
+    ///
+    /// returns: Exit Code: Int32
+    ///
     func run() -> Int32 {
         self.renderScreen()
         
@@ -262,6 +298,16 @@ internal class MainWindow {
                         self.renderScreen()
                         self.isShowingTopWindow = false
                     }
+                    if isCommandInCommands(self.currentCommand, self.commandsRebuildSongNo) {
+                        var i: Int = 1
+                        for s in g_songs {
+                            s.number = i
+                            i += 1
+                        }
+                        g_library.setNextAvailableNumber(i)
+                        g_library.library = g_songs
+                        g_library.save()
+                    }
                     if parts.count > 1 {
                         if isCommandInCommands(parts[0], self.commandsSearch) {
                             self.isShowingTopWindow = true
@@ -281,5 +327,5 @@ internal class MainWindow {
         }
         
         return self.exitCode
-    }
-}
+    }// run
+}// CMPlayer

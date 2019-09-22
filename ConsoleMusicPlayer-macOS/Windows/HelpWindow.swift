@@ -22,7 +22,8 @@ internal class HelpWindow {
                                                 " enable crossfade"," :: enables crossfade",
                                                 " disable crossfade", " :: disables crossfade",
                                                 " enable aos", " :: enables playing on application startup",
-                                                " disable aos", " :: disables playing on application startup"]
+                                                " disable aos", " :: disables playing on application startup",
+                                                " rebuild songno"," :: rebuilds song numbers"]
     
     
     func showWindow() {

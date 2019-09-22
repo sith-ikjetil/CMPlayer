@@ -40,6 +40,10 @@ internal class PlayerLibrary {
         return self.nextNumber
     }
     
+    func setNextAvailableNumber(_ number: Int) -> Void {
+        self.nextNumber = number
+    }
+    
     func load() {
         let fileUrl: URL = PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent("CMPlayer.Library.xml", isDirectory: false)
         if FileManager.default.fileExists(atPath: fileUrl.path) {
