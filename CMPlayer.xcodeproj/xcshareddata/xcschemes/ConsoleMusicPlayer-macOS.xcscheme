@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D0ED142A23320B1B00FB51C8"
                BuildableName = "CMPlayer"
-               BlueprintName = "ConsoleMusicPlayer-macOS"
-               ReferencedContainer = "container:ConsoleMusicPlayer-macOS.xcodeproj">
+               BlueprintName = "CMPlayer"
+               ReferencedContainer = "container:CMPlayer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,8 +32,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0ED142A23320B1B00FB51C8"
             BuildableName = "CMPlayer"
-            BlueprintName = "ConsoleMusicPlayer-macOS"
-            ReferencedContainer = "container:ConsoleMusicPlayer-macOS.xcodeproj">
+            BlueprintName = "CMPlayer"
+            ReferencedContainer = "container:CMPlayer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -55,8 +55,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0ED142A23320B1B00FB51C8"
             BuildableName = "CMPlayer"
-            BlueprintName = "ConsoleMusicPlayer-macOS"
-            ReferencedContainer = "container:ConsoleMusicPlayer-macOS.xcodeproj">
+            BlueprintName = "CMPlayer"
+            ReferencedContainer = "container:CMPlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,8 +72,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0ED142A23320B1B00FB51C8"
             BuildableName = "CMPlayer"
-            BlueprintName = "ConsoleMusicPlayer-macOS"
-            ReferencedContainer = "container:ConsoleMusicPlayer-macOS.xcodeproj">
+            BlueprintName = "CMPlayer"
+            ReferencedContainer = "container:CMPlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
