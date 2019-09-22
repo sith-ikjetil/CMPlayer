@@ -252,7 +252,7 @@ internal class Player {
                 g_songs.append(se)
             }
             else {
-                g_songs.append(SongEntry(path: URL(fileURLWithPath: r),num: g_library.nextAvailableNumber()))
+                g_songs.append(SongEntry(path: URL(fileURLWithPath: r),songNo: g_library.nextAvailableSongNo()))
             }
             
             i += 1

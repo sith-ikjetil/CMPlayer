@@ -127,14 +127,14 @@ internal class MainWindow {
                 
                 if idx == 5 {
                     if g_player.audioPlayerActive == 1 {
-                        renderSong(idx, s.number, s.artist, s.title, g_player.durationAudioPlayer1)
+                        renderSong(idx, s.songNo, s.artist, s.title, g_player.durationAudioPlayer1)
                     }
                     else if g_player.audioPlayerActive == 2 {
-                        renderSong(idx, s.number, s.artist, s.title, g_player.durationAudioPlayer2)
+                        renderSong(idx, s.songNo, s.artist, s.title, g_player.durationAudioPlayer2)
                     }
                 }
                 else {
-                    renderSong(idx, s.number, s.artist, s.title, s.duration)
+                    renderSong(idx, s.songNo, s.artist, s.title, s.duration)
                 }
             }
             else {
@@ -272,7 +272,7 @@ internal class MainWindow {
                     if let num = Int32(self.currentCommand) {
                         if num > 0 {
                             for se in g_songs {
-                                if se.number == num {
+                                if se.songNo == num {
                                     g_playlist.append(se)
                                     break
                                 }
@@ -324,10 +324,10 @@ internal class MainWindow {
                     if isCommandInCommands(self.currentCommand, self.commandsRebuildSongNo) {
                         var i: Int = 1
                         for s in g_songs {
-                            s.number = i
+                            s.songNo = i
                             i += 1
                         }
-                        g_library.setNextAvailableNumber(i)
+                        g_library.setNextAvailableSongNo(i)
                         g_library.library = g_songs
                         g_library.save()
                     }

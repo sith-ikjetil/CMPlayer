@@ -19,7 +19,7 @@ internal class PlayerLibrary {
     // Private properties/constants
     //
     private let filename: String = "CMPLayer.Library.xml"
-    private var nextNumber: Int = 0
+    private var nextSongNo: Int = 0
     private var dictionary: [String: Int] = [:]
     
     //
@@ -51,16 +51,16 @@ internal class PlayerLibrary {
     ///
     /// returnes: Next available song number.
     ///
-    func nextAvailableNumber() -> Int {
-        self.nextNumber += 1
-        return self.nextNumber
+    func nextAvailableSongNo() -> Int {
+        self.nextSongNo += 1
+        return self.nextSongNo
     }
     
     ///
     /// Sets the next available number
     ///
-    func setNextAvailableNumber(_ number: Int) -> Void {
-        self.nextNumber = number
+    func setNextAvailableSongNo(_ songNo: Int) -> Void {
+        self.nextSongNo = songNo
     }
     
     ///
@@ -78,14 +78,14 @@ internal class PlayerLibrary {
                 let xeSongs = xeSongLibrary.elements(forName: "Song")
                 
                 for s in xeSongs {
-                    var number: Int = 0
+                    var songNo: Int = 0
                     var artist: String = ""
                     var title: String = ""
                     var url: String = ""
                     var duration: UInt64 = 0
                     
-                    if let aNumber = s.attribute(forName: "number") {
-                        number = Int(aNumber.stringValue ?? "0") ?? 0
+                    if let aNumber = s.attribute(forName: "songNo") {
+                        songNo = Int(aNumber.stringValue ?? "0") ?? 0
                     }
                     if let aArtist = s.attribute(forName: "artist") {
                         artist = aArtist.stringValue ?? "<UNKNOWN>"
@@ -100,10 +100,10 @@ internal class PlayerLibrary {
                         url = aUrl.stringValue ?? ""
                     }
                     
-                    if number > self.nextNumber {
-                        self.nextNumber = number
+                    if songNo > self.nextSongNo {
+                        self.nextSongNo = songNo
                     }
-                    let se = SongEntry(number: number, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url))
+                    let se = SongEntry(songNo: songNo, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url))
                     self.library.append(se)
                     if url.count > 0 {
                         self.dictionary[url] = self.library.count-1
@@ -126,10 +126,10 @@ internal class PlayerLibrary {
             let xeSong: XMLElement = XMLElement(name: "Song")
             xeRoot.addChild(xeSong)
             
-            let xnNumber: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
-            xnNumber.name = "number"
-            xnNumber.setStringValue(String(s.number), resolvingEntities: true)
-            xeSong.addAttribute(xnNumber)
+            let xnSongNo: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+            xnSongNo.name = "songNo"
+            xnSongNo.setStringValue(String(s.songNo), resolvingEntities: true)
+            xeSong.addAttribute(xnSongNo)
             
             let xnArtist: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
             xnArtist.name = "artist"

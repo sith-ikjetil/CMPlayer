@@ -75,7 +75,7 @@ class SearchWindow {
             
             let se = g_searchResult[index_search]
             
-            Console.printXY(1, index_screen_lines, "\(se.number) ", widthSongNo+1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            Console.printXY(1, index_screen_lines, "\(se.songNo) ", widthSongNo+1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             
             Console.printXY(10, index_screen_lines, "\(se.artist)", widthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
 

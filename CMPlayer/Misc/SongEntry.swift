@@ -19,7 +19,7 @@ internal class SongEntry {
     //
     // Properties/Constants.
     //
-    var number: Int = 0
+    var songNo: Int = 0
     var artist: String = ""
     var title: String = ""
     var duration: UInt64 = 0
@@ -30,7 +30,7 @@ internal class SongEntry {
     ///
     init()
     {
-        self.number = 0
+        self.songNo = 0
         self.artist = "<UNKNOWN>"
         self.title = "<UNKNOWN>"
         self.duration = 0
@@ -46,8 +46,8 @@ internal class SongEntry {
     /// parameter: duration. Song length in milliseconds.
     /// parameter: url. Song file path.
     ///
-    init(number: Int, artist: String, title: String, duration: UInt64, url: URL?) {
-        self.number = number
+    init(songNo: Int, artist: String, title: String, duration: UInt64, url: URL?) {
+        self.songNo = songNo
         self.artist = artist
         self.title = title
         self.duration = duration
@@ -60,12 +60,12 @@ internal class SongEntry {
     /// parameter: path. URL file path to song.
     /// parameter: num. Song No.
     ///
-    init(path: URL?, num: Int)
+    init(path: URL?, songNo: Int)
     {
         //
         // MEMORY LEAK IN THIS METHOD
         //
-        self.number = num
+        self.songNo = songNo
         self.fileURL = path!
         
         let playerItem = AVPlayerItem(url: self.fileURL!)
