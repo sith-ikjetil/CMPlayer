@@ -30,7 +30,9 @@ internal class Player {
     // Private properties/constants.
     //
     private var musicFormats: [String] = []
-    private let initSongLibraryText: String = "Initializing Song Library"
+    private var filesFound = false
+    private let findingFilesText: String = "Finding Song Files"
+    private let initSongLibraryText: String = "Updating Song Library"
     private var helpIndex: Int = 0
     private var currentCommandReady: Bool = false
     private let EXIT_CODE_ERROR_FINDING_FILES: Int32 = 1
@@ -242,6 +244,8 @@ internal class Player {
             let result = findSongs(path: PlayerPreferences.musicRootPath)
         #endif
         
+        filesFound = true
+        printWorkingInitializationSongs(completed: 0)
         
         var i: Int = 1
         for r in result {
@@ -276,6 +280,7 @@ internal class Player {
     ///
     func findSongs(path: String) -> [String]
     {
+        filesFound = false
         var results: [String] = []
         do
         {
@@ -325,9 +330,11 @@ internal class Player {
         
         Console.printXY(1,3,"### INITIALIZING ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
+        let pstFiles: String = "\((filesFound) ? 100 : 0)%"
+        Console.printXY(1, 5, findingFilesText + " " + pstFiles, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        let pst: String = "\(completed)%"
-        Console.printXY(1, 5, initSongLibraryText + " " + pst, initSongLibraryText.count + pst.count + 1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        let pstLib: String = "\(completed)%"
+        Console.printXY(1, 6, initSongLibraryText + " " + pstLib, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(1,23,"PLEASE BE PATIENT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
