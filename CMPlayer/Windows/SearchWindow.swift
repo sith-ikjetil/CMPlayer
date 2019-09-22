@@ -6,14 +6,28 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import
+//
 import Foundation
 
+///
+/// Represents CMPlayer SearchWindow.
+///
 class SearchWindow {
+    //
+    // Private properties/constants.
+    //
     private var searchIndex: Int = 0
     
+    ///
+    /// Performs search from arguments. Searches g_songs.
+    ///
+    /// parameter: terms. Array of search terms.
+    ///
     func performSearch(terms: [String]) -> Void {
         g_searchResult.removeAll(keepingCapacity: false)
-        let nterms = reparseCurrentCommandArguments(terms)
+        let nterms = reparseCurrentCommandArguments(terms) // reparse the arguments taking "a b" strings into account
         for se in g_songs {
             let artist = se.artist.lowercased()
             let title = se.title.lowercased()
@@ -29,11 +43,17 @@ class SearchWindow {
         }
     }
     
+    ///
+    /// Shows this SearchWindow on screen.
+    ///
     func showWindow(parts: [String]) -> Void {
         self.renderSearch()
         self.run(parts: parts)
     }
     
+    ///
+    /// Renders screen output. Does clear screen first.
+    ///
     func renderSearch() -> Void {
         Console.clearScreen()
         
@@ -72,6 +92,9 @@ class SearchWindow {
         Console.printXY(1,24,"Results Found: \(g_searchResult.count.itsToString())",80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
+    ///
+    /// Runs SearchWindow keyboard input and feedback.
+    ///
     func run(parts: [String]) -> Void {
         var p : [String] = []
         for px in parts {
@@ -104,5 +127,5 @@ class SearchWindow {
             }
             ch = getchar()
         }
-    }
-}
+    }// run
+}// SearchWindow

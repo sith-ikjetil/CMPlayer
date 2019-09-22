@@ -6,17 +6,32 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import
+//
 import Foundation
 
+///
+/// Represents CMPlayer InitialSetupWindow.
+///
 internal class InitialSetupWindow {
+    ///
+    /// Private properties/constants.
+    ///
     private let setupTextRootPath: String = "There seems to be a problem finding the 2+ songs needed"
     private let setupTextPleaseEnterPath: String = "Please enter a new path to root directory of music"
 
+    ///
+    /// Shows this InitialSetupWindow on screen.
+    ///
     func showWindow() -> Bool {
         self.renderInitialSetup(path: "")
         return self.run()
     }
     
+    ///
+    /// Renders screen output. Does clear screen first.
+    ///
     func renderInitialSetup(path: String) -> Void {
         Console.clearScreen()
         
@@ -31,6 +46,11 @@ internal class InitialSetupWindow {
         //Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE RESULTS. OTHER KEY TO EXIT HELP.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
+    ///
+    /// Runs InitialSetupWindow keyboard input and feedback.
+    ///
+    ///  returns: Bool. True if path entered, false otherwise.
+    ///
     func run() -> Bool {
         var path: String = ""
         var ch = getchar()
@@ -63,5 +83,5 @@ internal class InitialSetupWindow {
             ch = getchar()
         }
         return false
-    }
-}
+    }// run
+}// InitialSetupWindow

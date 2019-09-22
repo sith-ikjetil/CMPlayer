@@ -5,14 +5,18 @@
 //  Created by Kjetil Kr Solberg on 20/09/2019.
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
+
+//
+// import
+//
 import Foundation
 
 ///
-/// Represents CMPlayer MainWindow
+/// Represents CMPlayer MainWindow.
 ///
 internal class MainWindow {
     //
-    // Private properties
+    // Private properties/constants.
     //
     private var quit: Bool = false
     private var currentCommand: String = ""
@@ -39,7 +43,7 @@ internal class MainWindow {
     private var isShowingTopWindow = false
     
     ///
-    /// Shows this MainWindow on screen and runs the keyboard and screen inpu/feedback
+    /// Shows this MainWindow on screen.
     ///
     /// returns: ExitCode,  Int32
     ///
@@ -52,7 +56,7 @@ internal class MainWindow {
     /// Renders header on screen
     ///
     static func renderHeader() -> Void {
-        Console.printXY(1,1,"Console Music Player | 1.0.1.0", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,1,"CMPlayer | 1.1.0.0", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///
@@ -147,7 +151,7 @@ internal class MainWindow {
     ///
     /// Runs MainWindow keyboard input and feedback. Delegation to other windows and command processing.
     ///
-    /// returns: Exit Code: Int32
+    /// returns: Int32. Exit code.
     ///
     func run() -> Int32 {
         self.renderScreen()

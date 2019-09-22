@@ -6,9 +6,18 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import
+//
 import Foundation
 
+///
+/// Represents CMPlayer AboutWindow.
+///
 internal class AboutWindow {
+    ///
+    /// Private properties/constants.
+    ///
     private var aboutIndex: Int = 0
     private let aboutText: [String] = ["   CMPlayer (Console Music Player) is a clone and improvement over the",
                                        "   Interactive DJ software written in summer 1997 running on DOS.",
@@ -22,13 +31,18 @@ internal class AboutWindow {
                                        "   ",
                                        "   CMPlayer was made by Kjetil Kristoffer Solberg. ENJOY!"]
     
-    
-    func showWindow() {
+    ///
+    /// Shows this AboutWindow on screen.
+    ///
+    func showWindow() -> Void {
         self.aboutIndex = 0
         self.renderAbout()
         self.run()
     }
     
+    ///
+    /// Renders screen output. Does clear screen first.
+    ///
     func renderAbout() -> Void {
         Console.clearScreen()
         
@@ -61,6 +75,9 @@ internal class AboutWindow {
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT ABOUT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
+    ///
+    /// Runs AboutWindow keyboard input and feedback.
+    ///
     func run() -> Void {
         self.aboutIndex = 0
         self.renderAbout()
@@ -87,5 +104,5 @@ internal class AboutWindow {
             }
             ch = getchar()
         }
-    }
-}
+    }// run
+}// AboutWindow

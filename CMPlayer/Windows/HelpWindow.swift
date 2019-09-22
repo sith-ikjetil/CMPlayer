@@ -6,9 +6,18 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import
+//
 import Foundation
 
+///
+/// Represents CMPlayer HelpWindow.
+///
 internal class HelpWindow {
+    //
+    // Private properties/constants
+    //
     private var helpIndex: Int = 0
     private let helpText: [String] = [" exit, quit", " :: exits application",
                                                 " next, skip", " :: plays next song",
@@ -25,13 +34,18 @@ internal class HelpWindow {
                                                 " disable aos", " :: disables playing on application startup",
                                                 " rebuild songno"," :: rebuilds song numbers"]
     
-    
-    func showWindow() {
+    ///
+    /// Shows this HelpWindow on screen.
+    ///
+    func showWindow() -> Void {
         self.helpIndex = 0
         self.renderHelp()
         self.run()
     }
     
+    ///
+    /// Renders screen output. Does clear screen first.
+    ///
     func renderHelp() -> Void {
         Console.clearScreen()
         
@@ -67,6 +81,9 @@ internal class HelpWindow {
         Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE RESULTS. OTHER KEY TO EXIT HELP.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
+    ///
+    /// Runs HelpWindow keyboard input and feedback.
+    ///
     func run() -> Void {
         self.helpIndex = 0
         self.renderHelp()
@@ -93,5 +110,5 @@ internal class HelpWindow {
             }
             ch = getchar()
         }
-    }
-}
+    }// run
+}// HelpWindow
