@@ -29,6 +29,62 @@ internal func isCommandInCommands(_ command: String, _ commands: [String]) -> Bo
     return false
 }
 
+internal func reparseCurrentCommandArguments(_ command: [String]) -> [String] {
+    var retVal: [String] = []
+
+    var temp: String = ""
+    
+    for c in command {
+        if temp.count > 0 {
+            if c.count > 0 {
+                if c.hasSuffix("\"") {
+                    var nc: String = c
+                    nc.remove(at: nc.index(nc.endIndex, offsetBy: -1))
+                    temp.append(" ")
+                    temp.append(nc)
+                    retVal.append(temp)
+                    temp = ""
+                }
+                else {
+                    temp.append(" ")
+                    temp.append(c)
+                }
+            }
+        }
+        else if c.count > 0 {
+            var nc: String = c
+            while nc.hasPrefix(" ") {
+                nc.remove(at: nc.startIndex)
+            }
+            if nc.count > 0 {
+                var i: Int = 0
+                if c.hasPrefix("\"") {
+                    i += 1
+                }
+                if i == 0 {
+                    retVal.append(nc)
+                }
+                else {
+                    nc.remove(at: nc.startIndex)
+                    if nc.count > 0 {
+                        if nc.hasSuffix("\"") {
+                            nc.remove(at: nc.index(nc.endIndex, offsetBy: -1))
+                            if nc.count > 0 {
+                                retVal.append(nc)
+                            }
+                        }
+                        else {
+                            temp = nc
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    return retVal
+}
+
 internal extension String {
     func itsToInt32() -> Int32 {
         var ns: String = ""

@@ -13,11 +13,12 @@ class SearchWindow {
     
     func performSearch(terms: [String]) -> Void {
         g_searchResult.removeAll(keepingCapacity: false)
+        let nterms = reparseCurrentCommandArguments(terms)
         for se in g_songs {
             let artist = se.artist.lowercased()
             let title = se.title.lowercased()
             
-            for t in terms {
+            for t in nterms {
                 let term = t.lowercased()
                 
                 if artist.contains(term) || title.contains(term) {

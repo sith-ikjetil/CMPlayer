@@ -174,19 +174,19 @@ internal class MainWindow {
                     
                     if g_player.audioPlayerActive == 1 {
                         if (PlayerPreferences.crossfadeSongs && g_player.durationAudioPlayer1 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || g_player.durationAudioPlayer1 <= 2000 {
+                            || g_player.durationAudioPlayer1 <= 1000 {
                             g_player.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
                     else if g_player.audioPlayerActive == 2 {
                         if (PlayerPreferences.crossfadeSongs && g_player.durationAudioPlayer2 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || g_player.durationAudioPlayer2 <= 2000 {
+                            || g_player.durationAudioPlayer2 <= 1000 {
                             g_player.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
                 }
                 
-                let second: Double = 1000000
+                let second: Double = 1_000_000
                 usleep(useconds_t(0.050 * second))
             }
         }
