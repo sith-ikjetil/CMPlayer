@@ -6,41 +6,64 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import.
+//
 import Foundation
 import AppKit
 
+///
+/// What to do when log max size is reached.
+///
 internal enum LogMaxSizeReached: String {
     case StopLogging = "StopLogging"
     case EmptyLog = "EmptyLog"
 }
 
+///
+/// What to do with log when application starts
+///
 internal enum LogApplicationStartLoadType: String {
     case DoNotLoadOldLog = "DoNotLoadOldLog"
     case LoadOldLog = "LoadOldLog"
 }
 
+///
+/// Represents CMPlayer PlayerPreferences.
+///
 internal class PlayerPreferences {
-    internal static let preferencesFilename: String = "CMPlayer.Preferences.xml"
-    internal static var musicRootPath: String = ""
-    internal static var musicFormats: String = "mp3;mp2;m4a"
-    internal static var autoplayOnStartup: Bool = true
-    internal static var crossfadeSongs: Bool = true
-    internal static var crossfadeTimeInSeconds: Int = 5
-    internal static var logInformation: Bool = true
-    internal static var logWarning: Bool = true
-    internal static var logError: Bool = true
-    internal static var logDebug: Bool = false
-    internal static var logOther: Bool = false
-    internal static var logMaxSize: Int = 1000
-    internal static var logMaxSizeReached: LogMaxSizeReached = LogMaxSizeReached.StopLogging
-    internal static let logMaxSizes: [Int] = [100, 500, 1000, 2000, 3000, 4000, 5000]
-    internal static var logApplicationStartLoadType: LogApplicationStartLoadType = LogApplicationStartLoadType.LoadOldLog
+    //
+    // Static properties/constants
+    //
+    static let preferencesFilename: String = "CMPlayer.Preferences.xml"
+    static var musicRootPath: String = ""
+    static var musicFormats: String = "mp3;mp2;m4a"
+    static var autoplayOnStartup: Bool = true
+    static var crossfadeSongs: Bool = true
+    static var crossfadeTimeInSeconds: Int = 5
+    static var logInformation: Bool = true
+    static var logWarning: Bool = true
+    static var logError: Bool = true
+    static var logDebug: Bool = false
+    static var logOther: Bool = false
+    static var logMaxSize: Int = 1000
+    static var logMaxSizeReached: LogMaxSizeReached = LogMaxSizeReached.StopLogging
+    static let logMaxSizes: [Int] = [100, 500, 1000, 2000, 3000, 4000, 5000]
+    static var logApplicationStartLoadType: LogApplicationStartLoadType = LogApplicationStartLoadType.LoadOldLog
     
+    ///
+    /// Default initializer.
+    ///
     internal init() {
         
     }
     
-    internal static func loadPreferences(_ fileUrl: URL ) {
+    ///
+    /// Loads preferences from file
+    ///
+    /// parameter: fileUrl. Path to preferences file.
+    ///
+    static func loadPreferences(_ fileUrl: URL ) {
         do {
             let xd: XMLDocument = try XMLDocument(contentsOf: fileUrl)
             let xeRoot = xd.rootElement()!
@@ -115,7 +138,10 @@ internal class PlayerPreferences {
         }
     }
     
-    internal static func savePreferences() {
+    ///
+    /// Saves preferences to file
+    ///
+    static func savePreferences() {
         let xeRoot: XMLElement = XMLElement(name: "preferences")
         
         //
@@ -211,7 +237,10 @@ internal class PlayerPreferences {
         }
     }
     
-    internal static func ensureLoadPreferences()
+    ///
+    /// Ensures that preferences file exists. If it does not create it by saving it. Anyhow load it.
+    ///
+    static func ensureLoadPreferences()
     {
         let dir = PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent(PlayerPreferences.preferencesFilename, isDirectory: false)
         if FileManager.default.fileExists(atPath: dir.path) == false {
@@ -219,5 +248,5 @@ internal class PlayerPreferences {
         }
         
         PlayerPreferences.loadPreferences(dir)
-    }
-}
+    }// ensureLoadPreferences
+}// PlayerPreferences

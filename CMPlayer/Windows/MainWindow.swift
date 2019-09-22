@@ -56,7 +56,7 @@ internal class MainWindow {
     /// Renders header on screen
     ///
     static func renderHeader() -> Void {
-        Console.printXY(1,1,"CMPlayer | 1.1.0.0", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,1,"CMPlayer | \(g_versionString)", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///

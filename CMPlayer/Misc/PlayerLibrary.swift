@@ -6,44 +6,66 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import.
+//
 import Foundation
 
+///
+/// Represents CMPlayer PlayerLibrary
+///
 internal class PlayerLibrary {
+    //
+    // Private properties/constants
+    //
     private let filename: String = "CMPLayer.Library.xml"
-    var library: [SongEntry] = []
     private var nextNumber: Int = 0
     private var dictionary: [String: Int] = [:]
     
+    //
+    // Internal properties/Constants
+    //
+    var library: [SongEntry] = []
+    
+    ///
+    /// Default initializer
+    ///
     init() {
         
     }
     
+    ///
+    /// Find SongEntry in self.dictionary. Return it or nil if not existing.
+    ///
     func find(url: URL) -> SongEntry? {
         if let item = self.dictionary[url.path] {
             if self.library.count > item {
                 return self.library[item]
             }
         }
-        
-        for s in self.library {
-            if s.fileURL != nil {
-                if ( s.fileURL! == url ) {
-                    return s
-                }
-            }
-        }
         return nil
     }
     
+    ///
+    /// Return next available SongNo.
+    ///
+    /// returnes: Next available song number.
+    ///
     func nextAvailableNumber() -> Int {
         self.nextNumber += 1
         return self.nextNumber
     }
     
+    ///
+    /// Sets the next available number
+    ///
     func setNextAvailableNumber(_ number: Int) -> Void {
         self.nextNumber = number
     }
     
+    ///
+    /// Loads the CMPlayer.Library.xml song library for faster song initialization load time.
+    ///
     func load() {
         let fileUrl: URL = PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent("CMPlayer.Library.xml", isDirectory: false)
         if FileManager.default.fileExists(atPath: fileUrl.path) {
@@ -94,6 +116,9 @@ internal class PlayerLibrary {
         }
     }
     
+    ///
+    /// Saves the self.library SongEntry array to CMPlayer.Library.xml.
+    ///
     func save() {
         let xeRoot: XMLElement = XMLElement(name: "SongLibrary")
         
@@ -140,5 +165,5 @@ internal class PlayerLibrary {
         catch {
             
         }
-    }
-}
+    }// save
+}// PlayerLibrary
