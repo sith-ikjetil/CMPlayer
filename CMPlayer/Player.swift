@@ -6,18 +6,30 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import.
+//
 import Foundation
 import AVFoundation
 import CoreMedia
 
+//
+// Represents CMPlayer Player.
+//
 internal class Player {
+    //
+    // Internal properties/constants.
+    //
     var audio1: AVAudioPlayer? = nil
     var audio2: AVAudioPlayer? = nil
     var audioPlayerActive: Int = -1
-    
-    private var musicFormats: [String] = []
     var durationAudioPlayer1: UInt64 = 0
     var durationAudioPlayer2: UInt64 = 0
+    
+    //
+    // Private properties/constants.
+    //
+    private var musicFormats: [String] = []
     private let initSongLibraryText: String = "Initializing Song Library"
     private var helpIndex: Int = 0
     private var currentCommandReady: Bool = false
@@ -25,7 +37,9 @@ internal class Player {
     private let EXIT_CODE_ERROR_PLAYING_FILE: Int32 = 2
     //private let EXIT_CODE_ERROR_NOT_ENOUGH_MUSIC: Int32 = 3
     
-    
+    ///
+    /// Initializes the application.
+    ///
     func initialize() -> Void {
         PlayerDirectories.ensureDirectoriesExistence()
         PlayerPreferences.ensureLoadPreferences()
@@ -70,6 +84,12 @@ internal class Player {
         Console.clearScreen()
     }
     
+    ///
+    /// Plays audio.
+    ///
+    /// parameter: player. Player number. 1 or 2.
+    /// parameter: playlistIndex. Index of playlist array to play.
+    ///
     func play(player: Int, playlistIndex: Int) -> Void {
         self.audioPlayerActive = player
         if player == 1 {
@@ -128,6 +148,9 @@ internal class Player {
         }
     }
     
+    ///
+    /// Pauses audio playback.
+    ///
     func pause() -> Void {
         if self.audio1 != nil {
             if self.audio1?.isPlaying ?? false {
@@ -142,6 +165,9 @@ internal class Player {
         }
     }
     
+    ///
+    /// Resumes audio playback.
+    ///
     func resume() -> Void {
         if self.audio1 != nil && self.audioPlayerActive == 1 {
             if self.audio1?.currentTime.magnitude ?? 0 > 0 {
@@ -156,6 +182,9 @@ internal class Player {
         }
     }
     
+    ///
+    /// Skips audio playback to next item in playlist.
+    ///
     func skip(crossfade: Bool = true) -> Void {
         g_playlist.removeFirst()
         if g_playlist.count < 2 {
@@ -190,12 +219,19 @@ internal class Player {
         }
     }
     
+    ///
+    /// Runs the application.
+    ///
+    /// returnes: Int32. Exit code.
+    ///
     func run() -> Int32 {
         g_mainWindow = MainWindow()
         return g_mainWindow?.showWindow() ?? 0
     }
     
-   
+    ///
+    /// Initializes all the songs from files and library.
+    ///
     func initializeSongs() -> Void {
         g_songs.removeAll()
         g_playlist.removeAll()
@@ -231,6 +267,13 @@ internal class Player {
         }
     }
     
+    ///
+    /// Finds all songs from path and all folder paths under path. Songs must be of format in PlayerPreferences.musicFormats.
+    ///
+    /// parameter: path. The root path to start finding supported audio files.
+    ///
+    /// returnes: [String]. Array of file paths to audio files found.
+    ///
     func findSongs(path: String) -> [String]
     {
         var results: [String] = []
@@ -272,7 +315,12 @@ internal class Player {
         return results
     }
     
-    func printWorkingInitializationSongs(completed: Int) {
+    ///
+    /// Prints the initialization of songs.
+    ///
+    /// parameters: Int. Percent completed.
+    ///
+    func printWorkingInitializationSongs(completed: Int) -> Void {
         MainWindow.renderHeader()
         
         Console.printXY(1,3,"### INITIALIZING ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
@@ -284,11 +332,16 @@ internal class Player {
         Console.printXY(1,23,"PLEASE BE PATIENT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
+    ///
+    /// Determines if a path is a directory or not.
+    ///
+    /// parameter: path. Path to check.
+    ///
+    /// returnes: Bool. True if path is directory. False otherwise.
+    ///
     func isDirectory(path: String) -> Bool {
         var isDirectory: ObjCBool = true
         FileManager().fileExists(atPath: path, isDirectory: &isDirectory)
         return isDirectory.boolValue
-    }
-    
-    
-}
+    }// isDirectory
+}// Player

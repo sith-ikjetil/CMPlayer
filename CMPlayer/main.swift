@@ -6,14 +6,24 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import.
+//
 import Foundation
 
+//
+// Global properties
+//
 var g_songs: [SongEntry] = []
 var g_playlist: [SongEntry] = []
 var g_searchResult: [SongEntry] = []
 var g_library: PlayerLibrary = PlayerLibrary()
 var g_mainWindow: MainWindow?
 let g_player: Player = Player()
+
+//
+// Startup code
+//
 g_player.initialize()
 exit(g_player.run())
 
