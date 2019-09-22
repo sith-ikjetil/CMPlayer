@@ -6,13 +6,22 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import.
+//
 import Foundation
 
+//
+// Global constants.
+//
 internal let widthSongNo: Int = 8
 internal let widthArtist: Int = 33
 internal let widthSong: Int = 33
 internal let widthTime: Int = 5
 
+///
+/// Padding alignment types.
+///
 internal enum PrintPaddingTextAlign {
     case left
     case right
@@ -20,6 +29,14 @@ internal enum PrintPaddingTextAlign {
     case ignore
 }
 
+///
+/// Check to see if command is one of the supported given commands.
+///
+/// parameter: command. Command to check for.
+/// parameter: commands. Commands to check in.
+///
+/// returnes: True if command is in commands. False otherwise.
+///
 internal func isCommandInCommands(_ command: String, _ commands: [String]) -> Bool {
     for c in commands {
         if command == c {
@@ -29,6 +46,13 @@ internal func isCommandInCommands(_ command: String, _ commands: [String]) -> Bo
     return false
 }
 
+///
+/// Reparses the command arguments. Makes sure that commands that are part of "<search term>" are remade into on search term without the " character.
+///
+/// parameter: command: The search terms comming from command argument.
+///
+/// returnes: The new reparsed command argument array.
+///
 internal func reparseCurrentCommandArguments(_ command: [String]) -> [String] {
     var retVal: [String] = []
 
@@ -85,58 +109,19 @@ internal func reparseCurrentCommandArguments(_ command: [String]) -> [String] {
     return retVal
 }
 
+///
+/// String extension methods.
+///
 internal extension String {
-    func itsToInt32() -> Int32 {
-        var ns: String = ""
-        for c in self {
-            if c == "0" || c == "1" || c == "2" || c == "3" || c == "4" || c == "5" || c == "6" || c == "7" || c == "8" || c == "9" {
-                ns += String(c)
-            }
-        }
-        
-        if ns.count == 0 {
-            return 0
-        }
-        
-        return Int32(ns)!
-    }
-    
-    func itsToFloat() -> Float {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en_US")
-        return formatter.number(from: self)!.floatValue
-    }
-    
-    func itsToCGFloat() -> CGFloat {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en_US")
-        return CGFloat(formatter.number(from: self)!.floatValue)
-    }
-    
-    func itsToDouble() -> Double {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en_US")
-        return formatter.number(from: self)!.doubleValue
-    }
-    
-    //func itsToNSColor() -> NSColor {
-    //    let parts: [Substring]? = self.split(separator: ",")
-    //    if parts != nil {
-    //        if parts!.count == 4 {
-    //            return NSColor(red: String(parts![0]).itsToCGFloat(), green: String(parts![1]).itsToCGFloat(), blue: String(parts![2]).itsToCGFloat(), alpha: String(parts![3]).itsToCGFloat())
-    //        }
-    //    }
-    //    return NSColor(red: CGFloat(1), green: CGFloat(1), blue: CGFloat(1), alpha: CGFloat(1))
-    //}
-    
-    func slice(from: String, to: String) -> String? {
-        return (range(of: from)?.upperBound).flatMap { substringFrom in
-            (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
-                String(self[substringFrom..<substringTo])
-            }
-        }
-    }
-    
+    ///
+    /// Converts a string to a padded string of given length.
+    ///
+    /// parameter: maxLength. Length of new string.
+    /// parameter: padding. Padding type.
+    /// parameter: paddingChar. Padding character to use.
+    ///
+    /// returnes: New padded string.
+    ///
     func convertStringToLengthPaddedString(_ maxLength: Int,_ padding: PrintPaddingTextAlign,_ paddingChar: Character) -> String {
         var msg: String = self
         if msg.count > maxLength {
@@ -178,11 +163,18 @@ internal extension String {
             
         }
     }
-}
+}// extension String
 
-//
-// Split ms to its parts
-//
+///
+/// Split ms to its parts.
+///
+/// parameter: time_ms: Time in milliseconds.
+///
+/// returnes: part_hours. Number of hours in time_ms.
+/// returnes: part_minutes. Number of minutes in time_ms.
+/// returnes: part_seconds. Number of seconds in time_ms.
+/// returnes: part_ms. Number of milliseconds in time_ms.
+///
 internal func itsSplitMsToHourMinuteSeconds(_ time_ms: UInt64 ) -> (part_hours: UInt64,part_minutes: UInt64,part_seconds: UInt64,part_ms: UInt64)
 {
     let seconds: UInt64 = time_ms / 1000
@@ -200,6 +192,16 @@ internal func itsSplitMsToHourMinuteSeconds(_ time_ms: UInt64 ) -> (part_hours: 
     return (part_hours, part_minutes, part_seconds, part_ms)
 }
 
+///
+/// Splits hour to its parts.
+///
+/// parameter: houIn. Number of hours to split.
+///
+/// returnes: houRest. Number of hours left in houIn.
+/// returnes: day. Number of days in houIn.
+/// returnes: week. Number of weeks in houIn.
+/// returnes. year. Number of years in houIn.
+///
 internal func itsSplitHourToYearWeekDayHour(_ houIn: UInt64 ) -> (houRest: UInt64, day: UInt64, week: UInt64, year: UInt64)
 {
     var houRest: UInt64 = houIn;
@@ -219,6 +221,14 @@ internal func itsSplitHourToYearWeekDayHour(_ houIn: UInt64 ) -> (houRest: UInt6
     return (houRest, day, week, year)
 }
 
+///
+/// Renders milliseconds to a fully descriptive time string.
+///
+/// parameter: milliseconds. Number of milliseconds to render.
+/// parameter: bWithMilliseconds. True is milliseconds should be part of the render. False if not.
+///
+/// returnes: A fully descriptive time string.
+///
 internal func itsRenderMsToFullString(_ milliseconds: UInt64,_ bWithMilliseconds: Bool) -> String
 {
     let (part_hours, min, sec, ms) = itsSplitMsToHourMinuteSeconds(milliseconds)
@@ -298,56 +308,15 @@ internal func itsRenderMsToFullString(_ milliseconds: UInt64,_ bWithMilliseconds
     return ss
 }
 
-internal extension Float {
-    func itsToString() -> String {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en_US")
-        return formatter.string(from: NSNumber(value: self))!
-    }
-}
-
-
-internal extension Double {
-    func itsToString() -> String {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en_US")
-        return formatter.string(from: NSNumber(value: self))!
-    }
-}
-
-internal extension Date {
-    func itsToString(includeMs: Bool) -> String {
-        let dateFormatter = DateFormatter()
-        if includeMs {
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-        }
-        else {
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        }
-        return dateFormatter.string(from: self)
-    }
-}
-
-internal extension Int64 {
-    func itsToString() -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale(identifier: "nb_NO")
-        return formatter.string(from: NSNumber(value: self))!
-    }
-}
-
-internal extension Int32 {
-    func itsToString() -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale(identifier: "nb_NO")
-        formatter.thousandSeparator = " "
-        return formatter.string(from: NSNumber(value: self))!
-    }
-}
-
+///
+/// Int extension methods.
+///
 internal extension Int {
+    ///
+    /// Convert a Int into a Norwegian style number for text representation. " " as a thousand separator.
+    ///
+    /// returnes: The number as a new string.
+    ///
     func itsToString() -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal

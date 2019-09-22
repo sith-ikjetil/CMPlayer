@@ -12,7 +12,7 @@
 import Foundation
 
 //
-// Global properties
+// Global properties/constants.
 //
 var g_songs: [SongEntry] = []
 var g_playlist: [SongEntry] = []
