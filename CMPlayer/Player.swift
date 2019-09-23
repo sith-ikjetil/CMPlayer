@@ -200,11 +200,29 @@ internal class Player {
     func skip(crossfade: Bool = true) -> Void {
         g_playlist.removeFirst()
         if g_playlist.count < 2 {
-            var s = g_songs.randomElement()!
-            while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
-                s = g_songs.randomElement()!
+            if g_modeGenre.count > 0 {
+                var list: [SongEntry] = []
+                for g in g_modeGenre {
+                    if g_genres[g] != nil {
+                        if let item = g_genres[g]?.randomElement() {
+                            list.append(item)
+                        }
+                    }
+                }
+                
+                var s = list.randomElement()!
+                while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
+                    s = g_songs.randomElement()!
+                }
+                g_playlist.append(s)
             }
-            g_playlist.append(s)
+            else {
+                var s = g_songs.randomElement()!
+                while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
+                    s = g_songs.randomElement()!
+                }
+                g_playlist.append(s)
+            }
         }
         
         if self.audioPlayerActive == -1 || self.audioPlayerActive == 2 {

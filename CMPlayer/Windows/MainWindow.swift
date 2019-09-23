@@ -37,6 +37,7 @@ internal class MainWindow {
     private let commandsDisableCrossfade: [String] = ["disable crossfade"]
     private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
     private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
+    private let commandsModeGenre: [String] = ["mode", "genre"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
     private let commandsListGenre: [String] = ["genre"]
     private let commandsPreferences: [String] = ["pref", "prefs", "preferences"]
@@ -45,6 +46,7 @@ internal class MainWindow {
     private var currentChar: Int32 = -1
     private var exitCode: Int32 = 0
     private var isShowingTopWindow = false
+    
     static private var timeElapsedMs: UInt64 = 0
     
     ///
@@ -336,6 +338,22 @@ internal class MainWindow {
                                 }
                             }
                         }
+                    }
+                    if parts.count > 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
+                        g_modeGenre.removeAll()
+                        
+                        let nparts = reparseCurrentCommandArguments(parts)
+                        
+                        if nparts.count > 2 {
+                            var i: Int = 2
+                            while i < nparts.count {
+                                g_modeGenre.append(parts[i].lowercased())
+                                i += 1
+                            }
+                        }
+                    }
+                    if parts.count == 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
+                        g_modeGenre.removeAll()
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsHelp) {
                         self.isShowingTopWindow = true

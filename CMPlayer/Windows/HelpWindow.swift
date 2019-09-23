@@ -36,7 +36,9 @@ internal class HelpWindow {
                                       " enable aos", " :: enables playing on application startup",
                                       " disable aos", " :: disables playing on application startup",
                                       " rebuild songno"," :: rebuilds song numbers",
-                                      " goto <mm:ss>", " :: moves playback point to minutes (mm) and seconds (ss) of current song"]
+                                      " goto <mm:ss>", " :: moves playback point to minutes (mm) and seconds (ss) of current song",
+                                      " mode genre [<genre>]", " :: set playback of songs only from the given genres",
+                                      " mode genre", ":: removes mode genre playback and plays songs fron entire library"]
     
     ///
     /// Shows this HelpWindow on screen.

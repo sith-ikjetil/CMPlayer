@@ -18,10 +18,11 @@ var g_songs: [SongEntry] = []
 var g_playlist: [SongEntry] = []
 var g_searchResult: [SongEntry] = []
 var g_genres: [String: [SongEntry]] = [:]
+var g_modeGenre: [String] = []
 var g_library: PlayerLibrary = PlayerLibrary()
 var g_mainWindow: MainWindow?
 let g_player: Player = Player()
-let g_versionString: String = "1.2.4.15"
+let g_versionString: String = "1.3.5.5"
 
 //
 // Startup code

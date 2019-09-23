@@ -41,7 +41,7 @@ internal class SongEntry {
         self.title = title
         self.duration = duration
         self.fileURL = url
-        self.genre = genre
+        self.genre = genre.lowercased()
         
         if g_genres[self.genre] == nil {
             g_genres[self.genre] = []
@@ -93,7 +93,7 @@ internal class SongEntry {
             
             if let npath = NSURL(string: path!.absoluteString) {
                 if let metadata = MDItemCreateWithURL(kCFAllocatorDefault, npath) {
-                    if let ge = MDItemCopyAttribute(metadata,kMDItemMusicalGenre) as? String { genre = ge }
+                    if let ge = MDItemCopyAttribute(metadata,kMDItemMusicalGenre) as? String { genre = ge.lowercased() }
                 }
             }
         }
