@@ -65,7 +65,7 @@ internal class InitialSetupWindow {
         })
         keyHandler.addKeyHandler(key: 10, closure: { () -> Bool in
             if path.count > 0 {
-                PlayerPreferences.musicRootPath = path
+                PlayerPreferences.musicRootPath.append(path)
                 retVal = true
                 return true
             }

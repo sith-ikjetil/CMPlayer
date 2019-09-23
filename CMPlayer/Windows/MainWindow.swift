@@ -30,7 +30,8 @@ internal class MainWindow {
     private let commandsAbout: [String] = ["about"]
     private let commandsGoTo: [String] = ["goto"]
     private let commandsRepaint: [String] = ["repaint","redraw"]
-    private let commandsSetMusicRootPath: [String] = ["set", "mrp"]
+    private let commandsAddMusicRootPath: [String] = ["add", "mrp"]
+    private let commandsRemoveMusicRootPath: [String] = ["remove", "mrp"]
     private let commandsSetCrossfadeTimeInSeconds: [String] = ["set", "cft"]
     private let commandsSetMusicFormats: [String] = ["set", "mf"]
     private let commandsEnableCrossfade: [String] = ["enable crossfade"]
@@ -305,9 +306,20 @@ internal class MainWindow {
                         PlayerPreferences.autoplayOnStartup = false
                         PlayerPreferences.savePreferences()
                     }
-                    if parts.count == 3 && parts[0] == self.commandsSetMusicRootPath[0] && parts[1] == self.commandsSetMusicRootPath[1] {
-                        PlayerPreferences.musicRootPath = parts[2]
+                    if parts.count == 3 && parts[0] == self.commandsAddMusicRootPath[0] && parts[1] == self.commandsAddMusicRootPath[1] {
+                        PlayerPreferences.musicRootPath.append(parts[2])
                         PlayerPreferences.savePreferences()
+                    }
+                    if parts.count == 3 && parts[0] == self.commandsRemoveMusicRootPath[0] && parts[1] == self.commandsRemoveMusicRootPath[1] {
+                        var i: Int = 0
+                        while i < PlayerPreferences.musicRootPath.count {
+                            if PlayerPreferences.musicRootPath[i] == parts[2] {
+                                PlayerPreferences.musicRootPath.remove(at: i)
+                                PlayerPreferences.savePreferences()
+                                break
+                            }
+                            i += 1
+                        }
                     }
                     if parts.count == 3 && parts[0] == self.commandsSetCrossfadeTimeInSeconds[0] && parts[1] == self.commandsSetCrossfadeTimeInSeconds[1] {
                         if let ctis = Int(parts[2]) {

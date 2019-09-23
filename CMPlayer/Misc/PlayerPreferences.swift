@@ -36,7 +36,7 @@ internal class PlayerPreferences {
     // Static properties/constants
     //
     static let preferencesFilename: String = "CMPlayer.Preferences.xml"
-    static var musicRootPath: String = ""
+    static var musicRootPath: [String] = []
     static var musicFormats: String = "mp3;mp4;m4a;wav"
     static var autoplayOnStartup: Bool = true
     static var crossfadeSongs: Bool = true
@@ -73,12 +73,6 @@ internal class PlayerPreferences {
             if elements.count == 1 {
                 let xeGeneral: XMLElement = elements[0]
                 
-                if let aMusicRootPath = xeGeneral.attribute(forName: "musicRootPath") {
-                    PlayerPreferences.musicRootPath = aMusicRootPath.stringValue!
-                }
-                if let aMusicFormats = xeGeneral.attribute(forName: "musicFormats") {
-                    PlayerPreferences.musicFormats = aMusicFormats.stringValue!
-                }
                 if let aAutoplayOnStartup = xeGeneral.attribute(forName: "autoplayOnStartup" ) {
                     PlayerPreferences.autoplayOnStartup = Bool(aAutoplayOnStartup.stringValue ?? "false") ?? false
                 }
@@ -89,6 +83,14 @@ internal class PlayerPreferences {
                     let cftis = Int(aCrossfadeTimeInSeconds.stringValue ?? "2") ?? 2
                     if isCrossfadeTimeValid(cftis) {
                         PlayerPreferences.crossfadeTimeInSeconds = cftis
+                    }
+                }
+                
+                let xeMusicRootPaths = xeGeneral.elements(forName: "musicRootPath")
+                for p in xeMusicRootPaths {
+                    let path = p.stringValue ?? ""
+                    if path.count > 0 {
+                        self.musicRootPath.append(path)
                     }
                 }
             }
@@ -150,10 +152,11 @@ internal class PlayerPreferences {
         let xeGeneral: XMLElement = XMLElement(name: "general")
         xeRoot.addChild(xeGeneral)
         
-        let xnMusicRootPath: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
-        xnMusicRootPath.name = "musicRootPath"
-        xnMusicRootPath.setStringValue(PlayerPreferences.musicRootPath, resolvingEntities: true)
-        xeGeneral.addAttribute(xnMusicRootPath)
+        for path in self.musicRootPath {
+            let xeMusicRootPath: XMLElement = XMLElement(name: "musicRootPath")
+            xeMusicRootPath.setStringValue(path, resolvingEntities: true)
+            xeGeneral.addChild(xeMusicRootPath)
+        }
         
         let xnMusicFormats: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
         xnMusicFormats.name = "musicFormats"

@@ -266,28 +266,30 @@ internal class Player {
         g_songs.removeAll()
         g_playlist.removeAll()
         
-        #if DEBUG
-            let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
-        #else
-            let result = findSongs(path: PlayerPreferences.musicRootPath)
-        #endif
-        
-        filesFound = true
-        printWorkingInitializationSongs(completed: 0)
-        
-        var i: Int = 1
-        for r in result {
-            printWorkingInitializationSongs( completed: Int(Double(i) * Double(100.0) / Double(result.count)))
+        for mrpath in PlayerPreferences.musicRootPath {
+            #if DEBUG
+                let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
+            #else
+                let result = findSongs(path: mrpath)
+            #endif
             
-            let u: URL = URL(fileURLWithPath: r)
-            if let se = g_library.find(url: u) {
-                g_songs.append(se)
-            }
-            else {
-                g_songs.append(SongEntry(path: URL(fileURLWithPath: r),songNo: g_library.nextAvailableSongNo()))
-            }
+            filesFound = true
+            printWorkingInitializationSongs(completed: 0)
             
-            i += 1
+            var i: Int = 1
+            for r in result {
+                printWorkingInitializationSongs( completed: Int(Double(i) * Double(100.0) / Double(result.count)))
+                
+                let u: URL = URL(fileURLWithPath: r)
+                if let se = g_library.find(url: u) {
+                    g_songs.append(se)
+                }
+                else {
+                    g_songs.append(SongEntry(path: URL(fileURLWithPath: r),songNo: g_library.nextAvailableSongNo()))
+                }
+                
+                i += 1
+            }
         }
         
         if g_songs.count > 2 {

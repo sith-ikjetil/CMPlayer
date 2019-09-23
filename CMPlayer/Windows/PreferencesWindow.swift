@@ -32,11 +32,27 @@ internal class PreferencesWindow {
     }
     
     func updatePreferencesText() {
-        self.preferencesText = [" Music Root Path", " :: \(PlayerPreferences.musicRootPath)",
-                                " Music Formats", " :: \(PlayerPreferences.musicFormats)",
-                                " Enable Autoplay On Startup", " :: \(PlayerPreferences.autoplayOnStartup)",
-                                " Enable Crossfade", " :: \(PlayerPreferences.crossfadeSongs)",
-                                " Crossfade Time"," :: \(PlayerPreferences.crossfadeTimeInSeconds) seconds"]
+        self.preferencesText.removeAll()
+        
+        self.preferencesText.append(" Music Root Paths")
+        if PlayerPreferences.musicRootPath.count == 0 {
+            self.preferencesText.append(" :: ")
+        }
+        else {
+            for path in PlayerPreferences.musicRootPath
+            {
+                self.preferencesText.append(" :: \(path)")
+            }
+        }
+        
+        self.preferencesText.append(" Music Formats")
+        self.preferencesText.append(" :: \(PlayerPreferences.musicFormats)")
+        self.preferencesText.append(" Enable Autoplay On Startup")
+        self.preferencesText.append(" :: \(PlayerPreferences.autoplayOnStartup)")
+        self.preferencesText.append(" Enable Crossfade")
+        self.preferencesText.append(" :: \(PlayerPreferences.crossfadeSongs)")
+        self.preferencesText.append(" Crossfade Time")
+        self.preferencesText.append(" :: \(PlayerPreferences.crossfadeTimeInSeconds) seconds")
     }
     
     ///
@@ -63,11 +79,11 @@ internal class PreferencesWindow {
             
             let se = preferencesText[index_search]
             
-            if index_search % 2 == 0 {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            if se.hasPrefix(" ::") {
+                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             }
             else {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             }
             
             index_screen_lines += 1
