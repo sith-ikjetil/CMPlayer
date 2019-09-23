@@ -347,9 +347,11 @@ internal class MainWindow {
                         if nparts.count > 2 {
                             var i: Int = 2
                             while i < nparts.count {
-                                let name = parts[i].lowercased()
+                                let name = nparts[i].lowercased()
                                 if g_genres[name] != nil {
-                                    g_modeGenre.append(name)
+                                    if g_genres[name]!.count >= 2 {
+                                        g_modeGenre.append(name)
+                                    }
                                 }
                                 i += 1
                             }
