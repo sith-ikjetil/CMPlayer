@@ -27,19 +27,6 @@ internal class SongEntry {
     var genre: String = ""
     
     ///
-    /// Default initializer
-    ///
-    init()
-    {
-        self.songNo = 0
-        self.artist = "<UNKNOWN>"
-        self.title = "<UNKNOWN>"
-        self.duration = 0
-        self.fileURL = nil
-        self.genre = ""
-    }
-    
-    ///
     /// Overloaded initializer
     ///
     /// parameter: number. Song No.
@@ -55,6 +42,11 @@ internal class SongEntry {
         self.duration = duration
         self.fileURL = url
         self.genre = genre
+        
+        if g_genres[self.genre] == nil {
+            g_genres[self.genre] = []
+        }
+        g_genres[self.genre]?.append(self)
     }
     
     ///
@@ -105,5 +97,10 @@ internal class SongEntry {
                 }
             }
         }
+        
+        if g_genres[self.genre] == nil {
+            g_genres[self.genre] = []
+        }
+        g_genres[self.genre]?.append(self)
     }// init
 }// SongEntry

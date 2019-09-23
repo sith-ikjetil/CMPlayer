@@ -26,6 +26,7 @@ internal class HelpWindow {
                                       " help"," :: shows this help information",
                                       " pref, prefs, preferences", " :: shows preferences information",
                                       " about"," :: show the about information",
+                                      " genre"," :: shows all genre information and statistics",
                                       " repaint", " :: clears and repaints entire console window",
                                       " set mrp <path>", " :: sets the path to the root folder where the music resides",
                                       " set cft <seconds>", " :: sets the crossfade time in seconds (1-10 seconds)",

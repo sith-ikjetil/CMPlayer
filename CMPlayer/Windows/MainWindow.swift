@@ -38,10 +38,10 @@ internal class MainWindow {
     private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
     private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
+    private let commandsListGenre: [String] = ["genre"]
     private let commandsPreferences: [String] = ["pref", "prefs", "preferences"]
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.cmplayer.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.cmplayer.macos.2", attributes: .concurrent)
-    //private let concurrentQueue3 = DispatchQueue(label: "cqueue.cmplayer.macos.3", attributes: .concurrent)
     private var currentChar: Int32 = -1
     private var exitCode: Int32 = 0
     private var isShowingTopWindow = false
@@ -348,6 +348,14 @@ internal class MainWindow {
                     if isCommandInCommands(self.currentCommand, self.commandsAbout) {
                         self.isShowingTopWindow = true
                         let wnd: AboutWindow = AboutWindow()
+                        wnd.showWindow()
+                        Console.clearScreen()
+                        self.renderScreen()
+                        self.isShowingTopWindow = false
+                    }
+                    if isCommandInCommands(self.currentCommand, self.commandsListGenre) {
+                        self.isShowingTopWindow = true
+                        let wnd: GenreWindow = GenreWindow()
                         wnd.showWindow()
                         Console.clearScreen()
                         self.renderScreen()

@@ -23,6 +23,7 @@
 		D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */; };
 		D0F162A723386F7A00754651 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162A623386F7A00754651 /* PreferencesWindow.swift */; };
 		D0F162A9233896E200754651 /* ConsoleKeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */; };
+		D0F162AB2338C8CF00754651 /* GenreWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162AA2338C8CF00754651 /* GenreWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +56,7 @@
 		D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPreferences.swift; sourceTree = "<group>"; };
 		D0F162A623386F7A00754651 /* PreferencesWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
 		D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleKeyboardHandler.swift; sourceTree = "<group>"; };
+		D0F162AA2338C8CF00754651 /* GenreWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				D093D0B02335E51E001842D6 /* InitialSetupWindow.swift */,
 				D0A58DBA233644D8008868CE /* AboutWindow.swift */,
 				D0F162A623386F7A00754651 /* PreferencesWindow.swift */,
+				D0F162AA2338C8CF00754651 /* GenreWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0ED142F23320B1B00FB51C8 /* main.swift in Sources */,
+				D0F162AB2338C8CF00754651 /* GenreWindow.swift in Sources */,
 				D0F162A723386F7A00754651 /* PreferencesWindow.swift in Sources */,
 				D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */,
 				D093D0B12335E51E001842D6 /* InitialSetupWindow.swift in Sources */,
