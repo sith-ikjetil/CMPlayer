@@ -24,6 +24,7 @@ internal class SongEntry {
     var title: String = ""
     var duration: UInt64 = 0
     var fileURL: URL? = nil
+    var genre: String = ""
     
     ///
     /// Default initializer
@@ -35,6 +36,7 @@ internal class SongEntry {
         self.title = "<UNKNOWN>"
         self.duration = 0
         self.fileURL = nil
+        self.genre = ""
     }
     
     ///
@@ -46,12 +48,13 @@ internal class SongEntry {
     /// parameter: duration. Song length in milliseconds.
     /// parameter: url. Song file path.
     ///
-    init(songNo: Int, artist: String, title: String, duration: UInt64, url: URL?) {
+    init(songNo: Int, artist: String, title: String, duration: UInt64, url: URL?, genre: String) {
         self.songNo = songNo
         self.artist = artist
         self.title = title
         self.duration = duration
         self.fileURL = url
+        self.genre = genre
     }
     
     ///
@@ -62,6 +65,10 @@ internal class SongEntry {
     ///
     init(path: URL?, songNo: Int)
     {
+        if path == nil {
+            return
+        }
+        
         self.songNo = songNo
         self.fileURL = path!
         
@@ -89,6 +96,12 @@ internal class SongEntry {
                             self.artist = String(artist[artist.startIndex..<artist.index(artist.startIndex, offsetBy: 32)])
                         }
                     }
+                }
+            }
+            
+            if let npath = NSURL(string: path!.absoluteString) {
+                if let metadata = MDItemCreateWithURL(kCFAllocatorDefault, npath) {
+                    if let ge = MDItemCopyAttribute(metadata,kMDItemMusicalGenre) as? String { genre = ge }
                 }
             }
         }

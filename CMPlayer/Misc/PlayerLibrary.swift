@@ -83,6 +83,7 @@ internal class PlayerLibrary {
                     var title: String = ""
                     var url: String = ""
                     var duration: UInt64 = 0
+                    var genre: String = ""
                     
                     if let aNumber = s.attribute(forName: "songNo") {
                         songNo = Int(aNumber.stringValue ?? "0") ?? 0
@@ -99,11 +100,14 @@ internal class PlayerLibrary {
                     if let aUrl = s.attribute(forName: "url") {
                         url = aUrl.stringValue ?? ""
                     }
+                    if let aGenre = s.attribute(forName: "genre") {
+                        genre = aGenre.stringValue ?? ""
+                    }
                     
                     if songNo > self.nextSongNo {
                         self.nextSongNo = songNo
                     }
-                    let se = SongEntry(songNo: songNo, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url))
+                    let se = SongEntry(songNo: songNo, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre)
                     self.library.append(se)
                     if url.count > 0 {
                         self.dictionary[url] = self.library.count-1
@@ -133,12 +137,12 @@ internal class PlayerLibrary {
             
             let xnArtist: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
             xnArtist.name = "artist"
-            xnArtist.setStringValue(String(s.artist), resolvingEntities: true)
+            xnArtist.setStringValue(s.artist, resolvingEntities: true)
             xeSong.addAttribute(xnArtist)
             
             let xnTitle: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
             xnTitle.name = "title"
-            xnTitle.setStringValue(String(s.title), resolvingEntities: true)
+            xnTitle.setStringValue(s.title, resolvingEntities: true)
             xeSong.addAttribute(xnTitle)
             
             let xnDuration: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
@@ -150,6 +154,11 @@ internal class PlayerLibrary {
             xnUrl.name = "url"
             xnUrl.setStringValue(s.fileURL?.path ?? "", resolvingEntities: true)
             xeSong.addAttribute(xnUrl)
+            
+            let xnGenre: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+            xnGenre.name = "genre"
+            xnGenre.setStringValue(s.genre, resolvingEntities: true)
+            xeSong.addAttribute(xnGenre)
         }
    
         //
