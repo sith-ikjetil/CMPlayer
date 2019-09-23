@@ -86,9 +86,9 @@ internal class PlayerPreferences {
                     PlayerPreferences.crossfadeSongs = Bool(aCrossfadeSongs.stringValue ?? "false") ?? false
                 }
                 if let aCrossfadeTimeInSeconds = xeGeneral.attribute(forName: "crossfadeTimeInSeconds" ) {
-                    PlayerPreferences.crossfadeTimeInSeconds = Int(aCrossfadeTimeInSeconds.stringValue ?? "2") ?? 2
-                    if PlayerPreferences.crossfadeTimeInSeconds > 10 {
-                        PlayerPreferences.crossfadeTimeInSeconds = 2
+                    let cftis = Int(aCrossfadeTimeInSeconds.stringValue ?? "2") ?? 2
+                    if isCrossfadeTimeValid(cftis) {
+                        PlayerPreferences.crossfadeTimeInSeconds = cftis
                     }
                 }
             }
