@@ -197,13 +197,13 @@ internal class MainWindow {
                     
                     if g_player.audioPlayerActive == 1 {
                         if (PlayerPreferences.crossfadeSongs && g_player.durationAudioPlayer1 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || g_player.durationAudioPlayer1 <= 1000 {
+                            || g_player.durationAudioPlayer1 <= 1000 || ( g_player.durationAudioPlayer1 > 0 && !g_player.isPaused && !g_player.audio1!.isPlaying ) {
                             g_player.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
                     else if g_player.audioPlayerActive == 2 {
                         if (PlayerPreferences.crossfadeSongs && g_player.durationAudioPlayer2 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || g_player.durationAudioPlayer2 <= 1000 {
+                            || g_player.durationAudioPlayer2 <= 1000 || ( g_player.durationAudioPlayer2 > 0 && !g_player.isPaused && !g_player.audio2!.isPlaying) {
                             g_player.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }

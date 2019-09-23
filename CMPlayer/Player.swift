@@ -25,6 +25,7 @@ internal class Player {
     var audioPlayerActive: Int = -1
     var durationAudioPlayer1: UInt64 = 0
     var durationAudioPlayer2: UInt64 = 0
+    var isPaused: Bool = false
     
     //
     // Private properties/constants.
@@ -102,6 +103,7 @@ internal class Player {
                     self.audio1 = try AVAudioPlayer(contentsOf:g_playlist[playlistIndex].fileURL!)
                     self.durationAudioPlayer1 = g_playlist[playlistIndex].duration
                     self.audio1?.play()
+                    self.isPaused = false
                 }
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
@@ -117,6 +119,7 @@ internal class Player {
                     self.audio1 = try AVAudioPlayer(contentsOf: g_playlist[playlistIndex].fileURL!)
                     self.durationAudioPlayer1 = g_playlist[playlistIndex].duration
                     self.audio1?.play()
+                    self.isPaused = false
                 }
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
@@ -133,6 +136,7 @@ internal class Player {
                     self.audio2 = try AVAudioPlayer(contentsOf:g_playlist[playlistIndex].fileURL!)
                     self.durationAudioPlayer2 = g_playlist[playlistIndex].duration
                     self.audio2?.play()
+                    self.isPaused = false
                 }
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
@@ -148,6 +152,7 @@ internal class Player {
                     self.audio2 = try AVAudioPlayer(contentsOf: g_playlist[playlistIndex].fileURL!)
                     self.durationAudioPlayer2 = g_playlist[playlistIndex].duration
                     self.audio2?.play()
+                    self.isPaused = false
                 }
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
@@ -167,12 +172,14 @@ internal class Player {
         if self.audio1 != nil {
             if self.audio1?.isPlaying ?? false {
                 audio1?.pause()
+                self.isPaused = true
             }
         }
         
         if self.audio2 != nil {
             if self.audio2?.isPlaying ?? false {
                 audio2?.pause()
+                self.isPaused = true
             }
         }
     }
@@ -184,12 +191,14 @@ internal class Player {
         if self.audio1 != nil && self.audioPlayerActive == 1 {
             if self.audio1?.currentTime.magnitude ?? 0 > 0 {
                 audio1?.play()
+                self.isPaused = false
             }
         }
         
         if self.audio2 != nil && self.audioPlayerActive == 2 {
             if self.audio2?.currentTime.magnitude ?? 0 > 0 {
                 audio2?.play()
+                self.isPaused = false
             }
         }
     }
