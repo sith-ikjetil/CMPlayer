@@ -47,6 +47,7 @@ internal class MainWindow {
     private var currentChar: Int32 = -1
     private var exitCode: Int32 = 0
     private var isShowingTopWindow = false
+    private var isSkipping: Bool = false
     
     static private var timeElapsedMs: UInt64 = 0
     
@@ -197,13 +198,13 @@ internal class MainWindow {
                     
                     if g_player.audioPlayerActive == 1 {
                         if (PlayerPreferences.crossfadeSongs && g_player.durationAudioPlayer1 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || g_player.durationAudioPlayer1 <= 1000 || ( g_player.durationAudioPlayer1 > 0 && !g_player.isPaused && !g_player.audio1!.isPlaying ) {
+                            || g_player.durationAudioPlayer1 <= 1000 || ( g_player.durationAudioPlayer1 > 0 && !g_player.isPaused && !g_player.audio1!.isPlaying && !self.isSkipping ) {
                             g_player.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
                     else if g_player.audioPlayerActive == 2 {
                         if (PlayerPreferences.crossfadeSongs && g_player.durationAudioPlayer2 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || g_player.durationAudioPlayer2 <= 1000 || ( g_player.durationAudioPlayer2 > 0 && !g_player.isPaused && !g_player.audio2!.isPlaying) {
+                            || g_player.durationAudioPlayer2 <= 1000 || ( g_player.durationAudioPlayer2 > 0 && !g_player.isPaused && !g_player.audio2!.isPlaying && !self.isSkipping) {
                             g_player.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
@@ -257,7 +258,9 @@ internal class MainWindow {
                         self.quit = true
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsNextSong) {
+                        self.isSkipping = true
                         g_player.skip(crossfade: false)
+                        self.isSkipping = false
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsPlay) {
                         if g_player.audioPlayerActive == -1 {
