@@ -53,35 +53,37 @@ internal class InitialSetupWindow {
     ///
     func run() -> Bool {
         var path: String = ""
-        var ch = getchar()
-        while true {
-            if ch == 27 {
-                ch = getchar()
-                ch = getchar()
-            }
-            if ch != EOF
-               && ch != 10
-               && ch != 127
-               && ch != 27
-            {
-                path.append(String(UnicodeScalar(UInt32(ch))!))
+        var retVal: Bool = false
+        
+        let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
+        keyHandler.addKeyHandler(key: 127, closure: { () -> Bool in
+            if path.count > 0 {
+                path.removeLast()
                 self.renderInitialSetup(path: path)
             }
-            else if ch == 127 {
-                if path.count > 0 {
-                    path.removeLast()
-                    self.renderInitialSetup(path: path)
-                }
+            return false
+        })
+        keyHandler.addKeyHandler(key: 10, closure: { () -> Bool in
+            if path.count > 0 {
+                PlayerPreferences.musicRootPath = path
+                retVal = true
+                return true
             }
-            else if ch == 10 {
-                if path.count > 0 {
-                    PlayerPreferences.musicRootPath = path
-                    return true
-                }
-                break
+            return false
+        })
+        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+            if key != EOF
+               && key != 10
+               && key != 127
+               && key != 27
+            {
+                path.append(String(UnicodeScalar(UInt32(key))!))
+                self.renderInitialSetup(path: path)
             }
-            ch = getchar()
-        }
-        return false
+            return false
+        })
+        keyHandler.run()
+        
+        return retVal
     }// run
 }// InitialSetupWindow

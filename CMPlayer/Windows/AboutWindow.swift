@@ -81,28 +81,25 @@ internal class AboutWindow {
     func run() -> Void {
         self.aboutIndex = 0
         self.renderAbout()
-        var ch = getchar()
-        while ch == EOF || ch == 27 || ch == 91 || ch == 65 || ch == 66 {
-            if ch == 27 {
-                ch = getchar()
+        
+        let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
+        keyHandler.addKeyHandler(key: 66, closure: { () -> Bool in
+            if (self.aboutIndex + 17) < self.aboutText.count {
+                self.aboutIndex += 1
+                self.renderAbout()
             }
-            if ch == 91 {
-                ch = getchar()
+            return false
+        })
+        keyHandler.addKeyHandler(key: 65, closure: { () -> Bool in
+            if self.aboutIndex > 0 {
+                self.aboutIndex -= 1
+                self.renderAbout()
             }
-            
-            if ch == 66 { // DOWN
-                if (self.aboutIndex + 17) < self.aboutText.count {
-                    self.aboutIndex += 1
-                    self.renderAbout()
-                }
-            }
-            if ch == 65 { // UP
-                if self.aboutIndex > 0 {
-                    self.aboutIndex -= 1
-                    self.renderAbout()
-                }
-            }
-            ch = getchar()
-        }
+            return false
+        })
+        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+            return true
+        })
+        keyHandler.run()
     }// run
 }// AboutWindow

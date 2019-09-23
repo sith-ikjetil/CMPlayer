@@ -89,28 +89,25 @@ internal class HelpWindow {
     func run() -> Void {
         self.helpIndex = 0
         self.renderHelp()
-        var ch = getchar()
-        while ch == EOF || ch == 27 || ch == 91 || ch == 65 || ch == 66 {
-            if ch == 27 {
-                ch = getchar()
+        
+        let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
+        keyHandler.addKeyHandler(key: 66, closure: { () -> Bool in
+            if (self.helpIndex + 17) < self.helpText.count {
+                self.helpIndex += 1
+                self.renderHelp()
             }
-            if ch == 91 {
-                ch = getchar()
+            return false
+        })
+        keyHandler.addKeyHandler(key: 65, closure: { () -> Bool in
+            if self.helpIndex > 0 {
+                self.helpIndex -= 1
+                self.renderHelp()
             }
-            
-            if ch == 66 { // DOWN
-                if (self.helpIndex + 17) < self.helpText.count {
-                    self.helpIndex += 1
-                    self.renderHelp()
-                }
-            }
-            if ch == 65 { // UP
-                if self.helpIndex > 0 {
-                    self.helpIndex -= 1
-                    self.renderHelp()
-                }
-            }
-            ch = getchar()
-        }
+            return false
+        })
+        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+            return true
+        })
+        keyHandler.run()
     }// run
 }// HelpWindow

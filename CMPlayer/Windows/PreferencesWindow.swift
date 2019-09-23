@@ -83,28 +83,25 @@ internal class PreferencesWindow {
     func run() -> Void {
         self.preferencesIndex = 0
         self.renderHelp()
-        var ch = getchar()
-        while ch == EOF || ch == 27 || ch == 91 || ch == 65 || ch == 66 {
-            if ch == 27 {
-                ch = getchar()
+        
+        let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
+        keyHandler.addKeyHandler(key: 66, closure: { () -> Bool in
+            if (self.preferencesIndex + 17) < self.preferencesText.count {
+                self.preferencesIndex += 1
+                self.renderHelp()
             }
-            if ch == 91 {
-                ch = getchar()
+            return false
+        })
+        keyHandler.addKeyHandler(key: 65, closure: { () -> Bool in
+            if self.preferencesIndex > 0 {
+                self.preferencesIndex -= 1
+                self.renderHelp()
             }
-            
-            if ch == 66 { // DOWN
-                if (self.preferencesIndex + 17) < self.preferencesText.count {
-                    self.preferencesIndex += 1
-                    self.renderHelp()
-                }
-            }
-            if ch == 65 { // UP
-                if self.preferencesIndex > 0 {
-                    self.preferencesIndex -= 1
-                    self.renderHelp()
-                }
-            }
-            ch = getchar()
-        }
+            return false
+        })
+        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+            return true
+        })
+        keyHandler.run()
     }// run
 }// HelpWindow

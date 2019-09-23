@@ -22,6 +22,7 @@
 		D0ED144023323DC400FB51C8 /* PlayerDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED143F23323DC400FB51C8 /* PlayerDirectories.swift */; };
 		D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */; };
 		D0F162A723386F7A00754651 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162A623386F7A00754651 /* PreferencesWindow.swift */; };
+		D0F162A9233896E200754651 /* ConsoleKeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +54,7 @@
 		D0ED143F23323DC400FB51C8 /* PlayerDirectories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDirectories.swift; sourceTree = "<group>"; };
 		D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPreferences.swift; sourceTree = "<group>"; };
 		D0F162A623386F7A00754651 /* PreferencesWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
+		D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleKeyboardHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				D0ED143523320B4600FB51C8 /* Console.swift */,
+				D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */,
 				D0C499F5233536F4001232A9 /* HelpWindow.swift */,
 				D0C499F72335370B001232A9 /* SearchWindow.swift */,
 				D0C499F923353721001232A9 /* MainWindow.swift */,
@@ -186,6 +189,7 @@
 				D0A58DBB233644D8008868CE /* AboutWindow.swift in Sources */,
 				D0ED143E23323C5000FB51C8 /* SongEntry.swift in Sources */,
 				D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */,
+				D0F162A9233896E200754651 /* ConsoleKeyboardHandler.swift in Sources */,
 				D093D0B323361497001842D6 /* PlayerLibrary.swift in Sources */,
 				D0C499F6233536F4001232A9 /* HelpWindow.swift in Sources */,
 				D0C499F82335370B001232A9 /* SearchWindow.swift in Sources */,
