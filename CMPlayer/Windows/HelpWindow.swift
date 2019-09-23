@@ -34,7 +34,8 @@ internal class HelpWindow {
                                       " disable crossfade", " :: disables crossfade",
                                       " enable aos", " :: enables playing on application startup",
                                       " disable aos", " :: disables playing on application startup",
-                                      " rebuild songno"," :: rebuilds song numbers"]
+                                      " rebuild songno"," :: rebuilds song numbers",
+                                      " goto <mm:ss>", " :: moves playback point to minutes (mm) and seconds (ss) of current song"]
     
     ///
     /// Shows this HelpWindow on screen.

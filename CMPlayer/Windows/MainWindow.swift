@@ -28,6 +28,7 @@ internal class MainWindow {
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
     private let commandsAbout: [String] = ["about"]
+    private let commandsGoTo: [String] = ["goto"]
     private let commandsRepaint: [String] = ["repaint","redraw"]
     private let commandsSetMusicRootPath: [String] = ["set", "mrp"]
     private let commandsSetCrossfadeTimeInSeconds: [String] = ["set", "cft"]
@@ -315,6 +316,24 @@ internal class MainWindow {
                     if parts.count == 3 && parts[0] == self.commandsSetMusicFormats[0] && parts[1] == self.commandsSetMusicFormats[1] {
                         PlayerPreferences.musicFormats = parts[2]
                         PlayerPreferences.savePreferences()
+                    }
+                    if parts.count == 2 && parts[0] == self.commandsGoTo[0] {
+                        let tp = parts[1].split(separator: ":" )
+                        if tp.count == 2 {
+                            if let time1 = Int(tp[0]) {
+                                if let time2 = Int(tp[1]) {
+                                    if time1 >= 0 && time2 >= 0 {
+                                        let pos: Int = time1*60 + time2
+                                        if g_player.audioPlayerActive == 1 {
+                                            g_player.audio1?.currentTime = TimeInterval(exactly: Double(Double(g_playlist[0].duration) / 1000) - Double(pos))!
+                                        }
+                                        else if g_player.audioPlayerActive == 2 {
+                                            g_player.audio2?.currentTime = TimeInterval(exactly: Double(Double(g_playlist[0].duration) / 1000) - Double(pos))!
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsHelp) {
                         self.isShowingTopWindow = true
