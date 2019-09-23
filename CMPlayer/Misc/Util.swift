@@ -47,6 +47,20 @@ internal func isCommandInCommands(_ command: String, _ commands: [String]) -> Bo
 }
 
 ///
+/// Validates if crossfade time is a valid crossfade time.
+///
+/// parameter: ctis. Crossfade time in seconds.
+///
+/// returnes: True if crossfade time is valid. False otherwise.
+///
+internal func isCrossfadeTimeValid(_ ctis: Int) -> Bool {
+    if ctis >= 1 && ctis <= 10 {
+        return true
+    }
+    return false
+}
+
+///
 /// Reparses the command arguments. Makes sure that commands that are part of "<search term>" are remade into on search term without the " character.
 ///
 /// parameter: command: The search terms comming from command argument.

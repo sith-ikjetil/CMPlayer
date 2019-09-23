@@ -21,6 +21,7 @@
 		D0ED143E23323C5000FB51C8 /* SongEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED143D23323C5000FB51C8 /* SongEntry.swift */; };
 		D0ED144023323DC400FB51C8 /* PlayerDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED143F23323DC400FB51C8 /* PlayerDirectories.swift */; };
 		D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */; };
+		D0F162A723386F7A00754651 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162A623386F7A00754651 /* PreferencesWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +52,7 @@
 		D0ED143D23323C5000FB51C8 /* SongEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongEntry.swift; sourceTree = "<group>"; };
 		D0ED143F23323DC400FB51C8 /* PlayerDirectories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDirectories.swift; sourceTree = "<group>"; };
 		D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPreferences.swift; sourceTree = "<group>"; };
+		D0F162A623386F7A00754651 /* PreferencesWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */,
 				D093D0B02335E51E001842D6 /* InitialSetupWindow.swift */,
 				D0A58DBA233644D8008868CE /* AboutWindow.swift */,
+				D0F162A623386F7A00754651 /* PreferencesWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0ED142F23320B1B00FB51C8 /* main.swift in Sources */,
+				D0F162A723386F7A00754651 /* PreferencesWindow.swift in Sources */,
 				D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */,
 				D093D0B12335E51E001842D6 /* InitialSetupWindow.swift in Sources */,
 				D0C499FA23353721001232A9 /* MainWindow.swift in Sources */,

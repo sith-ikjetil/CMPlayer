@@ -36,6 +36,7 @@ internal class MainWindow {
     private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
     private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
+    private let commandsPreferences: [String] = ["pref", "prefs", "preferences"]
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.cmplayer.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.cmplayer.macos.2", attributes: .concurrent)
     //private let concurrentQueue3 = DispatchQueue(label: "cqueue.cmplayer.macos.3", attributes: .concurrent)
@@ -301,8 +302,10 @@ internal class MainWindow {
                     }
                     if parts.count == 3 && parts[0] == self.commandsSetCrossfadeTimeInSeconds[0] && parts[1] == self.commandsSetCrossfadeTimeInSeconds[1] {
                         if let ctis = Int(parts[2]) {
-                            PlayerPreferences.crossfadeTimeInSeconds = ctis
-                            PlayerPreferences.savePreferences()
+                            if isCrossfadeTimeValid(ctis) {
+                                PlayerPreferences.crossfadeTimeInSeconds = ctis
+                                PlayerPreferences.savePreferences()
+                            }
                         }
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsHelp) {
@@ -330,6 +333,14 @@ internal class MainWindow {
                         g_library.setNextAvailableSongNo(i)
                         g_library.library = g_songs
                         g_library.save()
+                    }
+                    if isCommandInCommands(self.currentCommand, self.commandsPreferences) {
+                        self.isShowingTopWindow = true
+                        let wnd: PreferencesWindow = PreferencesWindow()
+                        wnd.showWindow()
+                        Console.clearScreen()
+                        self.renderScreen()
+                        self.isShowingTopWindow = false
                     }
                     if parts.count > 1 {
                         if isCommandInCommands(parts[0], self.commandsSearch) {
