@@ -24,6 +24,7 @@ internal class HelpWindow {
                                       " play, pause, resume", " :: plays, pauses or resumes playback",
                                       " search [<words>]", " :: searches artist and title for a match. case insensitive",
                                       " help"," :: shows this help information",
+                                      " pref, prefs, preferences", " :: shows preferences information",
                                       " about"," :: show the about information",
                                       " repaint", " :: clears and repaints entire console window",
                                       " set mrp <path>", " :: sets the path to the root folder where the music resides",
