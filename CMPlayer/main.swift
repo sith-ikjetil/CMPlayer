@@ -20,7 +20,7 @@ var g_searchResult: [SongEntry] = []
 var g_library: PlayerLibrary = PlayerLibrary()
 var g_mainWindow: MainWindow?
 let g_player: Player = Player()
-let g_versionString: String = "1.2.4.10"
+let g_versionString: String = "1.2.4.15"
 
 //
 // Startup code
