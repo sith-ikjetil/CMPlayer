@@ -31,6 +31,7 @@ internal class MainWindow {
     private let commandsRepaint: [String] = ["repaint","redraw"]
     private let commandsSetMusicRootPath: [String] = ["set", "mrp"]
     private let commandsSetCrossfadeTimeInSeconds: [String] = ["set", "cft"]
+    private let commandsSetMusicFormats: [String] = ["set", "mf"]
     private let commandsEnableCrossfade: [String] = ["enable crossfade"]
     private let commandsDisableCrossfade: [String] = ["disable crossfade"]
     private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
@@ -310,6 +311,10 @@ internal class MainWindow {
                                 PlayerPreferences.savePreferences()
                             }
                         }
+                    }
+                    if parts.count == 3 && parts[0] == self.commandsSetMusicFormats[0] && parts[1] == self.commandsSetMusicFormats[1] {
+                        PlayerPreferences.musicFormats = parts[2]
+                        PlayerPreferences.savePreferences()
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsHelp) {
                         self.isShowingTopWindow = true

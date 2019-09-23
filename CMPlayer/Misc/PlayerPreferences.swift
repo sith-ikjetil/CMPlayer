@@ -37,7 +37,7 @@ internal class PlayerPreferences {
     //
     static let preferencesFilename: String = "CMPlayer.Preferences.xml"
     static var musicRootPath: String = ""
-    static var musicFormats: String = "mp3;mp2;m4a"
+    static var musicFormats: String = "mp3;mp4;m4a;wav"
     static var autoplayOnStartup: Bool = true
     static var crossfadeSongs: Bool = true
     static var crossfadeTimeInSeconds: Int = 5

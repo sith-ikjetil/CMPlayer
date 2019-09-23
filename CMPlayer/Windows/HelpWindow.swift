@@ -20,19 +20,20 @@ internal class HelpWindow {
     //
     private var helpIndex: Int = 0
     private let helpText: [String] = [" exit, quit", " :: exits application",
-                                                " next, skip", " :: plays next song",
-                                                " play, pause, resume", " :: plays, pauses or resumes playback",
-                                                " search [<words>]", " :: searches artist and title for a match. case insensitive",
-                                                " help"," :: shows this help information",
-                                                " about"," :: show the about information",
-                                                " repaint", " :: clears and repaints entire console window",
-                                                " set mrp <path>", " :: sets the path to the root folder where the music resides",
-                                                " set cft <seconds>", " :: sets the crossfade time in seconds (1-10 seconds)",
-                                                " enable crossfade"," :: enables crossfade",
-                                                " disable crossfade", " :: disables crossfade",
-                                                " enable aos", " :: enables playing on application startup",
-                                                " disable aos", " :: disables playing on application startup",
-                                                " rebuild songno"," :: rebuilds song numbers"]
+                                      " next, skip", " :: plays next song",
+                                      " play, pause, resume", " :: plays, pauses or resumes playback",
+                                      " search [<words>]", " :: searches artist and title for a match. case insensitive",
+                                      " help"," :: shows this help information",
+                                      " about"," :: show the about information",
+                                      " repaint", " :: clears and repaints entire console window",
+                                      " set mrp <path>", " :: sets the path to the root folder where the music resides",
+                                      " set cft <seconds>", " :: sets the crossfade time in seconds (1-10 seconds)",
+                                      " set mf <formats>", " :: sets the supported music formats (separated by ;)",
+                                      " enable crossfade"," :: enables crossfade",
+                                      " disable crossfade", " :: disables crossfade",
+                                      " enable aos", " :: enables playing on application startup",
+                                      " disable aos", " :: disables playing on application startup",
+                                      " rebuild songno"," :: rebuilds song numbers"]
     
     ///
     /// Shows this HelpWindow on screen.
