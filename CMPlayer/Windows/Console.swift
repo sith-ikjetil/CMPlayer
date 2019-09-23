@@ -89,6 +89,22 @@ internal class Console {
     }
     
     ///
+    /// Turns console echo on.
+    ///
+    static func echoOn() -> Void {
+        let c: cc_t = 0
+        let cct = (c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c)
+        var oldt: termios = termios(c_iflag: 0, c_oflag: 0, c_cflag: 0, c_lflag: 0, c_cc: cct, c_ispeed: 0, c_ospeed: 0)
+        
+        tcgetattr(STDIN_FILENO, &oldt) // 1473
+        var newt = oldt
+        
+        newt.c_lflag = newt.c_lflag | UInt(ECHO) //1217  // Reset ICANON and Echo on
+        newt.c_lflag = newt.c_lflag | UInt(ICANON) //1217  // Reset ICANON and Echo on
+        tcsetattr( STDIN_FILENO, TCSANOW, &newt)
+    }
+    
+    ///
     /// Applies color to text string.
     ///
     /// parameter: colorBg. Background console color.

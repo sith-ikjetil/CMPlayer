@@ -52,7 +52,10 @@ internal class MainWindow {
     ///
     func showWindow() -> Int32 {
         self.renderScreen()
-        return self.run()
+        let exitCode = self.run()
+        Console.showCursor()
+        Console.echoOn()
+        return exitCode
     }
 
     ///

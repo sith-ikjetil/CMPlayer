@@ -68,6 +68,8 @@ internal class Player {
             if g_songs.count < 2 {
                 let wnd: ErrorWindow = ErrorWindow()
                 wnd.showWindow(message: "Could not find any music.\nThere must be at least two music files in musicRootPath.\nmusicRootPath was: \(PlayerPreferences.musicRootPath)")
+                Console.showCursor()
+                Console.echoOn()
                 exit(EXIT_CODE_ERROR_FINDING_FILES)
             }
             else {
@@ -104,6 +106,8 @@ internal class Player {
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    Console.showCursor()
+                    Console.echoOn()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -117,6 +121,8 @@ internal class Player {
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    Console.showCursor()
+                    Console.echoOn()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -131,6 +137,8 @@ internal class Player {
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    Console.showCursor()
+                    Console.echoOn()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -144,6 +152,8 @@ internal class Player {
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    Console.showCursor()
+                    Console.echoOn()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -314,6 +324,8 @@ internal class Player {
             
             //let wnd: ErrorWindow = ErrorWindow()
             //wnd.showWindow(message: "EXIT_CODE_ERROR_FINDING_FILES\n\(error)")
+            //Console.showCursor()
+            //Console.echoOn()
             //exit(EXIT_CODE_ERROR_FINDING_FILES)
         }
         
