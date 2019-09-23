@@ -41,7 +41,20 @@ internal class GenreWindow {
             let name = g.key.lowercased()
             let desc = "\(g.value.count) Songs"
             
-            self.genreText.append(name)
+            var hit = false
+            for e in g_modeGenre {
+                if e == name {
+                    hit = true
+                    break;
+                }
+            }
+            
+            if hit {
+                self.genreText.append("\(name) (*)")
+            }
+            else {
+                self.genreText.append(name)
+            }
             self.genreText.append(desc)
         }
     }
@@ -55,6 +68,7 @@ internal class GenreWindow {
         MainWindow.renderHeader(showTime: false)
         
         Console.printXY(1,3,"### GENRE ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,4,"mode genre is: \((g_modeGenre.count == 0) ? "off" : "on")", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = genreIndex
