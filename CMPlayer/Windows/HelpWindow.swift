@@ -38,7 +38,7 @@ internal class HelpWindow {
                                       " rebuild songno"," :: rebuilds song numbers",
                                       " goto <mm:ss>", " :: moves playback point to minutes (mm) and seconds (ss) of current song",
                                       " mode genre [<genre>]", " :: set playback of songs only from the given genres",
-                                      " mode genre", ":: removes mode genre playback and plays songs fron entire library"]
+                                      " mode genre", " :: removes mode genre playback and plays songs fron entire library"]
     
     ///
     /// Shows this HelpWindow on screen.
