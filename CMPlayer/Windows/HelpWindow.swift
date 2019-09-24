@@ -39,8 +39,10 @@ internal class HelpWindow {
                                       " disable aos", " :: disables playing on application startup",
                                       " rebuild songno"," :: rebuilds song numbers",
                                       " goto <mm:ss>", " :: moves playback point to minutes (mm) and seconds (ss) of current song",
+                                      " mode artist [<artist>]", " :: set playback of songs only from given artists",
+                                      " mode artist", " :: removes mode artist playback and plays songs from entire library",
                                       " mode genre [<genre>]", " :: set playback of songs only from the given genres",
-                                      " mode genre", " :: removes mode genre playback and plays songs fron entire library",
+                                      " mode genre", " :: removes mode genre playback and plays songs from entire library",
                                       " reinitialize", " :: reinitializes library and should be called after mrp paths are changed"]
     
     ///

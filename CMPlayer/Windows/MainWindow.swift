@@ -41,8 +41,10 @@ internal class MainWindow {
     private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
     private let commandsReinitialize: [String] = ["reinitialize"]
     private let commandsModeGenre: [String] = ["mode", "genre"]
+    private let commandsModeArtist: [String] = ["mode", "artist"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
     private let commandsListGenre: [String] = ["genre"]
+    private let commandsListArtist: [String] = ["artist"]
     private let commandsPreferences: [String] = ["pref", "prefs", "preferences"]
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.cmplayer.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.cmplayer.macos.2", attributes: .concurrent)
@@ -374,16 +376,47 @@ internal class MainWindow {
                             while i < nparts.count {
                                 let name = nparts[i].lowercased()
                                 if g_genres[name] != nil {
-                                    if g_genres[name]!.count >= 2 {
+                                    if g_genres[name]!.count >= 1 {
                                         g_modeGenre.append(name)
                                     }
                                 }
                                 i += 1
                             }
                         }
+                        
+                        if g_modeGenre.count > 0 {
+                            g_modeArtist.removeAll()
+                        }
+                    }
+                    if parts.count > 2 && parts[0] == self.commandsModeArtist[0] && parts[1] == self.commandsModeArtist[1] {
+                        g_modeArtist.removeAll()
+                        
+                        let nparts = reparseCurrentCommandArguments(parts)
+                        
+                        if nparts.count > 2 {
+                            var i: Int = 2
+                            while i < nparts.count {
+                                let name = nparts[i].lowercased()
+                                for a in g_artists {
+                                    if a.key.lowercased() == name {
+                                        if a.value.count >= 1 {
+                                            g_modeArtist.append(a.key)
+                                        }
+                                    }
+                                }
+                                i += 1
+                            }
+                        }
+                        
+                        if g_modeArtist.count > 0 {
+                            g_modeGenre.removeAll()
+                        }
                     }
                     if parts.count == 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
                         g_modeGenre.removeAll()
+                    }
+                    if parts.count == 2 && parts[0] == self.commandsModeArtist[0] && parts[1] == self.commandsModeArtist[1] {
+                        g_modeArtist.removeAll()
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsHelp) {
                         self.isShowingTopWindow = true
@@ -408,6 +441,14 @@ internal class MainWindow {
                     if isCommandInCommands(self.currentCommand, self.commandsListGenre) {
                         self.isShowingTopWindow = true
                         let wnd: GenreWindow = GenreWindow()
+                        wnd.showWindow()
+                        Console.clearScreen()
+                        self.renderScreen()
+                        self.isShowingTopWindow = false
+                    }
+                    if isCommandInCommands(self.currentCommand, self.commandsListArtist) {
+                        self.isShowingTopWindow = true
+                        let wnd: ArtistWindow = ArtistWindow()
                         wnd.showWindow()
                         Console.clearScreen()
                         self.renderScreen()

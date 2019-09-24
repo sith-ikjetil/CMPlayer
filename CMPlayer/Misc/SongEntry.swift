@@ -27,7 +27,7 @@ internal class SongEntry {
     var genre: String = ""
     
     ///
-    /// Overloaded initializer
+    /// Overloaded initializer. Is only called from PlayerLibrary.load()
     ///
     /// parameter number: Song No.
     /// parameter artist: Artist.
@@ -43,11 +43,30 @@ internal class SongEntry {
         self.fileURL = url
         self.genre = genre.lowercased()
         
-        if FileManager.default.fileExists(atPath: url!.path) {
+        if isPathInMusicRootPath(path: url!.path) {
+            if self.genre.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
+                self.genre = "unknown"
+            }
+            
+            //
+            // Add to g_genres
+            //
             if g_genres[self.genre] == nil {
                 g_genres[self.genre] = []
             }
+            
             g_genres[self.genre]?.append(self)
+            
+            //
+            // Add to g_artists
+            //
+            if self.artist.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+                if g_artists[self.artist] == nil {
+                    g_artists[self.artist] = []
+                }
+            
+                g_artists[self.artist]?.append(self)
+            }
         }
     }
     
@@ -100,9 +119,28 @@ internal class SongEntry {
             }
         }
         
+        //
+        // Add to genre
+        //
+        if self.genre.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
+            self.genre = "unknown"
+        }
+        
         if g_genres[self.genre] == nil {
             g_genres[self.genre] = []
         }
+        
         g_genres[self.genre]?.append(self)
+        
+        //
+        // Add to g_artists
+        //
+        if self.artist.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
+            if g_artists[self.artist] == nil {
+                g_artists[self.artist] = []
+            }
+        
+            g_artists[self.artist]?.append(self)
+        }
     }// init
 }// SongEntry

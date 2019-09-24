@@ -229,12 +229,20 @@ internal class Player {
                     }
                 }
                 
-                var s = list.randomElement()!
-                if g_songs.count > 2 {
-                    while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
-                        s = g_songs.randomElement()!
+                let s = list.randomElement()!
+                g_playlist.append(s)
+            }
+            else if g_modeArtist.count > 0 {
+                var list: [SongEntry] = []
+                for g in g_modeArtist {
+                    if g_artists[g] != nil {
+                        if let item = g_artists[g]?.randomElement() {
+                            list.append(item)
+                        }
                     }
                 }
+                
+                let s = list.randomElement()!
                 g_playlist.append(s)
             }
             else {

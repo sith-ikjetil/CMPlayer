@@ -323,6 +323,22 @@ internal func itsRenderMsToFullString(_ milliseconds: UInt64,_ bWithMilliseconds
 }
 
 ///
+/// Determines if a song url path is under music root path in Player Preferences
+///
+/// parameter path: Path to song to determine if it is part of music root paths.
+///
+/// returns: True if path is under music root path. False otherwise.
+///
+func isPathInMusicRootPath(path: String) -> Bool {
+    for p in PlayerPreferences.musicRootPath {
+        if path.hasPrefix(p) {
+            return true
+        }
+    }
+    return false
+}
+
+///
 /// Int extension methods.
 ///
 internal extension Int {
