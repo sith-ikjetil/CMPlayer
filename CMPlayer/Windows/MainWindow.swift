@@ -136,7 +136,7 @@ internal class MainWindow {
     ///
     func renderStatusLine() -> Void
     {
-        Console.printXY(1,24,"Songs Found: \(g_songs.count.itsToString())", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"Song Count: \(g_songs.count.itsToString())", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///
