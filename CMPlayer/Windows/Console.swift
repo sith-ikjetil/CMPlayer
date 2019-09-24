@@ -140,6 +140,16 @@ internal class Console {
     }
     
     ///
+    /// Sets terminal size in character length.
+    ///
+    /// parameter width. Number of characters in x axis.
+    /// parameter height: Number of characters in y axis.
+    ///
+    static func setTerminalSize(width: Int, height: Int) -> Void {
+        print("\u{001B}[8;\(height);\(width)t")
+    }
+    
+    ///
     /// Moves console position.
     ///
     /// parameter x: Console x position.
@@ -173,21 +183,15 @@ internal class Console {
     /// Initializes console.
     ///
     static func initialize() -> Void {
+        Console.setTerminalSize(width: 80, height: 24)
         //
         // Respond to window resize
         //
-        sigintSrc.setEventHandler {
-            //var w = winsize()
-            //if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
-            //    if w.ws_row != 24 || w.ws_col != 80 {
-            //        w.ws_row = 24
-            //        w.ws_col = 80
-            //        _ = ioctl(STDOUT_FILENO, TIOCSWINSZ, &w)
-            //    }
-            //}
-            Console.clearScreen()
-            g_mainWindow?.renderScreen()
-        }
-        sigintSrc.resume()
+        //sigintSrc.setEventHandler {
+        //    Console.setTerminalSize(width: 80, height: 24)
+            //Console.clearScreen()
+            //g_mainWindow?.renderScreen()
+        //}
+        //sigintSrc.resume()
     }// initialize
 }// Console
