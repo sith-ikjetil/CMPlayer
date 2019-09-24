@@ -394,7 +394,7 @@ internal class Player {
         
         Console.printXY(1,3,"### INITIALIZE ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(1, 5, "Root Path: " + path, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, 5, "Current Path: " + path, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         let pstFiles: String = "\((filesFound) ? 100 : 0)%"
         Console.printXY(1, 6, findingFilesText + " " + pstFiles, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
