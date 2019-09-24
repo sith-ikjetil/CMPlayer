@@ -109,14 +109,14 @@ internal class GenreWindow {
         self.renderGenre()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: 66, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.genreIndex + 17) < self.genreText.count {
                 self.genreIndex += 1
                 self.renderGenre()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: 65, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.genreIndex > 0 {
                 self.genreIndex -= 1
                 self.renderGenre()

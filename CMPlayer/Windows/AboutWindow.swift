@@ -83,14 +83,14 @@ internal class AboutWindow {
         self.renderAbout()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: 66, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.aboutIndex + 17) < self.aboutText.count {
                 self.aboutIndex += 1
                 self.renderAbout()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: 65, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.aboutIndex > 0 {
                 self.aboutIndex -= 1
                 self.renderAbout()

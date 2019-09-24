@@ -32,8 +32,8 @@ internal class Player {
     //
     private var musicFormats: [String] = []
     private var filesFound = false
-    private let findingFilesText: String = "Finding Song Files"
-    private let initSongLibraryText: String = "Updating Song Library"
+    private let findingFilesText: String = "Finding Song Files:"
+    private let initSongLibraryText: String = "Updating Song Library:"
     private var helpIndex: Int = 0
     private var currentCommandReady: Bool = false
     private let EXIT_CODE_ERROR_FINDING_FILES: Int32 = 1
@@ -169,6 +169,8 @@ internal class Player {
             return
         }
         
+        g_lock.lock()
+        
         if self.audio1 != nil {
             if self.audio1?.isPlaying ?? false {
                 audio1?.pause()
@@ -182,6 +184,8 @@ internal class Player {
                 self.isPaused = true
             }
         }
+        
+        g_lock.unlock()
     }
     
     ///
@@ -191,6 +195,8 @@ internal class Player {
         guard g_songs.count > 0 else {
             return
         }
+        
+        g_lock.lock()
         
         if self.audio1 != nil && self.audioPlayerActive == 1 {
             if self.audio1?.currentTime.magnitude ?? 0 > 0 {
@@ -205,6 +211,8 @@ internal class Player {
                 self.isPaused = false
             }
         }
+        
+        g_lock.unlock()
     }
     
     ///
@@ -212,7 +220,7 @@ internal class Player {
     ///
     /// parameter crossfade: True if skip should crossfade. False otherwise.
     ///
-    func skip(crossfade: Bool = true) -> Void {
+    func skip(play: Bool = true, crossfade: Bool = true) -> Void {
         guard g_songs.count > 0 && g_playlist.count >= 1 else {
             return
         }
@@ -257,26 +265,34 @@ internal class Player {
         }
         
         if self.audioPlayerActive == -1 || self.audioPlayerActive == 2 {
-            if self.audio2!.isPlaying {
-                if !PlayerPreferences.crossfadeSongs || !crossfade {
-                    self.audio2!.stop()
-                }
-                else {
-                    self.audio2!.setVolume(0.0, fadeDuration: Double(PlayerPreferences.crossfadeTimeInSeconds) )
+            if self.audio2 != nil {
+                if self.audio2!.isPlaying {
+                    if !PlayerPreferences.crossfadeSongs || !crossfade {
+                        self.audio2!.stop()
+                    }
+                    else {
+                        self.audio2!.setVolume(0.0, fadeDuration: Double(PlayerPreferences.crossfadeTimeInSeconds) )
+                    }
                 }
             }
-            self.play(player: 1, playlistIndex: 0)
+            if play {
+                self.play(player: 1, playlistIndex: 0)
+            }
         }
         else if self.audioPlayerActive == 1 {
-            if self.audio1!.isPlaying {
-                if !PlayerPreferences.crossfadeSongs || !crossfade {
-                    self.audio1!.stop()
-                }
-                else {
-                    self.audio1!.setVolume(0.0, fadeDuration: Double(PlayerPreferences.crossfadeTimeInSeconds) )
+            if self.audio1 != nil {
+                if self.audio1!.isPlaying {
+                    if !PlayerPreferences.crossfadeSongs || !crossfade {
+                        self.audio1!.stop()
+                    }
+                    else {
+                        self.audio1!.setVolume(0.0, fadeDuration: Double(PlayerPreferences.crossfadeTimeInSeconds) )
+                    }
                 }
             }
-            self.play(player: 2, playlistIndex: 0)
+            if play {
+                self.play(player: 2, playlistIndex: 0)
+            }
         }
     }
     
@@ -298,11 +314,11 @@ internal class Player {
         g_playlist.removeAll()
         
         for mrpath in PlayerPreferences.musicRootPath {
-            #if DEBUG
-                let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
-            #else
+            //#if DEBUG
+            //    let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
+            //#else
                 let result = findSongs(path: mrpath)
-            #endif
+            //#endif
             
             filesFound = true
             printWorkingInitializationSongs(path: mrpath, completed: 0)

@@ -108,14 +108,14 @@ class SearchWindow {
         self.renderSearch()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: 66, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.searchIndex + 17) < g_searchResult.count {
                 self.searchIndex += 1
                 self.renderSearch()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: 65, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.searchIndex > 0 {
                 self.searchIndex -= 1
                 self.renderSearch()

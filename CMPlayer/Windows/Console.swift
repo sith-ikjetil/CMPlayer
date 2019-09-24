@@ -43,6 +43,16 @@ internal class Console {
     static private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1.console", attributes: .concurrent)
     static private let sigintSrc = DispatchSource.makeSignalSource(signal: Int32(SIGWINCH), queue: Console.concurrentQueue1)
     
+    //
+    // Internal static constants
+    //
+    static let KEY_BACKSPACE: Int32 = 127
+    static let KEY_ENTER: Int32 = 10
+    static let KEY_UP: Int32 = 65
+    static let KEY_DOWN: Int32 = 66
+    static let KEY_LEFT: Int32 = 68
+    static let KEY_RIGHT: Int32 = 67
+    
     ///
     /// Clears console screen.
     ///

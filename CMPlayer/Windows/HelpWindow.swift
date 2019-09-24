@@ -100,14 +100,14 @@ internal class HelpWindow {
         self.renderHelp()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: 66, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.helpIndex + 17) < self.helpText.count {
                 self.helpIndex += 1
                 self.renderHelp()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: 65, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.helpIndex > 0 {
                 self.helpIndex -= 1
                 self.renderHelp()

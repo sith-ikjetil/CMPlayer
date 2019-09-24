@@ -109,14 +109,14 @@ internal class ArtistWindow {
         self.renderArtist()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: 66, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.artistIndex + 17) < self.artistText.count {
                 self.artistIndex += 1
                 self.renderArtist()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: 65, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.artistIndex > 0 {
                 self.artistIndex -= 1
                 self.renderArtist()

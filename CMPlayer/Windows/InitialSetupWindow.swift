@@ -64,14 +64,14 @@ internal class InitialSetupWindow {
         var retVal: Bool = false
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: 127, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_BACKSPACE, closure: { () -> Bool in
             if path.count > 0 {
                 path.removeLast()
                 self.renderInitialSetup(path: path)
             }
             return false
         })
-        keyHandler.addKeyHandler(key: 10, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: Console.KEY_ENTER, closure: { () -> Bool in
             if path.count > 0 {
                 PlayerPreferences.musicRootPath.append(path)
                 retVal = true

@@ -53,6 +53,7 @@ internal class MainWindow {
     private var isShowingTopWindow = false
     private var isSkipping: Bool = false
     
+    
     static private var timeElapsedMs: UInt64 = 0
     
     ///
@@ -150,7 +151,10 @@ internal class MainWindow {
                 let s = g_playlist[index]
                 
                 if idx == 5 {
-                    if g_player.audioPlayerActive == 1 {
+                    if g_player.audioPlayerActive == -1 && g_playlist.count > 0{
+                        renderSong(idx, s.songNo, s.artist, s.title, g_playlist[0].duration)
+                    }
+                    else if g_player.audioPlayerActive == 1 {
                         renderSong(idx, s.songNo, s.artist, s.title, g_player.durationAudioPlayer1)
                     }
                     else if g_player.audioPlayerActive == 2 {
@@ -198,13 +202,20 @@ internal class MainWindow {
                     self.renderSongs()
                 }
                 
+                g_lock.lock()
                 if g_playlist.count > 0 {
                     if g_player.audioPlayerActive == 1 {
-                        let time = g_player.audio1!.currentTime.magnitude
+                        var time: Double = 0.0
+                        if let a = g_player.audio1 {
+                            time = a.currentTime.magnitude
+                        }
                         g_player.durationAudioPlayer1 = UInt64(Double(g_playlist[0].duration) - time * Double(1000))
                     }
                     else if g_player.audioPlayerActive == 2 {
-                        let time = g_player.audio2!.currentTime.magnitude
+                        var time: Double = 0.0
+                        if let a = g_player.audio2 {
+                            time = a.currentTime.magnitude
+                        }
                         g_player.durationAudioPlayer2 = UInt64(Double(g_playlist[0].duration) - time * Double(1000))
                     }
                     
@@ -221,6 +232,7 @@ internal class MainWindow {
                         }
                     }
                 }
+                g_lock.unlock()
                 
                 let second: Double = 1_000_000
                 usleep(useconds_t(0.050 * second))
@@ -367,6 +379,8 @@ internal class MainWindow {
                         }
                     }
                     if parts.count > 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
+                        g_lock.lock()
+                        
                         g_modeGenre.removeAll()
                         
                         let nparts = reparseCurrentCommandArguments(parts)
@@ -387,8 +401,12 @@ internal class MainWindow {
                         if g_modeGenre.count > 0 {
                             g_modeArtist.removeAll()
                         }
+                        
+                        g_lock.unlock()
                     }
                     if parts.count > 2 && parts[0] == self.commandsModeArtist[0] && parts[1] == self.commandsModeArtist[1] {
+                        g_lock.lock()
+                        
                         g_modeArtist.removeAll()
                         
                         let nparts = reparseCurrentCommandArguments(parts)
@@ -411,6 +429,8 @@ internal class MainWindow {
                         if g_modeArtist.count > 0 {
                             g_modeGenre.removeAll()
                         }
+                        
+                        g_lock.unlock()
                     }
                     if parts.count == 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
                         g_modeGenre.removeAll()
@@ -457,13 +477,21 @@ internal class MainWindow {
                     if isCommandInCommands(self.currentCommand, self.commandsReinitialize) {
                         g_player.pause()
                         
+                        g_lock.lock()
+                        
                         g_genres.removeAll()
+                        g_artists.removeAll()
                         g_modeGenre.removeAll()
+                        g_modeArtist.removeAll()
                         g_songs.removeAll()
                         g_playlist.removeAll()
                         g_library.library = []
                         g_library.save()
                         g_library.setNextAvailableSongNo(0)
+                        
+                        g_player.audioPlayerActive = -1
+                        g_player.audio1 = nil
+                        g_player.audio2 = nil
                         
                         if PlayerPreferences.musicRootPath.count == 0 {
                             self.isShowingTopWindow = true
@@ -490,7 +518,9 @@ internal class MainWindow {
                         
                         self.renderScreen()
                         
-                        g_player.skip()
+                        g_lock.unlock()
+                        
+                        g_player.skip(play: PlayerPreferences.autoplayOnStartup)
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsRebuildSongNo) {
                         var i: Int = 1
