@@ -20,6 +20,7 @@ internal class GenreWindow {
     ///
     private var genreIndex: Int = 0
     private var genreText: [String] = []
+    
     ///
     /// Shows this AboutWindow on screen.
     ///
@@ -39,7 +40,7 @@ internal class GenreWindow {
         
         for g in g_genres {
             let name = g.key.lowercased()
-            let desc = "\(g.value.count) Songs"
+            let desc = " :: \(g.value.count) Songs"
             
             var hit = false
             for e in g_modeGenre {
