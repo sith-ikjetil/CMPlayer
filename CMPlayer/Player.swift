@@ -55,27 +55,20 @@ internal class Player {
         
         g_library.load()
         
-        Console.clearScreen()
-        MainWindow.renderHeader(showTime: false)
-        self.initializeSongs()
-        
-        if g_songs.count < 2 {
+        if PlayerPreferences.musicRootPath.count == 0 {
             let wnd: InitialSetupWindow = InitialSetupWindow()
-            if wnd.showWindow() {
-                Console.clearScreen()
-                MainWindow.renderHeader(showTime: false)
-                self.initializeSongs()
+            while !wnd.showWindow() {
+                
             }
-            if g_songs.count < 2 {
-                let wnd: ErrorWindow = ErrorWindow()
-                wnd.showWindow(message: "Could not find any music.\nThere must be at least two music files in musicRootPath.\nmusicRootPath was: \(PlayerPreferences.musicRootPath)")
-                Console.showCursor()
-                Console.echoOn()
-                exit(EXIT_CODE_ERROR_FINDING_FILES)
-            }
-            else {
-                PlayerPreferences.savePreferences()
-            }
+            PlayerPreferences.savePreferences()
+            Console.clearScreen()
+            MainWindow.renderHeader(showTime: false)
+            self.initializeSongs()
+        }
+        else {
+            Console.clearScreen()
+            MainWindow.renderHeader(showTime: false)
+            self.initializeSongs()
         }
         
         g_library.library = g_songs
@@ -84,7 +77,6 @@ internal class Player {
         if PlayerPreferences.autoplayOnStartup && g_playlist.count > 0 {
             self.play(player: 1, playlistIndex: 0)
         }
-        
         
         Console.clearScreen()
     }
@@ -96,6 +88,10 @@ internal class Player {
     /// parameter: playlistIndex. Index of playlist array to play.
     ///
     func play(player: Int, playlistIndex: Int) -> Void {
+        guard g_songs.count > 0 && g_playlist.count > playlistIndex else {
+            return
+        }
+        
         self.audioPlayerActive = player
         if player == 1 {
             if self.audio1 == nil {
@@ -169,6 +165,10 @@ internal class Player {
     /// Pauses audio playback.
     ///
     func pause() -> Void {
+        guard g_songs.count > 0 else {
+            return
+        }
+        
         if self.audio1 != nil {
             if self.audio1?.isPlaying ?? false {
                 audio1?.pause()
@@ -188,6 +188,10 @@ internal class Player {
     /// Resumes audio playback.
     ///
     func resume() -> Void {
+        guard g_songs.count > 0 else {
+            return
+        }
+        
         if self.audio1 != nil && self.audioPlayerActive == 1 {
             if self.audio1?.currentTime.magnitude ?? 0 > 0 {
                 audio1?.play()
@@ -207,6 +211,10 @@ internal class Player {
     /// Skips audio playback to next item in playlist.
     ///
     func skip(crossfade: Bool = true) -> Void {
+        guard g_songs.count > 0 && g_playlist.count >= 1 else {
+            return
+        }
+        
         g_playlist.removeFirst()
         if g_playlist.count < 2 {
             if g_modeGenre.count > 0 {
@@ -220,15 +228,19 @@ internal class Player {
                 }
                 
                 var s = list.randomElement()!
-                while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
-                    s = g_songs.randomElement()!
+                if g_songs.count > 2 {
+                    while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
+                        s = g_songs.randomElement()!
+                    }
                 }
                 g_playlist.append(s)
             }
             else {
                 var s = g_songs.randomElement()!
-                while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
-                    s = g_songs.randomElement()!
+                if g_songs.count > 2 {
+                    while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
+                        s = g_songs.randomElement()!
+                    }
                 }
                 g_playlist.append(s)
             }
@@ -283,11 +295,11 @@ internal class Player {
             #endif
             
             filesFound = true
-            printWorkingInitializationSongs(completed: 0)
+            printWorkingInitializationSongs(path: mrpath, completed: 0)
             
             var i: Int = 1
             for r in result {
-                printWorkingInitializationSongs( completed: Int(Double(i) * Double(100.0) / Double(result.count)))
+                printWorkingInitializationSongs( path: mrpath, completed: Int(Double(i) * Double(100.0) / Double(result.count)))
                 
                 let u: URL = URL(fileURLWithPath: r)
                 if let se = g_library.find(url: u) {
@@ -301,7 +313,7 @@ internal class Player {
             }
         }
         
-        if g_songs.count > 2 {
+        if g_songs.count > 0 {
             let r1 = g_songs.randomElement()
             let r2 = g_songs.randomElement()
             
@@ -331,7 +343,7 @@ internal class Player {
                     nr = "\(path)\(r)"
                 }
                 
-                printWorkingInitializationSongs(completed: 0)
+                printWorkingInitializationSongs(path: nr, completed: 0)
                 
                 if isDirectory(path: nr) {
                     results.append(contentsOf: findSongs(path: nr))
@@ -366,16 +378,18 @@ internal class Player {
     ///
     /// parameters: Int. Percent completed.
     ///
-    func printWorkingInitializationSongs(completed: Int) -> Void {
+    func printWorkingInitializationSongs(path: String, completed: Int) -> Void {
         MainWindow.renderHeader(showTime: false)
         
-        Console.printXY(1,3,"### INITIALIZING ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,3,"### INITIALIZE ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+        Console.printXY(1, 5, "Root Path: " + path, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         let pstFiles: String = "\((filesFound) ? 100 : 0)%"
-        Console.printXY(1, 5, findingFilesText + " " + pstFiles, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, 6, findingFilesText + " " + pstFiles, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         let pstLib: String = "\(completed)%"
-        Console.printXY(1, 6, initSongLibraryText + " " + pstLib, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1, 7, initSongLibraryText + " " + pstLib, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(1,23,"PLEASE BE PATIENT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }

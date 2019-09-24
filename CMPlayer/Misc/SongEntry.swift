@@ -43,10 +43,12 @@ internal class SongEntry {
         self.fileURL = url
         self.genre = genre.lowercased()
         
-        if g_genres[self.genre] == nil {
-            g_genres[self.genre] = []
+        if FileManager.default.fileExists(atPath: url!.path) {
+            if g_genres[self.genre] == nil {
+                g_genres[self.genre] = []
+            }
+            g_genres[self.genre]?.append(self)
         }
-        g_genres[self.genre]?.append(self)
     }
     
     ///

@@ -32,12 +32,14 @@ internal class MainWindow {
     private let commandsRepaint: [String] = ["repaint","redraw"]
     private let commandsAddMusicRootPath: [String] = ["add", "mrp"]
     private let commandsRemoveMusicRootPath: [String] = ["remove", "mrp"]
+    private let commandsClearMusicRootPath: [String] = ["clear mrp"]
     private let commandsSetCrossfadeTimeInSeconds: [String] = ["set", "cft"]
     private let commandsSetMusicFormats: [String] = ["set", "mf"]
     private let commandsEnableCrossfade: [String] = ["enable crossfade"]
     private let commandsDisableCrossfade: [String] = ["disable crossfade"]
     private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
     private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
+    private let commandsReinitialize: [String] = ["reinitialize"]
     private let commandsModeGenre: [String] = ["mode", "genre"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
     private let commandsListGenre: [String] = ["genre"]
@@ -383,6 +385,10 @@ internal class MainWindow {
                         self.renderScreen()
                         self.isShowingTopWindow = false
                     }
+                    if isCommandInCommands(self.currentCommand, self.commandsClearMusicRootPath) {
+                        PlayerPreferences.musicRootPath.removeAll()
+                        PlayerPreferences.savePreferences()
+                    }
                     if isCommandInCommands(self.currentCommand, self.commandsAbout) {
                         self.isShowingTopWindow = true
                         let wnd: AboutWindow = AboutWindow()
@@ -398,6 +404,44 @@ internal class MainWindow {
                         Console.clearScreen()
                         self.renderScreen()
                         self.isShowingTopWindow = false
+                    }
+                    if isCommandInCommands(self.currentCommand, self.commandsReinitialize) {
+                        g_player.pause()
+                        
+                        g_genres.removeAll()
+                        g_modeGenre.removeAll()
+                        g_songs.removeAll()
+                        g_playlist.removeAll()
+                        g_library.library = []
+                        g_library.save()
+                        g_library.setNextAvailableSongNo(0)
+                        
+                        if PlayerPreferences.musicRootPath.count == 0 {
+                            self.isShowingTopWindow = true
+                            let wnd: InitialSetupWindow = InitialSetupWindow()
+                            while !wnd.showWindow() {
+                                
+                            }
+                            PlayerPreferences.savePreferences()
+                            Console.clearScreen()
+                            MainWindow.renderHeader(showTime: false)
+                            self.isShowingTopWindow = true
+                            g_player.initializeSongs()
+                        }
+                        else {
+                            Console.clearScreen()
+                            MainWindow.renderHeader(showTime: false)
+                            self.isShowingTopWindow = true
+                            g_player.initializeSongs()
+                        }
+                        self.isShowingTopWindow = false
+                        
+                        g_library.library = g_songs
+                        g_library.save()
+                        
+                        self.renderScreen()
+                        
+                        g_player.skip()
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsRebuildSongNo) {
                         var i: Int = 1

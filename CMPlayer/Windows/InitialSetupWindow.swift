@@ -18,8 +18,10 @@ internal class InitialSetupWindow {
     ///
     /// Private properties/constants.
     ///
-    private let setupTextRootPath: String = "There seems to be a problem finding the 2+ songs needed"
-    private let setupTextPleaseEnterPath: String = "Please enter a new path to root directory of music"
+    private let setupText: [String] = ["CMPlayer needs to have a path to search for music",
+                                       "In CMPlayer you can have many root paths.",
+                                       "In CMPlayer Use: add mrp <path> or: remove mrp <path> to add remove path.",
+                                       "Please enter the path to the root directory of where your music resides."]
 
     ///
     /// Shows this InitialSetupWindow on screen.
@@ -39,9 +41,13 @@ internal class InitialSetupWindow {
         
         Console.printXY(1,3,"### SETUP ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(1,5, setupTextRootPath, 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        Console.printXY(1,7, setupTextPleaseEnterPath, 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        Console.printXY(1,9, ":> \(path)", 3+path.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        var y: Int = 5
+        for txt in self.setupText {
+            Console.printXY(1, y, txt, 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            y += 1
+        }
+        
+        Console.printXY(1,y+1, ":> \(path)", 3+path.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
         
         //Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE RESULTS. OTHER KEY TO EXIT HELP.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }

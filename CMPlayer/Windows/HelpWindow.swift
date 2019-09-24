@@ -28,7 +28,9 @@ internal class HelpWindow {
                                       " about"," :: show the about information",
                                       " genre"," :: shows all genre information and statistics",
                                       " repaint", " :: clears and repaints entire console window",
-                                      " set mrp <path>", " :: sets the path to the root folder where the music resides",
+                                      " add mrp <path>", " :: adds the path to music root folder",
+                                      " remove mrp <path>", " :: removes the path from music root folders",
+                                      " clear mrp", " :: clears all paths from music root folders",
                                       " set cft <seconds>", " :: sets the crossfade time in seconds (1-10 seconds)",
                                       " set mf <formats>", " :: sets the supported music formats (separated by ;)",
                                       " enable crossfade"," :: enables crossfade",
@@ -38,7 +40,8 @@ internal class HelpWindow {
                                       " rebuild songno"," :: rebuilds song numbers",
                                       " goto <mm:ss>", " :: moves playback point to minutes (mm) and seconds (ss) of current song",
                                       " mode genre [<genre>]", " :: set playback of songs only from the given genres",
-                                      " mode genre", " :: removes mode genre playback and plays songs fron entire library"]
+                                      " mode genre", " :: removes mode genre playback and plays songs fron entire library",
+                                      " reinitialize", " :: reinitializes library and should be called after mrp paths are changed"]
     
     ///
     /// Shows this HelpWindow on screen.
