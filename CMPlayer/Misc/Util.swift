@@ -32,10 +32,10 @@ internal enum PrintPaddingTextAlign {
 ///
 /// Check to see if command is one of the supported given commands.
 ///
-/// parameter: command. Command to check for.
-/// parameter: commands. Commands to check in.
+/// parameter command: Command to check for.
+/// parameter commands: Commands to check in.
 ///
-/// returnes: True if command is in commands. False otherwise.
+/// returns: True if command is in commands. False otherwise.
 ///
 internal func isCommandInCommands(_ command: String, _ commands: [String]) -> Bool {
     for c in commands {
@@ -49,9 +49,9 @@ internal func isCommandInCommands(_ command: String, _ commands: [String]) -> Bo
 ///
 /// Validates if crossfade time is a valid crossfade time.
 ///
-/// parameter: ctis. Crossfade time in seconds.
+/// parameter ctis: Crossfade time in seconds.
 ///
-/// returnes: True if crossfade time is valid. False otherwise.
+/// returns: True if crossfade time is valid. False otherwise.
 ///
 internal func isCrossfadeTimeValid(_ ctis: Int) -> Bool {
     if ctis >= 1 && ctis <= 10 {
@@ -63,9 +63,9 @@ internal func isCrossfadeTimeValid(_ ctis: Int) -> Bool {
 ///
 /// Reparses the command arguments. Makes sure that commands that are part of "<search term>" are remade into on search term without the " character.
 ///
-/// parameter: command: The search terms comming from command argument.
+/// parameter command: The search terms comming from command argument.
 ///
-/// returnes: The new reparsed command argument array.
+/// returns: The new reparsed command argument array.
 ///
 internal func reparseCurrentCommandArguments(_ command: [String]) -> [String] {
     var retVal: [String] = []
@@ -130,11 +130,11 @@ internal extension String {
     ///
     /// Converts a string to a padded string of given length.
     ///
-    /// parameter: maxLength. Length of new string.
-    /// parameter: padding. Padding type.
-    /// parameter: paddingChar. Padding character to use.
+    /// parameter maxLength: Length of new string.
+    /// parameter padding: Padding type.
+    /// parameter paddingChar: Padding character to use.
     ///
-    /// returnes: New padded string.
+    /// returns: New padded string.
     ///
     func convertStringToLengthPaddedString(_ maxLength: Int,_ padding: PrintPaddingTextAlign,_ paddingChar: Character) -> String {
         var msg: String = self
@@ -182,12 +182,12 @@ internal extension String {
 ///
 /// Split ms to its parts.
 ///
-/// parameter: time_ms: Time in milliseconds.
+/// parameter time_ms: Time in milliseconds.
 ///
-/// returnes: part_hours. Number of hours in time_ms.
-/// returnes: part_minutes. Number of minutes in time_ms.
-/// returnes: part_seconds. Number of seconds in time_ms.
-/// returnes: part_ms. Number of milliseconds in time_ms.
+/// returns: part_hours. Number of hours in time_ms.
+/// returns: part_minutes. Number of minutes in time_ms.
+/// returns: part_seconds. Number of seconds in time_ms.
+/// returns: part_ms. Number of milliseconds in time_ms.
 ///
 internal func itsSplitMsToHourMinuteSeconds(_ time_ms: UInt64 ) -> (part_hours: UInt64,part_minutes: UInt64,part_seconds: UInt64,part_ms: UInt64)
 {
@@ -209,12 +209,12 @@ internal func itsSplitMsToHourMinuteSeconds(_ time_ms: UInt64 ) -> (part_hours: 
 ///
 /// Splits hour to its parts.
 ///
-/// parameter: houIn. Number of hours to split.
+/// parameter houIn: Number of hours to split.
 ///
-/// returnes: houRest. Number of hours left in houIn.
-/// returnes: day. Number of days in houIn.
-/// returnes: week. Number of weeks in houIn.
-/// returnes. year. Number of years in houIn.
+/// returns: houRest. Number of hours left in houIn.
+/// returns: day. Number of days in houIn.
+/// returns: week. Number of weeks in houIn.
+/// returns: year. Number of years in houIn.
 ///
 internal func itsSplitHourToYearWeekDayHour(_ houIn: UInt64 ) -> (houRest: UInt64, day: UInt64, week: UInt64, year: UInt64)
 {
@@ -238,10 +238,10 @@ internal func itsSplitHourToYearWeekDayHour(_ houIn: UInt64 ) -> (houRest: UInt6
 ///
 /// Renders milliseconds to a fully descriptive time string.
 ///
-/// parameter: milliseconds. Number of milliseconds to render.
-/// parameter: bWithMilliseconds. True is milliseconds should be part of the render. False if not.
+/// parameter milliseconds: Number of milliseconds to render.
+/// parameter bWithMilliseconds: True is milliseconds should be part of the render. False if not.
 ///
-/// returnes: A fully descriptive time string.
+/// returns: A fully descriptive time string.
 ///
 internal func itsRenderMsToFullString(_ milliseconds: UInt64,_ bWithMilliseconds: Bool) -> String
 {
@@ -329,7 +329,7 @@ internal extension Int {
     ///
     /// Convert a Int into a Norwegian style number for text representation. " " as a thousand separator.
     ///
-    /// returnes: The number as a new string.
+    /// returns: The number as a new string.
     ///
     func itsToString() -> String {
         let formatter = NumberFormatter()

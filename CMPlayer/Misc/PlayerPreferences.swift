@@ -61,7 +61,7 @@ internal class PlayerPreferences {
     ///
     /// Loads preferences from file
     ///
-    /// parameter: fileUrl. Path to preferences file.
+    /// parameter fileUrl: Path to preferences file.
     ///
     static func loadPreferences(_ fileUrl: URL ) {
         do {

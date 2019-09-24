@@ -69,6 +69,8 @@ internal class MainWindow {
     ///
     /// Renders header on screen
     ///
+    /// parameter showTime: True if time string is to be shown in header. False otherwise.
+    ///
     static func renderHeader(showTime: Bool) -> Void {
         if showTime {
             Console.printXY(1,1,"CMPlayer | \(g_versionString) | \(itsRenderMsToFullString(MainWindow.timeElapsedMs, false))", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
@@ -98,6 +100,12 @@ internal class MainWindow {
 
     ///
     /// Renders a song on screen
+    ///
+    /// parameter y: Line where song is to be rendered.
+    /// parameter songNo: SongNo.
+    /// parameter artist. Artist.
+    /// parameter song. Title.
+    /// parameter time. Duration (ms).
     ///
     func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64) -> Void
     {

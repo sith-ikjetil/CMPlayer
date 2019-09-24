@@ -34,6 +34,8 @@ internal class InitialSetupWindow {
     ///
     /// Renders screen output. Does clear screen first.
     ///
+    /// parameter path: Path to render on screen.
+    ///
     func renderInitialSetup(path: String) -> Void {
         Console.clearScreen()
         
@@ -55,7 +57,7 @@ internal class InitialSetupWindow {
     ///
     /// Runs InitialSetupWindow keyboard input and feedback.
     ///
-    ///  returns: Bool. True if path entered, false otherwise.
+    /// returns: Bool. True if path entered, false otherwise.
     ///
     func run() -> Bool {
         var path: String = ""

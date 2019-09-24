@@ -29,11 +29,11 @@ internal class SongEntry {
     ///
     /// Overloaded initializer
     ///
-    /// parameter: number. Song No.
-    /// parameter: artist. Artist.
-    /// parameter: title. Title.
-    /// parameter: duration. Song length in milliseconds.
-    /// parameter: url. Song file path.
+    /// parameter number: Song No.
+    /// parameter artist: Artist.
+    /// parameter title: Title.
+    /// parameter duration: Song length in milliseconds.
+    /// parameter url: Song file path.
     ///
     init(songNo: Int, artist: String, title: String, duration: UInt64, url: URL?, genre: String) {
         self.songNo = songNo
@@ -54,8 +54,8 @@ internal class SongEntry {
     ///
     /// Overloaded initializer.
     ///
-    /// parameter: path. URL file path to song.
-    /// parameter: num. Song No.
+    /// parameter path: URL file path to song.
+    /// parameter num: Song No.
     ///
     init(path: URL?, songNo: Int)
     {

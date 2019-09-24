@@ -31,6 +31,9 @@ internal class PreferencesWindow {
         self.run()
     }
     
+    ///
+    /// Updates the preferences text based on running values.
+    ///
     func updatePreferencesText() {
         self.preferencesText.removeAll()
         

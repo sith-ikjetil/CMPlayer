@@ -31,10 +31,10 @@ internal class ConsoleKeyboardHandler {
     ///
     /// Adds a closure keyboard handler for given key from getchar()
     ///
-    /// parameter: key. getchar() return value.
-    /// parameter: closure. A Keyboard handler for key pressed.
+    /// parameter key: getchar() return value.
+    /// parameter closure: A Keyboard handler for key pressed.
     ///
-    /// returnes: True if ConsoleKeyboardHandler should stop processing keys and return from run. False otherwise.
+    /// returns: True if ConsoleKeyboardHandler should stop processing keys and return from run. False otherwise.
     ///
     func addKeyHandler(key: Int32, closure: @escaping () -> Bool) {
         self.keyHandlers[key] = closure
@@ -43,9 +43,9 @@ internal class ConsoleKeyboardHandler {
     ///
     /// Adds a closure keyboard handler for given key from getchar() that is not processed with addKeyHandler handler.
     ///
-    /// parameter : closure. A Closure for handling key pressed.
+    /// parameter closure: A Closure for handling key pressed.
     ///
-    /// returnes: True is ConsoleKeyboardHandler should stop processing keys and return from run. False otherwise.
+    /// returns: True is ConsoleKeyboardHandler should stop processing keys and return from run. False otherwise.
     ///
     func addUnknownKeyHandler(closure: @escaping (Int32) -> Bool) {
         self.unknownKeyHandlers.append(closure)
@@ -73,9 +73,9 @@ internal class ConsoleKeyboardHandler {
     ///
     /// Processes a keystroke from getchar()
     ///
-    /// parameter: key. Value from getchar()
+    /// parameter key: Value from getchar()
     ///
-    /// returnes: True if eventhandler processed the keystroke and eventhandler returned true. False if no eventhandler processed the key. Also false if eventhandler returned false.
+    /// returns: True if eventhandler processed the keystroke and eventhandler returned true. False if no eventhandler processed the key. Also false if eventhandler returned false.
     ///
     func processKey(key: Int32) -> Bool {
         var hit: Bool = false

@@ -49,7 +49,7 @@ internal class PlayerLibrary {
     ///
     /// Return next available SongNo.
     ///
-    /// returnes: Next available song number.
+    /// returns: Next available song number.
     ///
     func nextAvailableSongNo() -> Int {
         self.nextSongNo += 1
@@ -58,6 +58,8 @@ internal class PlayerLibrary {
     
     ///
     /// Sets the next available number
+    ///
+    /// parameter songNo: SongNo.
     ///
     func setNextAvailableSongNo(_ songNo: Int) -> Void {
         self.nextSongNo = songNo

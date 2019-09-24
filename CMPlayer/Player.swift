@@ -84,8 +84,8 @@ internal class Player {
     ///
     /// Plays audio.
     ///
-    /// parameter: player. Player number. 1 or 2.
-    /// parameter: playlistIndex. Index of playlist array to play.
+    /// parameter player: Player number. 1 or 2.
+    /// parameter playlistIndex: Index of playlist array to play.
     ///
     func play(player: Int, playlistIndex: Int) -> Void {
         guard g_songs.count > 0 && g_playlist.count > playlistIndex else {
@@ -210,6 +210,8 @@ internal class Player {
     ///
     /// Skips audio playback to next item in playlist.
     ///
+    /// parameter crossfade: True if skip should crossfade. False otherwise.
+    ///
     func skip(crossfade: Bool = true) -> Void {
         guard g_songs.count > 0 && g_playlist.count >= 1 else {
             return
@@ -325,9 +327,9 @@ internal class Player {
     ///
     /// Finds all songs from path and all folder paths under path. Songs must be of format in PlayerPreferences.musicFormats.
     ///
-    /// parameter: path. The root path to start finding supported audio files.
+    /// parameter path: The root path to start finding supported audio files.
     ///
-    /// returnes: [String]. Array of file paths to audio files found.
+    /// returns: [String]. Array of file paths to audio files found.
     ///
     func findSongs(path: String) -> [String]
     {
@@ -376,7 +378,8 @@ internal class Player {
     ///
     /// Prints the initialization of songs.
     ///
-    /// parameters: Int. Percent completed.
+    /// parameter path: Current Path.
+    /// parameter completed: Percent completed.
     ///
     func printWorkingInitializationSongs(path: String, completed: Int) -> Void {
         MainWindow.renderHeader(showTime: false)
@@ -397,9 +400,9 @@ internal class Player {
     ///
     /// Determines if a path is a directory or not.
     ///
-    /// parameter: path. Path to check.
+    /// parameter path. Path to check.
     ///
-    /// returnes: Bool. True if path is directory. False otherwise.
+    /// returns: Bool. True if path is directory. False otherwise.
     ///
     func isDirectory(path: String) -> Bool {
         var isDirectory: ObjCBool = true

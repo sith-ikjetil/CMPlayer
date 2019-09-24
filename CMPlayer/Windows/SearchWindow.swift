@@ -23,7 +23,7 @@ class SearchWindow {
     ///
     /// Performs search from arguments. Searches g_songs.
     ///
-    /// parameter: terms. Array of search terms.
+    /// parameter terms: Array of search terms.
     ///
     func performSearch(terms: [String]) -> Void {
         g_searchResult.removeAll(keepingCapacity: false)
@@ -94,6 +94,8 @@ class SearchWindow {
     
     ///
     /// Runs SearchWindow keyboard input and feedback.
+    ///
+    /// parameter parts: command parts from search input command.
     ///
     func run(parts: [String]) -> Void {
         var p : [String] = []

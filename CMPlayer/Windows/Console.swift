@@ -31,13 +31,6 @@ enum ConsoleColor : Int {
 enum ConsoleColorModifier : Int {
     case none = 0
     case bold = 1
-    //case dim = 2
-    //case italic = 3
-    //case underline = 4
-    //case blink = 5
-    //case inverse = 7
-    //case hidden = 8
-    //case strikethrough = 9
 }
 
 ///
@@ -107,13 +100,13 @@ internal class Console {
     ///
     /// Applies color to text string.
     ///
-    /// parameter: colorBg. Background console color.
-    /// parameter: modifierBg. Background console color modifier.
-    /// parameter: colorText. Text console color.
-    /// parameter: modifierText: Text console color modifier.
-    /// parameter: text. Text to output to console.
+    /// parameter colorBg: Background console color.
+    /// parameter modifierBg: Background console color modifier.
+    /// parameter colorText: Text console color.
+    /// parameter modifierText: Text console color modifier.
+    /// parameter text: Text to output to console.
     ///
-    /// returnes: String. String to be written to console using print.
+    /// returns: String to be written to console using print.
     ///
     static func applyTextColor(colorBg: ConsoleColor, modifierBg:  ConsoleColorModifier, colorText: ConsoleColor, modifierText: ConsoleColorModifier, text: String) -> String {
         
@@ -139,8 +132,8 @@ internal class Console {
     ///
     /// Moves console position.
     ///
-    /// parameter: x. Console x position.
-    /// parameter: y. Console y position.
+    /// parameter x: Console x position.
+    /// parameter y: Console y position.
     ///
     static func gotoXY(_ x: Int, _ y: Int) -> Void
     {
@@ -150,16 +143,16 @@ internal class Console {
     ///
     /// Prints a string to console at given position.
     ///
-    /// parameter: x. Console x position.
-    /// parameter: y. Console y position.
-    /// parameter: text. Text to be written to console.
-    /// parameter: maxLength. Maximum length of string to be written.
-    /// parameter: padding. How should string content be aligned.
-    /// parameter: paddingChar. What char should be applied with padding to maximum length.
-    /// parameter: bgColor: Console background color.
-    /// parameter: modifierBg. Console background color modifier.
-    /// parameter: colorText: Console text color.
-    /// parameter: modifierText: Console text color modifier
+    /// parameter x: Console x position.
+    /// parameter y: Console y position.
+    /// parameter text: Text to be written to console.
+    /// parameter maxLength: Maximum length of string to be written.
+    /// parameter padding: How should string content be aligned.
+    /// parameter paddingChar: What char should be applied with padding to maximum length.
+    /// parameter bgColor: Console background color.
+    /// parameter modifierBg: Console background color modifier.
+    /// parameter colorText: Console text color.
+    /// parameter modifierText: Console text color modifier
     ///
     static func printXY(_ x: Int,_ y: Int,_ text: String,_ maxLength: Int,_ padding: PrintPaddingTextAlign,_ paddingChar: Character, _ bgColor: ConsoleColor, _ modifierBg: ConsoleColorModifier, _ colorText: ConsoleColor,_ modifierText: ConsoleColorModifier) -> Void {
         let nmsg = text.convertStringToLengthPaddedString(maxLength, padding, paddingChar)
