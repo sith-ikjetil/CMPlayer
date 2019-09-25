@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer InitialSetupWindow.
 ///
-internal class InitialSetupWindow {
+internal class SetupWindow {
     ///
     /// Private properties/constants.
     ///

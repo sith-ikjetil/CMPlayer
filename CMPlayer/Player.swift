@@ -50,13 +50,10 @@ internal class Player {
         
         self.musicFormats = PlayerPreferences.musicFormats.components(separatedBy: ";")
         
-        Console.hideCursor()
-        Console.echoOff()
-        
         g_library.load()
         
         if PlayerPreferences.musicRootPath.count == 0 {
-            let wnd: InitialSetupWindow = InitialSetupWindow()
+            let wnd: SetupWindow = SetupWindow()
             while !wnd.showWindow() {
                 
             }

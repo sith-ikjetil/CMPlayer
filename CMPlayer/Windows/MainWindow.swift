@@ -495,7 +495,7 @@ internal class MainWindow {
                         
                         if PlayerPreferences.musicRootPath.count == 0 {
                             self.isShowingTopWindow = true
-                            let wnd: InitialSetupWindow = InitialSetupWindow()
+                            let wnd: SetupWindow = SetupWindow()
                             while !wnd.showWindow() {
                                 
                             }

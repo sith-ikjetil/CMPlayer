@@ -40,8 +40,8 @@ internal class Console {
     //
     // Private properties/constants.
     //
-    static private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1.console", attributes: .concurrent)
-    static private let sigintSrc = DispatchSource.makeSignalSource(signal: Int32(SIGWINCH), queue: Console.concurrentQueue1)
+    //static private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1.console", attributes: .concurrent)
+    //static private let sigintSrc = DispatchSource.makeSignalSource(signal: Int32(SIGWINCH), queue: Console.concurrentQueue1)
     
     //
     // Internal static constants
@@ -184,6 +184,8 @@ internal class Console {
     ///
     static func initialize() -> Void {
         Console.setTerminalSize(width: 80, height: 24)
+        Console.hideCursor()
+        Console.echoOff()
         //
         // Respond to window resize
         //
