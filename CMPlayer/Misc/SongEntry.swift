@@ -25,6 +25,7 @@ internal class SongEntry {
     var duration: UInt64 = 0
     var fileURL: URL? = nil
     var genre: String = ""
+    var recodingYear: Int = 0
     
     ///
     /// Overloaded initializer. Is only called from PlayerLibrary.load()
@@ -35,14 +36,15 @@ internal class SongEntry {
     /// parameter duration: Song length in milliseconds.
     /// parameter url: Song file path.
     ///
-    init(songNo: Int, artist: String, title: String, duration: UInt64, url: URL?, genre: String) {
+    init(songNo: Int, artist: String, title: String, duration: UInt64, url: URL?, genre: String, recordingYear: Int) {
         self.songNo = songNo
         self.artist = artist
         self.title = title
         self.duration = duration
         self.fileURL = url
         self.genre = genre.lowercased()
-        
+        self.recodingYear = recordingYear
+
         if isPathInMusicRootPath(path: url!.path) {
             if self.genre.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
                 self.genre = "unknown"
@@ -67,6 +69,15 @@ internal class SongEntry {
             
                 g_artists[self.artist]?.append(self)
             }
+            
+            //
+            // Add to g_releaseYears
+            //
+            if g_recordingYears[self.recodingYear] == nil {
+                g_recordingYears[self.recodingYear] = []
+            }
+            
+            g_recordingYears[self.recodingYear]?.append(self)
         }
     }
     
@@ -101,9 +112,7 @@ internal class SongEntry {
                             self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
                         }
                     }
-                }
-                if let keyValue = item.commonKey?.rawValue {
-                    if keyValue == "artist" {
+                    else if keyValue == "artist" {
                         self.artist = item.stringValue!
                         if self.artist.count > 32 {
                             self.artist = String(artist[artist.startIndex..<artist.index(artist.startIndex, offsetBy: 32)])
@@ -114,7 +123,13 @@ internal class SongEntry {
             
             if let npath = NSURL(string: path!.absoluteString) {
                 if let metadata = MDItemCreateWithURL(kCFAllocatorDefault, npath) {
-                    if let ge = MDItemCopyAttribute(metadata,kMDItemMusicalGenre) as? String { genre = ge.lowercased() }
+                    if let ge = MDItemCopyAttribute(metadata,kMDItemMusicalGenre) as? String {
+                        self.genre = ge.lowercased()
+                        
+                    }
+                    if let geYear = MDItemCopyAttribute(metadata,kMDItemRecordingYear) as? Int {
+                        self.recodingYear = geYear
+                    }
                 }
             }
         }
@@ -142,5 +157,14 @@ internal class SongEntry {
         
             g_artists[self.artist]?.append(self)
         }
+        
+        //
+        // Add to g_releaseYears
+        //
+        if g_recordingYears[self.recodingYear] == nil {
+            g_recordingYears[self.recodingYear] = []
+        }
+       
+        g_recordingYears[self.recodingYear]?.append(self)
     }// init
 }// SongEntry

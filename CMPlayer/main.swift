@@ -19,8 +19,10 @@ var g_playlist: [SongEntry] = []
 var g_searchResult: [SongEntry] = []
 var g_genres: [String: [SongEntry]] = [:]
 var g_artists: [String: [SongEntry]] = [:]
+var g_recordingYears: [Int: [SongEntry]] = [:]
 var g_modeGenre: [String] = []
 var g_modeArtist: [String] = []
+var g_modeRecordingYears: [Int] = []
 var g_library: PlayerLibrary = PlayerLibrary()
 var g_mainWindow: MainWindow?
 let g_player: Player = Player()

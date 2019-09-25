@@ -86,6 +86,7 @@ internal class PlayerLibrary {
                     var url: String = ""
                     var duration: UInt64 = 0
                     var genre: String = ""
+                    var recordingYear: Int = 0
                     
                     if let aNumber = s.attribute(forName: "songNo") {
                         songNo = Int(aNumber.stringValue ?? "0") ?? 0
@@ -105,11 +106,14 @@ internal class PlayerLibrary {
                     if let aGenre = s.attribute(forName: "genre") {
                         genre = aGenre.stringValue ?? ""
                     }
-                    
+                    if let aRecordingYear = s.attribute(forName: "recordingYear") {
+                        recordingYear = Int(aRecordingYear.stringValue ?? "0") ?? 0
+                    }
+
                     if songNo > self.nextSongNo {
                         self.nextSongNo = songNo
                     }
-                    let se = SongEntry(songNo: songNo, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre)
+                    let se = SongEntry(songNo: songNo, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear)
                     self.library.append(se)
                     if url.count > 0 {
                         self.dictionary[url] = self.library.count-1
@@ -161,6 +165,11 @@ internal class PlayerLibrary {
             xnGenre.name = "genre"
             xnGenre.setStringValue(s.genre, resolvingEntities: true)
             xeSong.addAttribute(xnGenre)
+            
+            let xnRecordingYear: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+            xnRecordingYear.name = "recordingYear"
+            xnRecordingYear.setStringValue(String(s.recodingYear), resolvingEntities: true)
+            xeSong.addAttribute(xnRecordingYear)
         }
    
         //

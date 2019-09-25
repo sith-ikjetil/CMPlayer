@@ -28,6 +28,7 @@ internal class MainWindow {
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
     private let commandsAbout: [String] = ["about"]
+    private let commandsYear: [String] = ["year", "years"]
     private let commandsGoTo: [String] = ["goto"]
     private let commandsRepaint: [String] = ["repaint","redraw"]
     private let commandsAddMusicRootPath: [String] = ["add", "mrp"]
@@ -535,6 +536,14 @@ internal class MainWindow {
                     if isCommandInCommands(self.currentCommand, self.commandsPreferences) {
                         self.isShowingTopWindow = true
                         let wnd: PreferencesWindow = PreferencesWindow()
+                        wnd.showWindow()
+                        Console.clearScreen()
+                        self.renderScreen()
+                        self.isShowingTopWindow = false
+                    }
+                    if isCommandInCommands(self.currentCommand, self.commandsYear) {
+                        self.isShowingTopWindow = true
+                        let wnd: RecordingYearWindow = RecordingYearWindow()
                         wnd.showWindow()
                         Console.clearScreen()
                         self.renderScreen()
