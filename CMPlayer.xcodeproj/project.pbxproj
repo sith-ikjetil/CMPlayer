@@ -44,6 +44,8 @@
 
 /* Begin PBXFileReference section */
 		D042988E233A10DF00EBDC0B /* ArtistWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistWindow.swift; sourceTree = "<group>"; };
+		D05E0A4D233B9CC9004A226E /* CMPlayer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CMPlayer.icns; sourceTree = "<group>"; };
+		D05E0A4F233B9F1D004A226E /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		D0777BCF233B7D3600BB603C /* InfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindow.swift; sourceTree = "<group>"; };
 		D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorWindow.swift; sourceTree = "<group>"; };
 		D093D0B02335E51E001842D6 /* SetupWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupWindow.swift; sourceTree = "<group>"; };
@@ -134,6 +136,8 @@
 				D0C499F4233536D9001232A9 /* Windows */,
 				D0ED143723320B4D00FB51C8 /* Player.swift */,
 				D0ED142E23320B1B00FB51C8 /* main.swift */,
+				D05E0A4D233B9CC9004A226E /* CMPlayer.icns */,
+				D05E0A4F233B9F1D004A226E /* Media.xcassets */,
 			);
 			path = CMPlayer;
 			sourceTree = "<group>";
@@ -342,8 +346,13 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.0.0.0;
 				DEVELOPMENT_TEAM = P788A4MVAS;
+				INFOPLIST_FILE = "$(SRCROOT)/CMPlayer/Info.plist";
+				MARKETING_VERSION = 1.0.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = no.ikjetil.cmplayer;
 				PRODUCT_NAME = CMPlayer;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -353,8 +362,13 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.0.0.0;
 				DEVELOPMENT_TEAM = P788A4MVAS;
+				INFOPLIST_FILE = "$(SRCROOT)/CMPlayer/Info.plist";
+				MARKETING_VERSION = 1.0.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = no.ikjetil.cmplayer;
 				PRODUCT_NAME = CMPlayer;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
