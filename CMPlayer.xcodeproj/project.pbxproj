@@ -13,6 +13,7 @@
 		D093D0B323361497001842D6 /* PlayerLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0B223361497001842D6 /* PlayerLibrary.swift */; };
 		D0A58DBB233644D8008868CE /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A58DBA233644D8008868CE /* AboutWindow.swift */; };
 		D0B4E441233B0E7D0031584B /* RecordingYearWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B4E440233B0E7D0031584B /* RecordingYearWindow.swift */; };
+		D0B4E443233B4D090031584B /* ModeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B4E442233B4D090031584B /* ModeWindow.swift */; };
 		D0C499F6233536F4001232A9 /* HelpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F5233536F4001232A9 /* HelpWindow.swift */; };
 		D0C499F82335370B001232A9 /* SearchWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F72335370B001232A9 /* SearchWindow.swift */; };
 		D0C499FA23353721001232A9 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F923353721001232A9 /* MainWindow.swift */; };
@@ -47,6 +48,7 @@
 		D093D0B223361497001842D6 /* PlayerLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLibrary.swift; sourceTree = "<group>"; };
 		D0A58DBA233644D8008868CE /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		D0B4E440233B0E7D0031584B /* RecordingYearWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingYearWindow.swift; sourceTree = "<group>"; };
+		D0B4E442233B4D090031584B /* ModeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeWindow.swift; sourceTree = "<group>"; };
 		D0C499F5233536F4001232A9 /* HelpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpWindow.swift; sourceTree = "<group>"; };
 		D0C499F72335370B001232A9 /* SearchWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWindow.swift; sourceTree = "<group>"; };
 		D0C499F923353721001232A9 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 				D0F162AA2338C8CF00754651 /* GenreWindow.swift */,
 				D042988E233A10DF00EBDC0B /* ArtistWindow.swift */,
 				D0B4E440233B0E7D0031584B /* RecordingYearWindow.swift */,
+				D0B4E442233B4D090031584B /* ModeWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0B4E443233B4D090031584B /* ModeWindow.swift in Sources */,
 				D0ED142F23320B1B00FB51C8 /* main.swift in Sources */,
 				D0F162AB2338C8CF00754651 /* GenreWindow.swift in Sources */,
 				D042988F233A10DF00EBDC0B /* ArtistWindow.swift in Sources */,

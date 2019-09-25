@@ -28,6 +28,7 @@ internal class HelpWindow {
                                       " about"," :: show the about information",
                                       " genre"," :: shows all genre information and statistics",
                                       " year, years", " :: shows all year information and statistics",
+                                      " mode", " :: shows all modes information and statistics",
                                       " repaint", " :: clears and repaints entire console window",
                                       " add mrp <path>", " :: adds the path to music root folder",
                                       " remove mrp <path>", " :: removes the path from music root folders",

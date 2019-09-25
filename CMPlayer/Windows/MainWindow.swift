@@ -30,6 +30,7 @@ internal class MainWindow {
     private let commandsAbout: [String] = ["about"]
     private let commandsYear: [String] = ["year", "years"]
     private let commandsGoTo: [String] = ["goto"]
+    private let commandsMode: [String] = ["mode"]
     private let commandsRepaint: [String] = ["repaint","redraw"]
     private let commandsAddMusicRootPath: [String] = ["add", "mrp"]
     private let commandsRemoveMusicRootPath: [String] = ["remove", "mrp"]
@@ -540,6 +541,14 @@ internal class MainWindow {
                         self.renderScreen()
                         self.isShowingTopWindow = false
                     }
+                    if isCommandInCommands(self.currentCommand, self.commandsMode) {
+                        self.isShowingTopWindow = true
+                        let wnd: ModeWindow = ModeWindow()
+                        wnd.showWindow()
+                        Console.clearScreen()
+                        self.renderScreen()
+                        self.isShowingTopWindow = false
+                    }
                     if isCommandInCommands(self.currentCommand, self.commandsReinitialize) {
                         g_player.pause()
                         
@@ -547,8 +556,10 @@ internal class MainWindow {
                         
                         g_genres.removeAll()
                         g_artists.removeAll()
+                        g_recordingYears.removeAll()
                         g_modeGenre.removeAll()
                         g_modeArtist.removeAll()
+                        g_modeRecordingYears.removeAll()
                         g_songs.removeAll()
                         g_playlist.removeAll()
                         g_library.library = []

@@ -26,7 +26,7 @@ var g_modeRecordingYears: [Int] = []
 var g_library: PlayerLibrary = PlayerLibrary()
 var g_mainWindow: MainWindow?
 let g_player: Player = Player()
-let g_versionString: String = "1.6.0.0"
+let g_versionString: String = "1.6.1.0"
 let g_lock = NSLock()
 //
 // Startup code
