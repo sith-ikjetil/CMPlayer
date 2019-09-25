@@ -72,7 +72,7 @@ internal class AboutWindow {
         
         //Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE TEXT. OTHER KEY TO EXIT ABOUT.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1,23,"PRESS ANY KEY TO EXIT ABOUT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///
