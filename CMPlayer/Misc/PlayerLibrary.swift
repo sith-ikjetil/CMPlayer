@@ -82,6 +82,7 @@ internal class PlayerLibrary {
                 for s in xeSongs {
                     var songNo: Int = 0
                     var artist: String = ""
+                    var albumName: String = ""
                     var title: String = ""
                     var url: String = ""
                     var duration: UInt64 = 0
@@ -92,10 +93,13 @@ internal class PlayerLibrary {
                         songNo = Int(aNumber.stringValue ?? "0") ?? 0
                     }
                     if let aArtist = s.attribute(forName: "artist") {
-                        artist = aArtist.stringValue ?? "<UNKNOWN>"
+                        artist = aArtist.stringValue ?? "<unknown>"
+                    }
+                    if let aAlbumName = s.attribute(forName: "albumName") {
+                        albumName = aAlbumName.stringValue ?? "<unknown>"
                     }
                     if let aTitle = s.attribute(forName: "title") {
-                        title = aTitle.stringValue ?? "<UNKNOWN>"
+                        title = aTitle.stringValue ?? "<unknown>"
                     }
                     if let aDuration = s.attribute(forName: "duration") {
                         duration = UInt64(aDuration.stringValue ?? "0") ?? 0
@@ -113,7 +117,7 @@ internal class PlayerLibrary {
                     if songNo > self.nextSongNo {
                         self.nextSongNo = songNo
                     }
-                    let se = SongEntry(songNo: songNo, artist: artist, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear)
+                    let se = SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear)
                     self.library.append(se)
                     if url.count > 0 {
                         self.dictionary[url] = self.library.count-1
@@ -145,6 +149,11 @@ internal class PlayerLibrary {
             xnArtist.name = "artist"
             xnArtist.setStringValue(s.artist, resolvingEntities: true)
             xeSong.addAttribute(xnArtist)
+            
+            let xnAlbumName: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+            xnAlbumName.name = "albumName"
+            xnAlbumName.setStringValue(s.albumName, resolvingEntities: true)
+            xeSong.addAttribute(xnAlbumName)
             
             let xnTitle: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
             xnTitle.name = "title"

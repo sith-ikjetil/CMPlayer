@@ -25,6 +25,7 @@ internal class SongEntry {
     var duration: UInt64 = 0
     var fileURL: URL? = nil
     var genre: String = ""
+    var albumName: String = ""
     var recodingYear: Int = 0
     
     ///
@@ -36,9 +37,10 @@ internal class SongEntry {
     /// parameter duration: Song length in milliseconds.
     /// parameter url: Song file path.
     ///
-    init(songNo: Int, artist: String, title: String, duration: UInt64, url: URL?, genre: String, recordingYear: Int) {
+    init(songNo: Int, artist: String, albumName: String, title: String, duration: UInt64, url: URL?, genre: String, recordingYear: Int) {
         self.songNo = songNo
         self.artist = artist
+        self.albumName = albumName
         self.title = title
         self.duration = duration
         self.fileURL = url
@@ -126,6 +128,9 @@ internal class SongEntry {
                     if let ge = MDItemCopyAttribute(metadata,kMDItemMusicalGenre) as? String {
                         self.genre = ge.lowercased()
                         
+                    }
+                    if let an = MDItemCopyAttribute(metadata,kMDItemAlbum) as? String {
+                        self.albumName = an
                     }
                     if let geYear = MDItemCopyAttribute(metadata,kMDItemRecordingYear) as? Int {
                         self.recodingYear = geYear

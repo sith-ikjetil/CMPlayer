@@ -31,6 +31,7 @@ internal class MainWindow {
     private let commandsYear: [String] = ["year", "years"]
     private let commandsGoTo: [String] = ["goto"]
     private let commandsMode: [String] = ["mode"]
+    private let commandsInfo: [String] = ["info"]
     private let commandsRepaint: [String] = ["repaint","redraw"]
     private let commandsAddMusicRootPath: [String] = ["add", "mrp"]
     private let commandsRemoveMusicRootPath: [String] = ["remove", "mrp"]
@@ -505,6 +506,23 @@ internal class MainWindow {
                         g_modeRecordingYears.removeAll()
                         g_lock.unlock()
                     }
+                    if parts.count == 2 && parts[0] == self.commandsInfo[0] {
+                        if let sno = Int(parts[1]) {
+                            if sno > 0 {
+                                for s in g_songs {
+                                    if s.songNo == sno {
+                                        self.isShowingTopWindow = true
+                                        let wnd: InfoWindow = InfoWindow()
+                                        wnd.showWindow(song: s)
+                                        Console.clearScreen()
+                                        self.renderScreen()
+                                        self.isShowingTopWindow = false
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                    }
                     if isCommandInCommands(self.currentCommand, self.commandsHelp) {
                         self.isShowingTopWindow = true
                         let wnd: HelpWindow = HelpWindow()
@@ -545,6 +563,17 @@ internal class MainWindow {
                         self.isShowingTopWindow = true
                         let wnd: ModeWindow = ModeWindow()
                         wnd.showWindow()
+                        Console.clearScreen()
+                        self.renderScreen()
+                        self.isShowingTopWindow = false
+                    }
+                    if isCommandInCommands(self.currentCommand, self.commandsInfo) {
+                        self.isShowingTopWindow = true
+                        let wnd: InfoWindow = InfoWindow()
+                        g_lock.lock()
+                        let song = g_playlist[0]
+                        g_lock.unlock()
+                        wnd.showWindow(song: song)
                         Console.clearScreen()
                         self.renderScreen()
                         self.isShowingTopWindow = false

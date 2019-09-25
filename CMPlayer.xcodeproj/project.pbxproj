@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D042988F233A10DF00EBDC0B /* ArtistWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D042988E233A10DF00EBDC0B /* ArtistWindow.swift */; };
+		D0777BD0233B7D3600BB603C /* InfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0777BCF233B7D3600BB603C /* InfoWindow.swift */; };
 		D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */; };
 		D093D0B12335E51E001842D6 /* SetupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0B02335E51E001842D6 /* SetupWindow.swift */; };
 		D093D0B323361497001842D6 /* PlayerLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0B223361497001842D6 /* PlayerLibrary.swift */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		D042988E233A10DF00EBDC0B /* ArtistWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistWindow.swift; sourceTree = "<group>"; };
+		D0777BCF233B7D3600BB603C /* InfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindow.swift; sourceTree = "<group>"; };
 		D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorWindow.swift; sourceTree = "<group>"; };
 		D093D0B02335E51E001842D6 /* SetupWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupWindow.swift; sourceTree = "<group>"; };
 		D093D0B223361497001842D6 /* PlayerLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLibrary.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				D042988E233A10DF00EBDC0B /* ArtistWindow.swift */,
 				D0B4E440233B0E7D0031584B /* RecordingYearWindow.swift */,
 				D0B4E442233B4D090031584B /* ModeWindow.swift */,
+				D0777BCF233B7D3600BB603C /* InfoWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				D0ED143A23320B4D00FB51C8 /* Player.swift in Sources */,
 				D0ED143623320B4600FB51C8 /* Console.swift in Sources */,
 				D0ED143B23320B4D00FB51C8 /* Util.swift in Sources */,
+				D0777BD0233B7D3600BB603C /* InfoWindow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
