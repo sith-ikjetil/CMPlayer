@@ -43,6 +43,7 @@ internal class MainWindow {
     private let commandsReinitialize: [String] = ["reinitialize"]
     private let commandsModeGenre: [String] = ["mode", "genre"]
     private let commandsModeArtist: [String] = ["mode", "artist"]
+    private let commandsModeYear: [String] = ["mode", "year"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
     private let commandsListGenre: [String] = ["genre"]
     private let commandsListArtist: [String] = ["artist"]
@@ -401,6 +402,7 @@ internal class MainWindow {
                         
                         if g_modeGenre.count > 0 {
                             g_modeArtist.removeAll()
+                            g_modeRecordingYears.removeAll()
                         }
                         
                         g_lock.unlock()
@@ -429,15 +431,78 @@ internal class MainWindow {
                         
                         if g_modeArtist.count > 0 {
                             g_modeGenre.removeAll()
+                            g_modeRecordingYears.removeAll()
+                        }
+                        
+                        g_lock.unlock()
+                    }
+                    if parts.count > 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
+                        g_lock.lock()
+                        
+                        g_modeRecordingYears.removeAll()
+                        
+                        let nparts = reparseCurrentCommandArguments(parts)
+                        let currentYear = Calendar.current.component(.year, from: Date())
+                        
+                        if nparts.count > 2 {
+                            var i: Int = 2
+                            while i < nparts.count {
+                                let year = nparts[i]
+                                
+                                let yearsSubs = year.split(separator: "-")
+                                
+                                var years: [String] = []
+                                for ys in yearsSubs {
+                                    years.append(String(ys))
+                                }
+                                
+                                if years.count == 1 {
+                                    let resultYear = Int(years[0]) ?? 0
+                                    if resultYear >= 0 && resultYear <= currentYear {
+                                        if g_recordingYears[resultYear] != nil {
+                                            g_modeRecordingYears.append(Int(years[0]) ?? 0)
+                                        }
+                                    }
+                                }
+                                else if years.count == 2 {
+                                    let from: Int = Int(years[0]) ?? -1
+                                    let to: Int = Int(years[1]) ?? -1
+                                    
+                                    if to <= currentYear {
+                                        if from != -1 && to != -6 && from <= to {
+                                            for y in from...to {
+                                                if g_recordingYears[y] != nil {
+                                                    g_modeRecordingYears.append(y)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                i += 1
+                            }
+                        }
+                        
+                        if g_modeRecordingYears.count > 0 {
+                            g_modeArtist.removeAll()
+                            g_modeGenre.removeAll()
                         }
                         
                         g_lock.unlock()
                     }
                     if parts.count == 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
+                        g_lock.lock()
                         g_modeGenre.removeAll()
+                        g_lock.unlock()
                     }
                     if parts.count == 2 && parts[0] == self.commandsModeArtist[0] && parts[1] == self.commandsModeArtist[1] {
+                        g_lock.lock()
                         g_modeArtist.removeAll()
+                        g_lock.unlock()
+                    }
+                    if parts.count == 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
+                        g_lock.lock()
+                        g_modeRecordingYears.removeAll()
+                        g_lock.unlock()
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsHelp) {
                         self.isShowingTopWindow = true

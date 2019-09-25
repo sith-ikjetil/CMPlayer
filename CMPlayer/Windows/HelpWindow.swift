@@ -27,6 +27,7 @@ internal class HelpWindow {
                                       " pref, prefs, preferences", " :: shows preferences information",
                                       " about"," :: show the about information",
                                       " genre"," :: shows all genre information and statistics",
+                                      " year, years", " :: shows all year information and statistics",
                                       " repaint", " :: clears and repaints entire console window",
                                       " add mrp <path>", " :: adds the path to music root folder",
                                       " remove mrp <path>", " :: removes the path from music root folders",
@@ -43,6 +44,9 @@ internal class HelpWindow {
                                       " mode artist", " :: removes mode artist playback and plays songs from entire library",
                                       " mode genre [<genre>]", " :: set playback of songs only from the given genres",
                                       " mode genre", " :: removes mode genre playback and plays songs from entire library",
+                                      " mode year [<year>]", " :: set playback of songs only from given years",
+                                      " mode year <year from>-<year to>", " :: set playback of songs from given year interval",
+                                      " mode year", " :: removes mode year playback and plays songs from entire library",
                                       " reinitialize", " :: reinitializes library and should be called after mrp paths are changed"]
     
     ///
@@ -89,7 +93,7 @@ internal class HelpWindow {
             index_search += 1
         }
         
-        Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE RESULTS. OTHER KEY TO EXIT HELP.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///

@@ -250,6 +250,19 @@ internal class Player {
                 let s = list.randomElement()!
                 g_playlist.append(s)
             }
+            else if g_modeRecordingYears.count > 0 {
+                var list: [SongEntry] = []
+                for g in g_modeRecordingYears {
+                    if g_recordingYears[g] != nil {
+                        if let item = g_recordingYears[g]?.randomElement() {
+                            list.append(item)
+                        }
+                    }
+                }
+                
+                let s = list.randomElement()!
+                g_playlist.append(s)
+            }
             else {
                 var s = g_songs.randomElement()!
                 if g_songs.count > 2 {
