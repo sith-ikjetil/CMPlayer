@@ -43,7 +43,7 @@ internal class ModeWindow {
             self.modeText.append(" :: ")
         }
         for g in g_modeGenre {
-            self.modeText.append(" :: \(g), \(g_genres[g]!.count) songs")
+            self.modeText.append(" :: \(g), \(g_genres[g]!.count) Songs")
         }
         
         self.modeText.append("artist")
@@ -51,7 +51,7 @@ internal class ModeWindow {
             self.modeText.append(" :: ")
         }
         for a in g_modeArtist {
-            self.modeText.append(" :: \(a), \(g_artists[a]!.count) songs")
+            self.modeText.append(" :: \(a), \(g_artists[a]!.count) Songs")
         }
         
         self.modeText.append("year")
@@ -59,7 +59,7 @@ internal class ModeWindow {
             self.modeText.append(" :: ")
         }
         for y in g_modeRecordingYears {
-            self.modeText.append(" :: \(y), \(g_recordingYears[y]!.count) songs")
+            self.modeText.append(" :: \(y), \(g_recordingYears[y]!.count) Songs")
         }
     }
     
