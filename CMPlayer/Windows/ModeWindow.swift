@@ -73,6 +73,12 @@ internal class ModeWindow {
         
         Console.printXY(1,3,"### MODE ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
+        var bMode: Bool = false;
+        if g_modeRecordingYears.count > 0 || g_modeGenre.count > 0 || g_modeArtist.count > 0 {
+            bMode = true
+        }
+        Console.printXY(1,4,"mode is: \((!bMode) ? "off" : "on")", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
         var index_screen_lines: Int = 5
         var index_search: Int = modeIndex
         let max = modeIndex + 21
