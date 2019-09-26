@@ -48,10 +48,11 @@ internal class Console {
     //
     static let KEY_BACKSPACE: Int32 = 127
     static let KEY_ENTER: Int32 = 10
-    static let KEY_UP: Int32 = 65
-    static let KEY_DOWN: Int32 = 66
-    static let KEY_LEFT: Int32 = 68
-    static let KEY_RIGHT: Int32 = 67
+    static let KEY_UP: Int32 = 365
+    static let KEY_DOWN: Int32 = 366
+    static let KEY_RIGHT: Int32 = 367
+    static let KEY_LEFT: Int32 = 368
+
     
     ///
     /// Clears console screen.

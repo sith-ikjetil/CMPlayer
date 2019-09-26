@@ -28,7 +28,7 @@ internal class MainWindow {
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
     private let commandsAbout: [String] = ["about"]
-    private let commandsYear: [String] = ["year", "years"]
+    private let commandsYear: [String] = ["year"]
     private let commandsGoTo: [String] = ["goto"]
     private let commandsMode: [String] = ["mode"]
     private let commandsInfo: [String] = ["info"]
@@ -49,7 +49,7 @@ internal class MainWindow {
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
     private let commandsListGenre: [String] = ["genre"]
     private let commandsListArtist: [String] = ["artist"]
-    private let commandsPreferences: [String] = ["pref", "prefs", "preferences"]
+    private let commandsPreferences: [String] = ["pref"]
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.cmplayer.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.cmplayer.macos.2", attributes: .concurrent)
     private var currentChar: Int32 = -1
