@@ -102,8 +102,8 @@ internal class MainWindow {
         
         Console.printXY(76,3,"Time", widthTime, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        let sep = String("\u{2550}")
-        Console.printXY(1,4,sep, 80, .left, sep.first!, ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        //let sep = String("\u{2550}")
+        Console.printXY(1,4,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
 
     ///
