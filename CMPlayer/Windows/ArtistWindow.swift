@@ -46,7 +46,7 @@ internal class ArtistWindow {
             
             var hit = false
             for e in g_modeArtist {
-                if e == name.lowercased() {
+                if e == name {
                     hit = true
                     break;
                 }
