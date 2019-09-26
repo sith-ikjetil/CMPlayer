@@ -59,9 +59,10 @@ internal class ConsoleKeyboardHandler {
         while true {
             if ch == 27 {
                 ch = getchar()
-                ch = getchar()
-                
-                ch += 300   // ARROWS, ADD NUMERIC BASE FOR ARROWS TO DISTINGUISH FROM A og B etc.
+                if ch == 91 {
+                    ch = getchar()
+                    ch += 300   // ARROWS, ADD NUMERIC BASE FOR ARROWS TO DISTINGUISH FROM A og B etc.
+                }
             }
             
             if processKey(key: ch) {
