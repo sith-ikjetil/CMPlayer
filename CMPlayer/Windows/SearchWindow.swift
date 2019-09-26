@@ -111,7 +111,7 @@ class SearchWindow {
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
-            if (self.searchIndex + 17) < g_searchResult.count {
+            if (self.searchIndex + 17) < self.searchResult.count {
                 self.searchIndex += 1
                 self.renderSearch()
             }
@@ -128,7 +128,7 @@ class SearchWindow {
             return true
         })
         keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
-            if self.searchIndex > 0  && g_searchResult.count > g_windowContentLineCount {
+            if self.searchIndex > 0  && self.searchResult.count > g_windowContentLineCount {
                 if self.searchIndex - g_windowContentLineCount > 0 {
                     self.searchIndex -= g_windowContentLineCount
                 }
@@ -140,12 +140,12 @@ class SearchWindow {
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
-            if self.searchIndex >= 0  && g_searchResult.count > g_windowContentLineCount {
-                if self.searchIndex + g_windowContentLineCount < g_searchResult.count - g_windowContentLineCount {
+            if self.searchIndex >= 0  && self.searchResult.count > g_windowContentLineCount {
+                if self.searchIndex + g_windowContentLineCount < self.searchResult.count - g_windowContentLineCount {
                     self.searchIndex += g_windowContentLineCount
                 }
                 else {
-                    self.searchIndex = g_searchResult.count - g_windowContentLineCount
+                    self.searchIndex = self.searchResult.count - g_windowContentLineCount
                 }
                 self.renderSearch()
             }
