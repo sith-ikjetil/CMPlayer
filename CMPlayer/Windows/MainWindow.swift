@@ -134,7 +134,11 @@ internal class MainWindow {
     ///
     func renderCommandLine() -> Void
     {
-        Console.printXY(1,23,">: " + self.currentCommand,80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        var text = self.currentCommand
+        if text.count > 77 {
+            text = String(text[text.index(text.endIndex, offsetBy: -77)..<text.endIndex])
+        }
+        Console.printXY(1,23,">: " + text, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     ///

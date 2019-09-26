@@ -11,14 +11,6 @@
 //
 import Foundation
 
-//
-// Global constants.
-//
-internal let widthSongNo: Int = 8
-internal let widthArtist: Int = 33
-internal let widthSong: Int = 33
-internal let widthTime: Int = 5
-
 ///
 /// Padding alignment types.
 ///
