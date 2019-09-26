@@ -38,7 +38,9 @@ internal class GenreWindow {
     {
         self.genreText.removeAll()
         
-        for g in g_genres {
+        let sorted = g_genres.sorted { $0.key < $1.key }
+        
+        for g in sorted {
             let name = g.key.lowercased()
             let desc = " :: \(g.value.count) Songs"
             

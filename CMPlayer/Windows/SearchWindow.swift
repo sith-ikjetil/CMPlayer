@@ -41,6 +41,8 @@ class SearchWindow {
                 }
             }
         }
+        
+        g_searchResult = g_searchResult.sorted { $0.artist < $1.artist }
     }
     
     ///

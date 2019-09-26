@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer RecordingYearWindow.
 ///
-internal class RecordingYearWindow {
+internal class YearWindow {
     ///
     /// Private properties/constants.
     ///
@@ -38,7 +38,9 @@ internal class RecordingYearWindow {
     {
         self.yearText.removeAll()
         
-        for g in g_recordingYears {
+        let sorted = g_recordingYears.sorted { $0.key < $1.key }
+        
+        for g in sorted { 
             let name = String(g.key)
             let desc = " :: \(g.value.count) Songs"
             

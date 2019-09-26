@@ -648,7 +648,7 @@ internal class MainWindow {
                     }
                     if isCommandInCommands(self.currentCommand, self.commandsYear) {
                         self.isShowingTopWindow = true
-                        let wnd: RecordingYearWindow = RecordingYearWindow()
+                        let wnd: YearWindow = YearWindow()
                         wnd.showWindow()
                         Console.clearScreen()
                         self.renderScreen()

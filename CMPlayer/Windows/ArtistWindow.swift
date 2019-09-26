@@ -38,7 +38,9 @@ internal class ArtistWindow {
     {
         self.artistText.removeAll()
         
-        for g in g_artists {
+        let sorted = g_artists.sorted { $0.key < $1.key }
+        
+        for g in sorted {
             let name = g.key
             let desc = " :: \(g.value.count) Songs"
             
