@@ -113,6 +113,30 @@ internal class InfoWindow {
             }
             return false
         })
+        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+            if self.infoIndex > 0 && self.infoText.count > g_windowContentLineCount{
+                if self.infoIndex - g_windowContentLineCount > 0 {
+                    self.infoIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.infoIndex = 0
+                }
+                self.renderInfo()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+            if self.infoIndex >= 0 && self.infoText.count > g_windowContentLineCount {
+                if self.infoIndex + g_windowContentLineCount < self.infoText.count - g_windowContentLineCount {
+                    self.infoIndex += g_windowContentLineCount
+                }
+                else {
+                    self.infoIndex = self.infoText.count - g_windowContentLineCount
+                }
+                self.renderInfo()
+            }
+            return false
+        })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
             return true
         })

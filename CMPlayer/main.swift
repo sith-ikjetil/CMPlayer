@@ -21,13 +21,13 @@ internal let widthTime: Int = 5
 internal let g_player: Player = Player()
 internal let g_versionString: String = "1.6.8.1"
 internal let g_lock = NSLock()
+internal let g_windowContentLineCount = 17
 
 //
 // Global variables/properties
 //
 internal var g_songs: [SongEntry] = []
 internal var g_playlist: [SongEntry] = []
-internal var g_searchResult: [SongEntry] = []
 internal var g_genres: [String: [SongEntry]] = [:]
 internal var g_artists: [String: [SongEntry]] = [:]
 internal var g_recordingYears: [Int: [SongEntry]] = [:]

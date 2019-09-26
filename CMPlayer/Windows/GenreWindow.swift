@@ -125,6 +125,30 @@ internal class GenreWindow {
             }
             return false
         })
+        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+            if self.genreIndex > 0 && self.genreText.count > g_windowContentLineCount {
+                if self.genreIndex - g_windowContentLineCount > 0 {
+                    self.genreIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.genreIndex = 0
+                }
+                self.renderGenre()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+            if self.genreIndex >= 0 && self.genreText.count > g_windowContentLineCount {
+                if self.genreIndex + g_windowContentLineCount < self.genreText.count - g_windowContentLineCount {
+                    self.genreIndex += g_windowContentLineCount
+                }
+                else {
+                    self.genreIndex = self.genreText.count - g_windowContentLineCount
+                }
+                self.renderGenre()
+            }
+            return false
+        })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
             return true
         })

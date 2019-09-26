@@ -19,14 +19,14 @@ class SearchWindow {
     // Private properties/constants.
     //
     private var searchIndex: Int = 0
-    
+    private var searchResult: [SongEntry] = []
     ///
     /// Performs search from arguments. Searches g_songs.
     ///
     /// parameter terms: Array of search terms.
     ///
     func performSearch(terms: [String]) -> Void {
-        g_searchResult.removeAll(keepingCapacity: false)
+        self.searchResult.removeAll(keepingCapacity: false)
         let nterms = reparseCurrentCommandArguments(terms) // reparse the arguments taking "a b" strings into account
         for se in g_songs {
             let artist = se.artist.lowercased()
@@ -36,13 +36,13 @@ class SearchWindow {
                 let term = t.lowercased()
                 
                 if artist.contains(term) || title.contains(term) {
-                    g_searchResult.append(se)
+                    self.searchResult.append(se)
                     break
                 }
             }
         }
         
-        g_searchResult = g_searchResult.sorted { $0.artist < $1.artist }
+        self.searchResult = self.searchResult.sorted { $0.artist < $1.artist }
     }
     
     ///
@@ -71,11 +71,11 @@ class SearchWindow {
                 break
             }
             
-            if index_search > g_searchResult.count - 1 {
+            if index_search > self.searchResult.count - 1 {
                 break
             }
             
-            let se = g_searchResult[index_search]
+            let se = self.searchResult[index_search]
             
             Console.printXY(1, index_screen_lines, "\(se.songNo) ", widthSongNo+1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             
@@ -91,7 +91,7 @@ class SearchWindow {
         
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1,24,"Songs Found: \(g_searchResult.count.itsToString())",80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"Songs Found: \(self.searchResult.count.itsToString())",80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///
@@ -126,6 +126,30 @@ class SearchWindow {
         })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
             return true
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+            if self.searchIndex > 0  && g_searchResult.count > g_windowContentLineCount {
+                if self.searchIndex - g_windowContentLineCount > 0 {
+                    self.searchIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.searchIndex = 0
+                }
+                self.renderSearch()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+            if self.searchIndex >= 0  && g_searchResult.count > g_windowContentLineCount {
+                if self.searchIndex + g_windowContentLineCount < g_searchResult.count - g_windowContentLineCount {
+                    self.searchIndex += g_windowContentLineCount
+                }
+                else {
+                    self.searchIndex = g_searchResult.count - g_windowContentLineCount
+                }
+                self.renderSearch()
+            }
+            return false
         })
         keyHandler.run()
     }// run

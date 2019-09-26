@@ -125,6 +125,30 @@ internal class ArtistWindow {
             }
             return false
         })
+        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+            if self.artistIndex > 0 && self.artistText.count > g_windowContentLineCount {
+                if self.artistIndex - g_windowContentLineCount > 0 {
+                    self.artistIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.artistIndex = 0
+                }
+                self.renderArtist()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+            if self.artistIndex >= 0 && self.artistText.count > g_windowContentLineCount {
+                if self.artistIndex + g_windowContentLineCount < self.artistText.count - g_windowContentLineCount {
+                    self.artistIndex += g_windowContentLineCount
+                }
+                else {
+                    self.artistIndex = self.artistText.count - g_windowContentLineCount
+                }
+                self.renderArtist()
+            }
+            return false
+        })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
             return true
         })

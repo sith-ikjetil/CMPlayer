@@ -121,6 +121,30 @@ internal class HelpWindow {
             }
             return false
         })
+        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+            if self.helpIndex > 0  && self.helpText.count > g_windowContentLineCount {
+                if self.helpIndex - g_windowContentLineCount > 0 {
+                    self.helpIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.helpIndex = 0
+                }
+                self.renderHelp()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+            if self.helpIndex >= 0  && self.helpText.count > g_windowContentLineCount {
+                if self.helpIndex + g_windowContentLineCount < self.helpText.count - g_windowContentLineCount {
+                    self.helpIndex += g_windowContentLineCount
+                }
+                else {
+                    self.helpIndex = self.helpText.count - g_windowContentLineCount
+                }
+                self.renderHelp()
+            }
+            return false
+        })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
             return true
         })

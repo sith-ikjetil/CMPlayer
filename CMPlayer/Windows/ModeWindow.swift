@@ -129,6 +129,30 @@ internal class ModeWindow {
             }
             return false
         })
+        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+            if self.modeIndex > 0 && self.modeText.count > g_windowContentLineCount{
+                if self.modeIndex - g_windowContentLineCount > 0 {
+                    self.modeIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.modeIndex = 0
+                }
+                self.renderMode()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+            if self.modeIndex >= 0 && self.modeText.count > g_windowContentLineCount {
+                if self.modeIndex + g_windowContentLineCount < self.modeText.count - g_windowContentLineCount {
+                    self.modeIndex += g_windowContentLineCount
+                }
+                else {
+                    self.modeIndex = self.modeText.count - g_windowContentLineCount
+                }
+                self.renderMode()
+            }
+            return false
+        })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
             return true
         })

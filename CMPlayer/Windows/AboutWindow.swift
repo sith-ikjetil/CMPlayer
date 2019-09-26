@@ -97,6 +97,30 @@ internal class AboutWindow {
             }
             return false
         })
+        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+            if self.aboutIndex > 0 && self.aboutText.count > g_windowContentLineCount {
+                if self.aboutIndex - g_windowContentLineCount > 0 {
+                    self.aboutIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.aboutIndex = 0
+                }
+                self.renderAbout()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+            if self.aboutIndex >= 0 && self.aboutText.count > g_windowContentLineCount {
+                if self.aboutIndex + g_windowContentLineCount < self.aboutText.count - g_windowContentLineCount {
+                    self.aboutIndex += g_windowContentLineCount
+                }
+                else {
+                    self.aboutIndex = self.aboutText.count - g_windowContentLineCount
+                }
+                self.renderAbout()
+            }
+            return false
+        })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
             return true
         })

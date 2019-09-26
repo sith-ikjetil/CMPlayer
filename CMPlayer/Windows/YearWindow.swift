@@ -125,6 +125,30 @@ internal class YearWindow {
             }
             return false
         })
+        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+            if self.yearIndex > 0 && self.yearText.count > g_windowContentLineCount {
+                if self.yearIndex - g_windowContentLineCount > 0 {
+                    self.yearIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.yearIndex = 0
+                }
+                self.renderRecordingYears()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+            if self.yearIndex >= 0 && self.yearText.count > g_windowContentLineCount {
+                if self.yearIndex + g_windowContentLineCount < self.yearText.count - g_windowContentLineCount {
+                    self.yearIndex += g_windowContentLineCount
+                }
+                else {
+                    self.yearIndex = self.yearText.count - g_windowContentLineCount
+                }
+                self.renderRecordingYears()
+            }
+            return false
+        })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
             return true
         })
