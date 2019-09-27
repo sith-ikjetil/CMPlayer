@@ -51,6 +51,21 @@ internal class InfoWindow {
         self.infoText.append(" :: \(itsRenderMsToFullString(song.duration, false))")
         self.infoText.append("recording year")
         self.infoText.append(" :: \(song.recodingYear)")
+        self.infoText.append("filename")
+        self.infoText.append(" :: \(song.fileURL?.lastPathComponent ?? "")")
+        
+        let p = song.fileURL?.path ?? ""
+        if p.count > 0 {
+            let fparts = song.fileURL?.pathComponents ?? []
+            var i: Int = 1
+            var pathOnly: String = ""
+            while i < fparts.count - 1 {
+                pathOnly.append("/\(fparts[i])")
+                i += 1
+            }
+            self.infoText.append("path")
+            self.infoText.append(" :: \(pathOnly)")
+        }
     }
     
     ///
@@ -77,11 +92,11 @@ internal class InfoWindow {
             
             let se = infoText[index_search]
             
-            if index_search % 2 == 0 {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            if !se.hasPrefix(" ::") {
+                Console.printXY(1, index_screen_lines, se, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             }
             else {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             }
             
             index_screen_lines += 1
