@@ -47,8 +47,8 @@ internal class MainWindow {
     private let commandsModeArtist: [String] = ["mode", "artist"]
     private let commandsModeYear: [String] = ["mode", "year"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
-    private let commandsListGenre: [String] = ["genre"]
-    private let commandsListArtist: [String] = ["artist"]
+    private let commandsGenre: [String] = ["genre"]
+    private let commandsArtist: [String] = ["artist"]
     private let commandsPreferences: [String] = ["pref"]
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.cmplayer.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.cmplayer.macos.2", attributes: .concurrent)
@@ -310,386 +310,691 @@ internal class MainWindow {
         if isCommandInCommands(command, self.commandsExit) {
             return true
         }
-        if isCommandInCommands(command, self.commandsNextSong) {
-            self.isSkipping = true
-            g_player.skip(crossfade: false)
-            self.isSkipping = false
+        else if isCommandInCommands(command, self.commandsNextSong) {
+            self.onCommandNextSong(parts: parts)
         }
-        if isCommandInCommands(command, self.commandsPlay) {
-            if g_player.audioPlayerActive == -1 {
-                g_player.play(player: 1, playlistIndex: 0)
-            }
-            else if g_player.audioPlayerActive == 1 {
-                g_player.resume()
-            }
-            else if g_player.audioPlayerActive == 2 {
-                g_player.resume()
-            }
+        else if isCommandInCommands(command, self.commandsPlay) {
+            self.onCommandPlay(parts: parts)
         }
-        if isCommandInCommands(command, self.commandsPause) {
-            g_player.pause()
+        else if isCommandInCommands(command, self.commandsPause) {
+            self.onCommandPause(parts: parts)
         }
-        if isCommandInCommands(command, self.commandsResume) {
+        else if isCommandInCommands(command, self.commandsResume) {
+            self.onCommandResume(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsRepaint) {
+            self.onCommandRepaint(parts: parts)
+        }
+        else if let num = Int(command) {
+            self.onCommandAddSongToPlaylist(parts: parts, songNo: num)
+        }
+        else if isCommandInCommands(command, self.commandsEnableCrossfade) {
+            self.onCommandEnableCrossfade(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsDisableCrossfade) {
+            self.onCommandDisableCrossfade(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsEnableAutoPlayOnStartup) {
+            self.onCommandEnableAutoPlayOnStartup(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsDisableAutoPlayOnStartup) {
+            self.onCommandDisableAutoPlayOnStartup(parts: parts)
+        }
+        else if parts.count == 3 && parts[0] == self.commandsAddMusicRootPath[0] && parts[1] == self.commandsAddMusicRootPath[1] {
+            self.onCommandAddMusicRootPath(parts: parts)
+        }
+        else if parts.count == 3 && parts[0] == self.commandsRemoveMusicRootPath[0] && parts[1] == self.commandsRemoveMusicRootPath[1] {
+            self.onCommandRemoveMusicRootPath(parts: parts)
+        }
+        else if parts.count == 3 && parts[0] == self.commandsSetCrossfadeTimeInSeconds[0] && parts[1] == self.commandsSetCrossfadeTimeInSeconds[1] {
+            self.onCommandSetCrossfadeTimeInSeconds(parts: parts)
+        }
+        else if parts.count == 3 && parts[0] == self.commandsSetMusicFormats[0] && parts[1] == self.commandsSetMusicFormats[1] {
+            self.onCommandSetMusicFormats(parts: parts)
+        }
+        else if parts.count == 2 && parts[0] == self.commandsGoTo[0] {
+            self.onCommandGoTo(parts: parts)
+        }
+        else if parts.count > 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
+            self.onCommandModeGenre(parts: parts)
+        }
+        else if parts.count > 2 && parts[0] == self.commandsModeArtist[0] && parts[1] == self.commandsModeArtist[1] {
+            self.onCommandModeArtist(parts: parts)
+        }
+        else if parts.count > 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
+            self.onCommandModeYear(parts: parts)
+        }
+        else if parts.count == 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
+            self.onCommandClearModeGenre(parts: parts)
+        }
+        else if parts.count == 2 && parts[0] == self.commandsModeArtist[0] && parts[1] == self.commandsModeArtist[1] {
+            self.onCommandClearModeArtist(parts: parts)
+        }
+        else if parts.count == 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
+            self.onCommandClearModeYear(parts: parts)
+        }
+        else if parts.count == 2 && parts[0] == self.commandsInfo[0] {
+            self.onCommandInfoSong(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsHelp) {
+            self.onCommandHelp(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsClearMusicRootPath) {
+            self.onCommandClearMusicRootPath(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsAbout) {
+            self.onCommandAbout(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsGenre) {
+            self.onCommandGenre(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsArtist) {
+            self.onCommandArtist(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsMode) {
+            self.onCommandMode(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsInfo) {
+            self.onCommandInfo(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsReinitialize) {
+            self.onCommandReinitialize(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsRebuildSongNo) {
+            self.onCommandRebuildSongNo(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsPreferences) {
+            self.onCommandPreferences(parts: parts)
+        }
+        else if isCommandInCommands(command, self.commandsYear) {
+            self.onCommandYear(parts: parts)
+        }
+        else if parts.count > 1 && isCommandInCommands(parts[0], self.commandsSearch) {
+            self.onCommandSearch(parts: parts)
+        }
+        
+        return false
+    }
+    
+    ///
+    /// Play next song
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandNextSong(parts: [String]) -> Void {
+        self.isSkipping = true
+        g_player.skip(crossfade: false)
+        self.isSkipping = false
+    }
+    
+    ///
+    /// Play if not playing.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandPlay(parts: [String]) -> Void {
+        if g_player.audioPlayerActive == -1 {
+            g_player.play(player: 1, playlistIndex: 0)
+        }
+        else if g_player.audioPlayerActive == 1 {
             g_player.resume()
         }
-        if isCommandInCommands(command, self.commandsRepaint) {
-            Console.clearScreen()
-            self.renderScreen()
+        else if g_player.audioPlayerActive == 2 {
+            g_player.resume()
         }
-        if let num = Int32(command) {
-            if num > 0 {
-                for se in g_songs {
-                    if se.songNo == num {
-                        g_playlist.append(se)
+    }
+    
+    ///
+    /// Pause playback.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandPause(parts: [String]) -> Void {
+        g_player.pause()
+    }
+    
+    ///
+    /// Resume playback.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandResume(parts: [String]) -> Void {
+        g_player.resume()
+    }
+    
+    ///
+    /// Repaint main window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandRepaint(parts: [String]) -> Void {
+        Console.clearScreen()
+        self.renderScreen()
+    }
+    
+    ///
+    /// Add song to playlist
+    ///
+    /// parameter parts: command array.
+    /// parameter songNo: song number to add.
+    ///
+    func onCommandAddSongToPlaylist(parts: [String], songNo: Int) -> Void {
+        if songNo > 0 {
+            for se in g_songs {
+                if se.songNo == songNo {
+                    g_playlist.append(se)
+                    break
+                }
+            }
+        }
+    }
+    
+    ///
+    /// Enable crossfade
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandEnableCrossfade(parts: [String]) -> Void {
+        PlayerPreferences.crossfadeSongs = true
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
+    /// Disable crossfade.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandDisableCrossfade(parts: [String]) -> Void {
+        PlayerPreferences.crossfadeSongs = false
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
+    /// Enable audoplay on startup and after reinitialize.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandEnableAutoPlayOnStartup(parts: [String]) -> Void {
+        PlayerPreferences.autoplayOnStartup = true
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
+    /// Disable autoplay on startup and after reinitialize.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandDisableAutoPlayOnStartup(parts: [String]) -> Void {
+        PlayerPreferences.autoplayOnStartup = false
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
+    /// Add path to root paths.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandAddMusicRootPath(parts: [String]) -> Void {
+        PlayerPreferences.musicRootPath.append(parts[2])
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
+    /// Remove root path.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandRemoveMusicRootPath(parts: [String]) -> Void {
+        var i: Int = 0
+        while i < PlayerPreferences.musicRootPath.count {
+            if PlayerPreferences.musicRootPath[i] == parts[2] {
+                PlayerPreferences.musicRootPath.remove(at: i)
+                PlayerPreferences.savePreferences()
+                break
+            }
+            i += 1
+        }
+    }
+    
+    ///
+    /// Set crossfade time in seconds.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandSetCrossfadeTimeInSeconds(parts: [String]) -> Void {
+        if let ctis = Int(parts[2]) {
+            if isCrossfadeTimeValid(ctis) {
+                PlayerPreferences.crossfadeTimeInSeconds = ctis
+                PlayerPreferences.savePreferences()
+            }
+        }
+    }
+    
+    ///
+    /// Set music formats.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandSetMusicFormats(parts: [String]) -> Void {
+        PlayerPreferences.musicFormats = parts[2]
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
+    /// Goto playback point of current playing item.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandGoTo(parts: [String]) -> Void {
+        let tp = parts[1].split(separator: ":" )
+        if tp.count == 2 {
+            if let time1 = Int(tp[0]) {
+                if let time2 = Int(tp[1]) {
+                    if time1 >= 0 && time2 >= 0 {
+                        let pos: Int = time1*60 + time2
+                        if g_player.audioPlayerActive == 1 {
+                            g_player.audio1?.currentTime = TimeInterval(exactly: Double(UInt64(Double(g_playlist[0].duration) / 1000.0)) - Double(pos))!
+                        }
+                        else if g_player.audioPlayerActive == 2 {
+                            g_player.audio2?.currentTime = TimeInterval(exactly: Double(UInt64(Double(g_playlist[0].duration) / 1000.0)) - Double(pos))!
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    ///
+    /// Set mode genre.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandModeGenre(parts: [String]) -> Void {
+        g_lock.lock()
+        
+        g_modeGenre.removeAll()
+        
+        let nparts = reparseCurrentCommandArguments(parts)
+        
+        if nparts.count > 2 {
+            var i: Int = 2
+            while i < nparts.count {
+                let name = nparts[i].lowercased()
+                if g_genres[name] != nil {
+                    if g_genres[name]!.count >= 1 {
+                        g_modeGenre.append(name)
+                    }
+                }
+                i += 1
+            }
+        }
+        
+        if g_modeGenre.count > 0 {
+            g_modeArtist.removeAll()
+            g_modeRecordingYears.removeAll()
+        }
+        
+        g_lock.unlock()
+    }
+    
+    ///
+    /// Set mode artist.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandModeArtist(parts: [String]) -> Void {
+        g_lock.lock()
+        
+        g_modeArtist.removeAll()
+        
+        let nparts = reparseCurrentCommandArguments(parts)
+        
+        if nparts.count > 2 {
+            var i: Int = 2
+            while i < nparts.count {
+                let name = nparts[i].lowercased()
+                for a in g_artists {
+                    if a.key.lowercased() == name {
+                        if a.value.count >= 1 {
+                            g_modeArtist.append(a.key)
+                        }
+                    }
+                }
+                i += 1
+            }
+        }
+        
+        if g_modeArtist.count > 0 {
+            g_modeGenre.removeAll()
+            g_modeRecordingYears.removeAll()
+        }
+        
+        g_lock.unlock()
+    }
+    
+    ///
+    /// Set mode year
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandModeYear(parts: [String]) -> Void {
+        g_lock.lock()
+        
+        g_modeRecordingYears.removeAll()
+        
+        let nparts = reparseCurrentCommandArguments(parts)
+        let currentYear = Calendar.current.component(.year, from: Date())
+        
+        if nparts.count > 2 {
+            var i: Int = 2
+            while i < nparts.count {
+                let year = nparts[i]
+                
+                let yearsSubs = year.split(separator: "-")
+                
+                var years: [String] = []
+                for ys in yearsSubs {
+                    years.append(String(ys))
+                }
+                
+                if years.count == 1 {
+                    let resultYear = Int(years[0]) ?? 0
+                    if resultYear >= 0 && resultYear <= currentYear {
+                        if g_recordingYears[resultYear] != nil {
+                            g_modeRecordingYears.append(Int(years[0]) ?? 0)
+                        }
+                    }
+                }
+                else if years.count == 2 {
+                    let from: Int = Int(years[0]) ?? -1
+                    let to: Int = Int(years[1]) ?? -1
+                    
+                    if to <= currentYear {
+                        if from != -1 && to != -6 && from <= to {
+                            for y in from...to {
+                                if g_recordingYears[y] != nil {
+                                    g_modeRecordingYears.append(y)
+                                }
+                            }
+                        }
+                    }
+                }
+                i += 1
+            }
+        }
+        
+        if g_modeRecordingYears.count > 0 {
+            g_modeArtist.removeAll()
+            g_modeGenre.removeAll()
+        }
+        
+        g_lock.unlock()
+    }
+    
+    ///
+    /// Clear mode genre.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandClearModeGenre(parts: [String]) -> Void {
+        g_lock.lock()
+        g_modeGenre.removeAll()
+        g_lock.unlock()
+    }
+    
+    ///
+    /// Clear mode artist.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandClearModeArtist(parts: [String]) -> Void {
+        g_lock.lock()
+        g_modeArtist.removeAll()
+        g_lock.unlock()
+    }
+    
+    ///
+    /// Clear mode year.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandClearModeYear(parts: [String]) -> Void {
+        g_lock.lock()
+        g_modeRecordingYears.removeAll()
+        g_lock.unlock()
+    }
+    
+    ///
+    /// Show info on given song number.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandInfoSong(parts: [String]) -> Void {
+        if let sno = Int(parts[1]) {
+            if sno > 0 {
+                for s in g_songs {
+                    if s.songNo == sno {
+                        self.isShowingTopWindow = true
+                        let wnd: InfoWindow = InfoWindow()
+                        wnd.showWindow(song: s)
+                        Console.clearScreen()
+                        self.renderScreen()
+                        self.isShowingTopWindow = false
                         break
                     }
                 }
             }
         }
-        if isCommandInCommands(command, self.commandsEnableCrossfade) {
-            PlayerPreferences.crossfadeSongs = true
-            PlayerPreferences.savePreferences()
-        }
-        if isCommandInCommands(command, self.commandsDisableCrossfade) {
-            PlayerPreferences.crossfadeSongs = false
-            PlayerPreferences.savePreferences()
-        }
-        if isCommandInCommands(command, self.commandsEnableAutoPlayOnStartup) {
-            PlayerPreferences.autoplayOnStartup = true
-            PlayerPreferences.savePreferences()
-        }
-        if isCommandInCommands(command, self.commandsDisableAutoPlayOnStartup) {
-            PlayerPreferences.autoplayOnStartup = false
-            PlayerPreferences.savePreferences()
-        }
-        if parts.count == 3 && parts[0] == self.commandsAddMusicRootPath[0] && parts[1] == self.commandsAddMusicRootPath[1] {
-            PlayerPreferences.musicRootPath.append(parts[2])
-            PlayerPreferences.savePreferences()
-        }
-        if parts.count == 3 && parts[0] == self.commandsRemoveMusicRootPath[0] && parts[1] == self.commandsRemoveMusicRootPath[1] {
-            var i: Int = 0
-            while i < PlayerPreferences.musicRootPath.count {
-                if PlayerPreferences.musicRootPath[i] == parts[2] {
-                    PlayerPreferences.musicRootPath.remove(at: i)
-                    PlayerPreferences.savePreferences()
-                    break
-                }
-                i += 1
-            }
-        }
-        if parts.count == 3 && parts[0] == self.commandsSetCrossfadeTimeInSeconds[0] && parts[1] == self.commandsSetCrossfadeTimeInSeconds[1] {
-            if let ctis = Int(parts[2]) {
-                if isCrossfadeTimeValid(ctis) {
-                    PlayerPreferences.crossfadeTimeInSeconds = ctis
-                    PlayerPreferences.savePreferences()
-                }
-            }
-        }
-        if parts.count == 3 && parts[0] == self.commandsSetMusicFormats[0] && parts[1] == self.commandsSetMusicFormats[1] {
-            PlayerPreferences.musicFormats = parts[2]
-            PlayerPreferences.savePreferences()
-        }
-        if parts.count == 2 && parts[0] == self.commandsGoTo[0] {
-            let tp = parts[1].split(separator: ":" )
-            if tp.count == 2 {
-                if let time1 = Int(tp[0]) {
-                    if let time2 = Int(tp[1]) {
-                        if time1 >= 0 && time2 >= 0 {
-                            let pos: Int = time1*60 + time2
-                            if g_player.audioPlayerActive == 1 {
-                                g_player.audio1?.currentTime = TimeInterval(exactly: Double(UInt64(Double(g_playlist[0].duration) / 1000.0)) - Double(pos))!
-                            }
-                            else if g_player.audioPlayerActive == 2 {
-                                g_player.audio2?.currentTime = TimeInterval(exactly: Double(UInt64(Double(g_playlist[0].duration) / 1000.0)) - Double(pos))!
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if parts.count > 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
-            g_lock.lock()
-            
-            g_modeGenre.removeAll()
-            
-            let nparts = reparseCurrentCommandArguments(parts)
-            
-            if nparts.count > 2 {
-                var i: Int = 2
-                while i < nparts.count {
-                    let name = nparts[i].lowercased()
-                    if g_genres[name] != nil {
-                        if g_genres[name]!.count >= 1 {
-                            g_modeGenre.append(name)
-                        }
-                    }
-                    i += 1
-                }
-            }
-            
-            if g_modeGenre.count > 0 {
-                g_modeArtist.removeAll()
-                g_modeRecordingYears.removeAll()
-            }
-            
-            g_lock.unlock()
-        }
-        if parts.count > 2 && parts[0] == self.commandsModeArtist[0] && parts[1] == self.commandsModeArtist[1] {
-            g_lock.lock()
-            
-            g_modeArtist.removeAll()
-            
-            let nparts = reparseCurrentCommandArguments(parts)
-            
-            if nparts.count > 2 {
-                var i: Int = 2
-                while i < nparts.count {
-                    let name = nparts[i].lowercased()
-                    for a in g_artists {
-                        if a.key.lowercased() == name {
-                            if a.value.count >= 1 {
-                                g_modeArtist.append(a.key)
-                            }
-                        }
-                    }
-                    i += 1
-                }
-            }
-            
-            if g_modeArtist.count > 0 {
-                g_modeGenre.removeAll()
-                g_modeRecordingYears.removeAll()
-            }
-            
-            g_lock.unlock()
-        }
-        if parts.count > 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
-            g_lock.lock()
-            
-            g_modeRecordingYears.removeAll()
-            
-            let nparts = reparseCurrentCommandArguments(parts)
-            let currentYear = Calendar.current.component(.year, from: Date())
-            
-            if nparts.count > 2 {
-                var i: Int = 2
-                while i < nparts.count {
-                    let year = nparts[i]
-                    
-                    let yearsSubs = year.split(separator: "-")
-                    
-                    var years: [String] = []
-                    for ys in yearsSubs {
-                        years.append(String(ys))
-                    }
-                    
-                    if years.count == 1 {
-                        let resultYear = Int(years[0]) ?? 0
-                        if resultYear >= 0 && resultYear <= currentYear {
-                            if g_recordingYears[resultYear] != nil {
-                                g_modeRecordingYears.append(Int(years[0]) ?? 0)
-                            }
-                        }
-                    }
-                    else if years.count == 2 {
-                        let from: Int = Int(years[0]) ?? -1
-                        let to: Int = Int(years[1]) ?? -1
-                        
-                        if to <= currentYear {
-                            if from != -1 && to != -6 && from <= to {
-                                for y in from...to {
-                                    if g_recordingYears[y] != nil {
-                                        g_modeRecordingYears.append(y)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    i += 1
-                }
-            }
-            
-            if g_modeRecordingYears.count > 0 {
-                g_modeArtist.removeAll()
-                g_modeGenre.removeAll()
-            }
-            
-            g_lock.unlock()
-        }
-        if parts.count == 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
-            g_lock.lock()
-            g_modeGenre.removeAll()
-            g_lock.unlock()
-        }
-        if parts.count == 2 && parts[0] == self.commandsModeArtist[0] && parts[1] == self.commandsModeArtist[1] {
-            g_lock.lock()
-            g_modeArtist.removeAll()
-            g_lock.unlock()
-        }
-        if parts.count == 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
-            g_lock.lock()
-            g_modeRecordingYears.removeAll()
-            g_lock.unlock()
-        }
-        if parts.count == 2 && parts[0] == self.commandsInfo[0] {
-            if let sno = Int(parts[1]) {
-                if sno > 0 {
-                    for s in g_songs {
-                        if s.songNo == sno {
-                            self.isShowingTopWindow = true
-                            let wnd: InfoWindow = InfoWindow()
-                            wnd.showWindow(song: s)
-                            Console.clearScreen()
-                            self.renderScreen()
-                            self.isShowingTopWindow = false
-                            break
-                        }
-                    }
-                }
-            }
-        }
-        if isCommandInCommands(command, self.commandsHelp) {
-            self.isShowingTopWindow = true
-            let wnd: HelpWindow = HelpWindow()
-            wnd.showWindow()
-            Console.clearScreen()
-            self.renderScreen()
-            self.isShowingTopWindow = false
-        }
-        if isCommandInCommands(command, self.commandsClearMusicRootPath) {
-            PlayerPreferences.musicRootPath.removeAll()
-            PlayerPreferences.savePreferences()
-        }
-        if isCommandInCommands(command, self.commandsAbout) {
-            self.isShowingTopWindow = true
-            let wnd: AboutWindow = AboutWindow()
-            wnd.showWindow()
-            Console.clearScreen()
-            self.renderScreen()
-            self.isShowingTopWindow = false
-        }
-        if isCommandInCommands(command, self.commandsListGenre) {
-            self.isShowingTopWindow = true
-            let wnd: GenreWindow = GenreWindow()
-            wnd.showWindow()
-            Console.clearScreen()
-            self.renderScreen()
-            self.isShowingTopWindow = false
-        }
-        if isCommandInCommands(command, self.commandsListArtist) {
-            self.isShowingTopWindow = true
-            let wnd: ArtistWindow = ArtistWindow()
-            wnd.showWindow()
-            Console.clearScreen()
-            self.renderScreen()
-            self.isShowingTopWindow = false
-        }
-        if isCommandInCommands(command, self.commandsMode) {
-            self.isShowingTopWindow = true
-            let wnd: ModeWindow = ModeWindow()
-            wnd.showWindow()
-            Console.clearScreen()
-            self.renderScreen()
-            self.isShowingTopWindow = false
-        }
-        if isCommandInCommands(command, self.commandsInfo) {
-            self.isShowingTopWindow = true
-            let wnd: InfoWindow = InfoWindow()
-            g_lock.lock()
-            let song = g_playlist[0]
-            g_lock.unlock()
-            wnd.showWindow(song: song)
-            Console.clearScreen()
-            self.renderScreen()
-            self.isShowingTopWindow = false
-        }
-        if isCommandInCommands(command, self.commandsReinitialize) {
-            g_player.pause()
-            
-            g_lock.lock()
-            
-            g_genres.removeAll()
-            g_artists.removeAll()
-            g_recordingYears.removeAll()
-            g_modeGenre.removeAll()
-            g_modeArtist.removeAll()
-            g_modeRecordingYears.removeAll()
-            g_songs.removeAll()
-            g_playlist.removeAll()
-            g_library.library = []
-            g_library.save()
-            g_library.setNextAvailableSongNo(0)
-            
-            g_player.audioPlayerActive = -1
-            g_player.audio1 = nil
-            g_player.audio2 = nil
-            
-            if PlayerPreferences.musicRootPath.count == 0 {
-                self.isShowingTopWindow = true
-                let wnd: SetupWindow = SetupWindow()
-                while !wnd.showWindow() {
-                    
-                }
-                PlayerPreferences.savePreferences()
-                Console.clearScreen()
-                MainWindow.renderHeader(showTime: false)
-                self.isShowingTopWindow = true
-                g_player.initializeSongs()
-            }
-            else {
-                Console.clearScreen()
-                MainWindow.renderHeader(showTime: false)
-                self.isShowingTopWindow = true
-                g_player.initializeSongs()
-            }
-            self.isShowingTopWindow = false
-            
-            g_library.library = g_songs
-            g_library.save()
-            
-            self.renderScreen()
-            
-            g_lock.unlock()
-            
-            g_player.skip(play: PlayerPreferences.autoplayOnStartup)
-        }
-        if isCommandInCommands(command, self.commandsRebuildSongNo) {
-            var i: Int = 1
-            for s in g_songs {
-                s.songNo = i
-                i += 1
-            }
-            g_library.setNextAvailableSongNo(i)
-            g_library.library = g_songs
-            g_library.save()
-        }
-        if isCommandInCommands(command, self.commandsPreferences) {
-            self.isShowingTopWindow = true
-            let wnd: PreferencesWindow = PreferencesWindow()
-            wnd.showWindow()
-            Console.clearScreen()
-            self.renderScreen()
-            self.isShowingTopWindow = false
-        }
-        if isCommandInCommands(command, self.commandsYear) {
-            self.isShowingTopWindow = true
-            let wnd: YearWindow = YearWindow()
-            wnd.showWindow()
-            Console.clearScreen()
-            self.renderScreen()
-            self.isShowingTopWindow = false
-        }
-        if parts.count > 1 {
-            if isCommandInCommands(parts[0], self.commandsSearch) {
-                self.isShowingTopWindow = true
-                let wnd: SearchWindow = SearchWindow()
-                wnd.showWindow(parts: parts)
-                Console.clearScreen()
-                self.renderScreen()
-                self.isShowingTopWindow = false
-            }
-        }
-        
-        return false
     }
+    
+    ///
+    /// Show help window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandHelp(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: HelpWindow = HelpWindow()
+        wnd.showWindow()
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }
+    
+    ///
+    /// Clear music root paths.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandClearMusicRootPath(parts: [String]) -> Void {
+        PlayerPreferences.musicRootPath.removeAll()
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
+    /// Show about window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandAbout(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: AboutWindow = AboutWindow()
+        wnd.showWindow()
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }
+    
+    ///
+    /// Show artist window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandArtist(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: ArtistWindow = ArtistWindow()
+        wnd.showWindow()
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }
+    
+    ///
+    /// Show genre window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandGenre(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: GenreWindow = GenreWindow()
+        wnd.showWindow()
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }
+    
+    ///
+    /// Show mode window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandMode(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: ModeWindow = ModeWindow()
+        wnd.showWindow()
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }
+
+    ///
+    /// Show info window about current playing item.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandInfo(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: InfoWindow = InfoWindow()
+        g_lock.lock()
+        let song = g_playlist[0]
+        g_lock.unlock()
+        wnd.showWindow(song: song)
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }
+    
+    ///
+    /// Reinitialize library and player.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandReinitialize(parts: [String]) -> Void {
+        g_player.pause()
+                
+        g_lock.lock()
+        
+        g_genres.removeAll()
+        g_artists.removeAll()
+        g_recordingYears.removeAll()
+        g_modeGenre.removeAll()
+        g_modeArtist.removeAll()
+        g_modeRecordingYears.removeAll()
+        g_songs.removeAll()
+        g_playlist.removeAll()
+        g_library.library = []
+        g_library.save()
+        g_library.setNextAvailableSongNo(0)
+        
+        g_player.audioPlayerActive = -1
+        g_player.audio1 = nil
+        g_player.audio2 = nil
+        
+        if PlayerPreferences.musicRootPath.count == 0 {
+            self.isShowingTopWindow = true
+            let wnd: SetupWindow = SetupWindow()
+            while !wnd.showWindow() {
+                
+            }
+            PlayerPreferences.savePreferences()
+            Console.clearScreen()
+            MainWindow.renderHeader(showTime: false)
+            self.isShowingTopWindow = true
+            g_player.initializeSongs()
+        }
+        else {
+            Console.clearScreen()
+            MainWindow.renderHeader(showTime: false)
+            self.isShowingTopWindow = true
+            g_player.initializeSongs()
+        }
+        self.isShowingTopWindow = false
+        
+        g_library.library = g_songs
+        g_library.save()
+        
+        self.renderScreen()
+        
+        g_lock.unlock()
+        
+        g_player.skip(play: PlayerPreferences.autoplayOnStartup)
+    }
+    
+    ///
+    /// Rebuild song numbers.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandRebuildSongNo(parts: [String]) -> Void {
+        var i: Int = 1
+        for s in g_songs {
+            s.songNo = i
+            i += 1
+        }
+        g_library.setNextAvailableSongNo(i)
+        g_library.library = g_songs
+        g_library.save()
+    }
+    
+    ///
+    /// Show preferences window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandPreferences(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: PreferencesWindow = PreferencesWindow()
+        wnd.showWindow()
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }
+    
+    ///
+    /// Show year window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandYear(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: YearWindow = YearWindow()
+        wnd.showWindow()
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }
+    
+    ///
+    /// Show search window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandSearch(parts: [String]) -> Void {
+        self.isShowingTopWindow = true
+        let wnd: SearchWindow = SearchWindow()
+        wnd.showWindow(parts: parts)
+        Console.clearScreen()
+        self.renderScreen()
+        self.isShowingTopWindow = false
+    }// onCommandSearch
 }// CMPlayer
