@@ -12,6 +12,13 @@
 import Foundation
 
 ///
+/// SongEntry error when constructing a new object.
+///
+internal enum SongEntryError : Error {
+    case DurationIsZero
+}
+
+///
 /// Padding alignment types.
 ///
 internal enum PrintPaddingTextAlign {

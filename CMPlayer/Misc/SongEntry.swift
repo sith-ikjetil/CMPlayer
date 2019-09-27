@@ -89,7 +89,7 @@ internal class SongEntry {
     /// parameter path: URL file path to song.
     /// parameter num: Song No.
     ///
-    init(path: URL?, songNo: Int)
+    init(path: URL?, songNo: Int) throws
     {
         if path == nil {
             return
@@ -137,6 +137,10 @@ internal class SongEntry {
                     }
                 }
             }
+        }
+        
+        guard duration > 0 else {
+            throw SongEntryError.DurationIsZero
         }
         
         //

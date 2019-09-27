@@ -342,7 +342,13 @@ internal class Player {
                     g_songs.append(se)
                 }
                 else {
-                    g_songs.append(SongEntry(path: URL(fileURLWithPath: r),songNo: g_library.nextAvailableSongNo()))
+                    let nasno = g_library.nextAvailableSongNo()
+                    do {
+                        g_songs.append(try SongEntry(path: URL(fileURLWithPath: r),songNo: nasno))
+                    }
+                    catch  {
+                        g_library.setNextAvailableSongNo(nasno - 1)
+                    }
                 }
                 
                 i += 1
