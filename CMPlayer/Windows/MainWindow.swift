@@ -272,6 +272,10 @@ internal class MainWindow {
         keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
             return false
         })
+        keyHandler.addKeyHandler(key: Console.KEY_HTAB, closure: { () -> Bool in
+            self.onCommandNextSong(parts: [])
+            return false
+        })
         keyHandler.addKeyHandler(key: Console.KEY_ENTER, closure: { () -> Bool in
             var returnValue: Bool = false
             if self.currentCommand.count > 0 {
