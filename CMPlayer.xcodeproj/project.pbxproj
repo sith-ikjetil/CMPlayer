@@ -80,11 +80,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D0C499F4233536D9001232A9 /* Windows */ = {
+		D0790E88233DD25E002A3B3E /* Console */ = {
 			isa = PBXGroup;
 			children = (
 				D0ED143523320B4600FB51C8 /* Console.swift */,
 				D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */,
+			);
+			path = Console;
+			sourceTree = "<group>";
+		};
+		D0C499F4233536D9001232A9 /* Windows */ = {
+			isa = PBXGroup;
+			children = (
 				D0C499F5233536F4001232A9 /* HelpWindow.swift */,
 				D0C499F72335370B001232A9 /* SearchWindow.swift */,
 				D0C499F923353721001232A9 /* MainWindow.swift */,
@@ -132,6 +139,7 @@
 		D0ED142D23320B1B00FB51C8 /* CMPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				D0790E88233DD25E002A3B3E /* Console */,
 				D0C499FB2335372E001232A9 /* Misc */,
 				D0C499F4233536D9001232A9 /* Windows */,
 				D0ED143723320B4D00FB51C8 /* Player.swift */,
