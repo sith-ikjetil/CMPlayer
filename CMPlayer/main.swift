@@ -14,10 +14,10 @@ import Foundation
 //
 // Global constants.
 //
-internal let widthSongNo: Int = 8
-internal let widthArtist: Int = 33
-internal let widthSong: Int = 33
-internal let widthTime: Int = 5
+internal let g_fieldWidthSongNo: Int = 8
+internal let g_fieldWidthArtist: Int = 33
+internal let g_fieldWidthTitle: Int = 33
+internal let g_fieldWidthDuration: Int = 5
 internal let g_player: Player = Player()
 internal let g_versionString: String = "1.6.8.1"
 internal let g_lock = NSLock()

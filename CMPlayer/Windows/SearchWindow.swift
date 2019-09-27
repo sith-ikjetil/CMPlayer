@@ -77,13 +77,13 @@ class SearchWindow {
             
             let se = self.searchResult[index_search]
             
-            Console.printXY(1, index_screen_lines, "\(se.songNo) ", widthSongNo+1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            Console.printXY(1, index_screen_lines, "\(se.songNo) ", g_fieldWidthSongNo+1, .right, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             
-            Console.printXY(10, index_screen_lines, "\(se.artist)", widthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(10, index_screen_lines, "\(se.artist)", g_fieldWidthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
 
-            Console.printXY(43, index_screen_lines, "\(se.title)", widthSong, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(43, index_screen_lines, "\(se.title)", g_fieldWidthTitle, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
-            Console.printXY(76, index_screen_lines, itsRenderMsToFullString(se.duration, false), widthTime, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(76, index_screen_lines, itsRenderMsToFullString(se.duration, false), g_fieldWidthDuration, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
             index_screen_lines += 1
             index_search += 1
