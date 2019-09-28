@@ -89,6 +89,7 @@ internal class PlayerLibrary {
                     var duration: UInt64 = 0
                     var genre: String = ""
                     var recordingYear: Int = 0
+                    var trackNo: Int = 0
                     
                     if let aNumber = s.attribute(forName: "songNo") {
                         songNo = Int(aNumber.stringValue ?? "0") ?? 0
@@ -114,11 +115,14 @@ internal class PlayerLibrary {
                     if let aRecordingYear = s.attribute(forName: "recordingYear") {
                         recordingYear = Int(aRecordingYear.stringValue ?? "0") ?? 0
                     }
+                    if let aTrackNo = s.attribute(forName: "trackNo") {
+                        trackNo = Int(aTrackNo.stringValue ?? "0") ?? 0
+                    }
 
                     if songNo > self.nextSongNo {
                         self.nextSongNo = songNo + 1
                     }
-                    let se = SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear)
+                    let se = SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear, trackNo: trackNo)
                     self.library.append(se)
                     if url.count > 0 {
                         self.dictionary[url] = self.library.count-1
@@ -180,6 +184,11 @@ internal class PlayerLibrary {
             xnRecordingYear.name = "recordingYear"
             xnRecordingYear.setStringValue(String(s.recodingYear), resolvingEntities: true)
             xeSong.addAttribute(xnRecordingYear)
+            
+            let xnTrackNo: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+            xnTrackNo.name = "trackNo"
+            xnTrackNo.setStringValue(String(s.trackNo), resolvingEntities: true)
+            xeSong.addAttribute(xnTrackNo)
         }
    
         //

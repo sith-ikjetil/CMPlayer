@@ -45,6 +45,8 @@ internal class InfoWindow {
         self.infoText.append(" :: \(song.artist)")
         self.infoText.append("album")
         self.infoText.append(" :: \(song.albumName)")
+        self.infoText.append("track no.")
+        self.infoText.append(" :: \(song.trackNo)")
         self.infoText.append("title")
         self.infoText.append(" :: \(song.title)")
         self.infoText.append("duration")

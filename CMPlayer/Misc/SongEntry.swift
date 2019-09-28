@@ -27,6 +27,7 @@ internal class SongEntry {
     var genre: String = ""
     var albumName: String = ""
     var recodingYear: Int = 0
+    var trackNo: Int = 0
     
     ///
     /// Overloaded initializer. Is only called from PlayerLibrary.load()
@@ -37,7 +38,7 @@ internal class SongEntry {
     /// parameter duration: Song length in milliseconds.
     /// parameter url: Song file path.
     ///
-    init(songNo: Int, artist: String, albumName: String, title: String, duration: UInt64, url: URL?, genre: String, recordingYear: Int) {
+    init(songNo: Int, artist: String, albumName: String, title: String, duration: UInt64, url: URL?, genre: String, recordingYear: Int, trackNo: Int) {
         self.songNo = songNo
         self.artist = artist
         self.albumName = albumName
@@ -46,6 +47,7 @@ internal class SongEntry {
         self.fileURL = url
         self.genre = genre.lowercased()
         self.recodingYear = recordingYear
+        self.trackNo = trackNo
 
         if isPathInMusicRootPath(path: url!.path) {
             if self.genre.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
@@ -134,6 +136,9 @@ internal class SongEntry {
                     }
                     if let geYear = MDItemCopyAttribute(metadata,kMDItemRecordingYear) as? Int {
                         self.recodingYear = geYear
+                    }
+                    if let trackNo = MDItemCopyAttribute(metadata,kMDItemAudioTrackNumber) as? Int {
+                        self.trackNo = trackNo
                     }
                 }
             }
