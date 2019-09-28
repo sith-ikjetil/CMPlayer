@@ -52,8 +52,9 @@ internal class PlayerLibrary {
     /// returns: Next available song number.
     ///
     func nextAvailableSongNo() -> Int {
+        let retVal: Int = self.nextSongNo
         self.nextSongNo += 1
-        return self.nextSongNo
+        return retVal
     }
     
     ///
@@ -115,7 +116,7 @@ internal class PlayerLibrary {
                     }
 
                     if songNo > self.nextSongNo {
-                        self.nextSongNo = songNo
+                        self.nextSongNo = songNo + 1
                     }
                     let se = SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear)
                     self.library.append(se)

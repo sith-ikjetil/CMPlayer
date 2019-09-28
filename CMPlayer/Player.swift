@@ -351,7 +351,7 @@ internal class Player {
                         g_songs.append(try SongEntry(path: URL(fileURLWithPath: r),songNo: nasno))
                     }
                     catch  {
-                        g_library.setNextAvailableSongNo(nasno - 1)
+                        g_library.setNextAvailableSongNo(nasno)
                     }
                 }
                 

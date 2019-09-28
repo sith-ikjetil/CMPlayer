@@ -643,6 +643,7 @@ internal class MainWindow {
         if g_modeGenre.count > 0 {
             g_modeArtist.removeAll()
             g_modeRecordingYears.removeAll()
+            g_modeSearch.removeAll()
         }
         
         g_lock.unlock()
@@ -678,6 +679,7 @@ internal class MainWindow {
         if g_modeArtist.count > 0 {
             g_modeGenre.removeAll()
             g_modeRecordingYears.removeAll()
+            g_modeSearch.removeAll()
         }
         
         g_lock.unlock()
@@ -737,6 +739,7 @@ internal class MainWindow {
         if g_modeRecordingYears.count > 0 {
             g_modeArtist.removeAll()
             g_modeGenre.removeAll()
+            g_modeSearch.removeAll()
         }
         
         g_lock.unlock()
@@ -754,19 +757,26 @@ internal class MainWindow {
         nparts.removeFirst()
         nparts.removeFirst()
         
-        let wnd: SearchWindow = SearchWindow()
-        wnd.performSearch(terms: nparts)
-        if wnd.searchResult.count > 0 {
-            g_modeSearch = nparts
-            g_modeSearchStats = wnd.stats
-            g_searchResult = wnd.searchResult
+        if nparts.count > 0 {
+            let wnd: SearchWindow = SearchWindow()
+            wnd.performSearch(terms: nparts)
+            if wnd.searchResult.count > 0 {
+                g_modeSearch = nparts
+                g_modeSearchStats = wnd.stats
+                g_searchResult = wnd.searchResult
+            }
+            else {
+                g_modeSearch = []
+                g_modeSearchStats = []
+                g_searchResult = []
+            }
+            
+            if g_modeSearch.count > 0 {
+                g_modeArtist.removeAll()
+                g_modeGenre.removeAll()
+                g_modeRecordingYears.removeAll()
+            }
         }
-        else {
-            g_modeSearch = []
-            g_modeSearchStats = []
-            g_searchResult = []
-        }
-        
         g_lock.unlock()
     }
     
@@ -954,7 +964,7 @@ internal class MainWindow {
         g_playlist.removeAll()
         g_library.library = []
         g_library.save()
-        g_library.setNextAvailableSongNo(0)
+        g_library.setNextAvailableSongNo(1)
         
         g_player.audioPlayerActive = -1
         g_player.audio1 = nil
@@ -1040,13 +1050,16 @@ internal class MainWindow {
     /// parameter parts: command array.
     ///
     func onCommandSearch(parts: [String]) -> Void {
-        self.isShowingTopWindow = true
-        let wnd: SearchWindow = SearchWindow()
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
-        wnd.showWindow(parts: nparts)
-        Console.clearScreen()
-        self.renderScreen()
-        self.isShowingTopWindow = false
+        
+        if nparts.count > 0 {
+            self.isShowingTopWindow = true
+            let wnd: SearchWindow = SearchWindow()
+            wnd.showWindow(parts: nparts)
+            Console.clearScreen()
+            self.renderScreen()
+            self.isShowingTopWindow = false
+        }
     }// onCommandSearch
 }// CMPlayer
