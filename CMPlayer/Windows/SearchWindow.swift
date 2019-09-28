@@ -21,6 +21,7 @@ internal class SearchWindow {
     private var searchIndex: Int = 0
     var searchResult: [SongEntry] = []
     private var parts: [String] = []
+    var stats: [Int] = []
     
     ///
     /// Performs search from arguments. Searches g_songs.
@@ -29,18 +30,26 @@ internal class SearchWindow {
     ///
     func performSearch(terms: [String]) -> Void {
         self.searchResult.removeAll(keepingCapacity: false)
+
+        self.stats.removeAll()
+        for _ in 0..<terms.count {
+            self.stats.append(0)
+        }
         
         for se in g_songs {
             let artist = se.artist.lowercased()
             let title = se.title.lowercased()
+            var index: Int = 0
             
             for t in terms {
                 let term = t.lowercased()
                 
                 if artist.contains(term) || title.contains(term) {
                     self.searchResult.append(se)
+                    self.stats[index] += 1
                     break
                 }
+                index += 1
             }
         }
         
@@ -51,7 +60,7 @@ internal class SearchWindow {
     /// Shows this SearchWindow on screen.
     ///
     func showWindow(parts: [String]) -> Void {
-        self.parts = reparseCurrentCommandArguments(parts)
+        self.parts = parts
         self.renderSearch()
         self.run()
     }
@@ -153,15 +162,8 @@ internal class SearchWindow {
         })
         keyHandler.addKeyHandler(key: Console.KEY_SPACEBAR, closure: { () -> Bool in
             g_searchResult = self.searchResult
-            
-            var mode: [String] = []
-            var i: Int = 1
-            while i < self.parts.count {
-                mode.append(self.parts[i])
-                i += 1
-            }
-            g_modeSearch = mode
-            
+            g_modeSearch = self.parts
+            g_modeSearchStats = self.stats
             return true
         })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in

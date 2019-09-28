@@ -63,11 +63,15 @@ internal class ModeWindow {
         }
         
         self.modeText.append("search")
-        if g_modeSearch.count == 0 {
+        if g_modeSearch.count == 0 || g_modeSearch.count != g_modeSearchStats.count {
             self.modeText.append(" :: ")
         }
-        for y in g_modeSearch {
-            self.modeText.append(" :: \(y)")
+        else {
+            var index: Int = 0
+            for y in g_modeSearch {
+                self.modeText.append(" :: \(y), \(g_modeSearchStats[index]) Songs")
+                index += 1
+            }
         }
     }
     

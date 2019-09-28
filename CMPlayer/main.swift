@@ -36,6 +36,7 @@ internal var g_modeGenre: [String] = []
 internal var g_modeArtist: [String] = []
 internal var g_modeRecordingYears: [Int] = []
 internal var g_modeSearch: [String] = []
+internal var g_modeSearchStats: [Int] = []
 internal var g_library: PlayerLibrary = PlayerLibrary()
 internal var g_mainWindow: MainWindow?
 

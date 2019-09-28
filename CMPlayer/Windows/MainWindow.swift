@@ -750,22 +750,20 @@ internal class MainWindow {
     func onCommandModeSearch(parts: [String]) -> Void {
         g_lock.lock()
         
-        let nparts = reparseCurrentCommandArguments(parts)
+        var nparts = reparseCurrentCommandArguments(parts)
+        nparts.removeFirst()
+        nparts.removeFirst()
         
         let wnd: SearchWindow = SearchWindow()
         wnd.performSearch(terms: nparts)
         if wnd.searchResult.count > 0 {
-            var mode: [String] = []
-            var i: Int = 2
-            while i < nparts.count {
-                mode.append(nparts[i])
-                i += 1
-            }
-            g_modeSearch = mode
+            g_modeSearch = nparts
+            g_modeSearchStats = wnd.stats
             g_searchResult = wnd.searchResult
         }
         else {
             g_modeSearch = []
+            g_modeSearchStats = []
             g_searchResult = []
         }
         
@@ -1044,7 +1042,9 @@ internal class MainWindow {
     func onCommandSearch(parts: [String]) -> Void {
         self.isShowingTopWindow = true
         let wnd: SearchWindow = SearchWindow()
-        wnd.showWindow(parts: parts)
+        var nparts = reparseCurrentCommandArguments(parts)
+        nparts.removeFirst()
+        wnd.showWindow(parts: nparts)
         Console.clearScreen()
         self.renderScreen()
         self.isShowingTopWindow = false
