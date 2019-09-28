@@ -14,12 +14,14 @@ import Foundation
 ///
 /// Represents CMPlayer SearchWindow.
 ///
-class SearchWindow {
+internal class SearchWindow {
     //
     // Private properties/constants.
     //
     private var searchIndex: Int = 0
-    private var searchResult: [SongEntry] = []
+    var searchResult: [SongEntry] = []
+    private var parts: [String] = []
+    
     ///
     /// Performs search from arguments. Searches g_songs.
     ///
@@ -27,12 +29,12 @@ class SearchWindow {
     ///
     func performSearch(terms: [String]) -> Void {
         self.searchResult.removeAll(keepingCapacity: false)
-        let nterms = reparseCurrentCommandArguments(terms) // reparse the arguments taking "a b" strings into account
+        
         for se in g_songs {
             let artist = se.artist.lowercased()
             let title = se.title.lowercased()
             
-            for t in nterms {
+            for t in terms {
                 let term = t.lowercased()
                 
                 if artist.contains(term) || title.contains(term) {
@@ -49,8 +51,9 @@ class SearchWindow {
     /// Shows this SearchWindow on screen.
     ///
     func showWindow(parts: [String]) -> Void {
+        self.parts = reparseCurrentCommandArguments(parts)
         self.renderSearch()
-        self.run(parts: parts)
+        self.run()
     }
     
     ///
@@ -89,7 +92,7 @@ class SearchWindow {
             index_search += 1
         }
         
-        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,23,"PRESS 'SPACEBAR' TO SET SEARCH MODE. PRESS ANY OTHER KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(1,24,"Songs Found: \(self.searchResult.count.itsToString())",80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
@@ -99,14 +102,14 @@ class SearchWindow {
     ///
     /// parameter parts: command parts from search input command.
     ///
-    func run(parts: [String]) -> Void {
+    func run() -> Void {
         var p : [String] = []
         for px in parts {
             p.append(px)
         }
         _ = p.removeFirst()
         self.searchIndex = 0
-        self.performSearch(terms: p)
+        self.performSearch(terms: self.parts)
         self.renderSearch()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
@@ -123,9 +126,6 @@ class SearchWindow {
                 self.renderSearch()
             }
             return false
-        })
-        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
-            return true
         })
         keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
             if self.searchIndex > 0  && self.searchResult.count > g_windowContentLineCount {
@@ -150,6 +150,22 @@ class SearchWindow {
                 self.renderSearch()
             }
             return false
+        })
+        keyHandler.addKeyHandler(key: Console.KEY_SPACEBAR, closure: { () -> Bool in
+            g_searchResult = self.searchResult
+            
+            var mode: [String] = []
+            var i: Int = 1
+            while i < self.parts.count {
+                mode.append(self.parts[i])
+                i += 1
+            }
+            g_modeSearch = mode
+            
+            return true
+        })
+        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+            return true
         })
         keyHandler.run()
     }// run

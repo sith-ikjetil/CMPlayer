@@ -19,7 +19,7 @@ internal let g_fieldWidthArtist: Int = 33
 internal let g_fieldWidthTitle: Int = 33
 internal let g_fieldWidthDuration: Int = 5
 internal let g_player: Player = Player()
-internal let g_versionString: String = "1.7.5.1"
+internal let g_versionString: String = "1.7.6.1"
 internal let g_lock = NSLock()
 internal let g_windowContentLineCount = 17
 
@@ -31,9 +31,11 @@ internal var g_playlist: [SongEntry] = []
 internal var g_genres: [String: [SongEntry]] = [:]
 internal var g_artists: [String: [SongEntry]] = [:]
 internal var g_recordingYears: [Int: [SongEntry]] = [:]
+internal var g_searchResult: [SongEntry] = []
 internal var g_modeGenre: [String] = []
 internal var g_modeArtist: [String] = []
 internal var g_modeRecordingYears: [Int] = []
+internal var g_modeSearch: [String] = []
 internal var g_library: PlayerLibrary = PlayerLibrary()
 internal var g_mainWindow: MainWindow?
 

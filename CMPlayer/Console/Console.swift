@@ -53,6 +53,7 @@ internal class Console {
     static let KEY_RIGHT: Int32 = 300 + 67
     static let KEY_LEFT: Int32 = 300 + 68
     static let KEY_HTAB: Int32 = 9
+    static let KEY_SPACEBAR: Int32 = 32
 
     
     ///

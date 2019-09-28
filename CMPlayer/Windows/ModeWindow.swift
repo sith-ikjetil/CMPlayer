@@ -61,6 +61,14 @@ internal class ModeWindow {
         for y in g_modeRecordingYears {
             self.modeText.append(" :: \(y), \(g_recordingYears[y]!.count) Songs")
         }
+        
+        self.modeText.append("search")
+        if g_modeSearch.count == 0 {
+            self.modeText.append(" :: ")
+        }
+        for y in g_modeSearch {
+            self.modeText.append(" :: \(y)")
+        }
     }
     
     ///

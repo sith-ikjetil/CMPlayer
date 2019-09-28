@@ -263,6 +263,10 @@ internal class Player {
                 let s = list.randomElement()!
                 g_playlist.append(s)
             }
+            else if g_modeSearch.count > 0 && g_searchResult.count > 0 {
+                let s = g_searchResult.randomElement()!
+                g_playlist.append(s)
+            }
             else {
                 var s = g_songs.randomElement()!
                 if g_songs.count > 2 {

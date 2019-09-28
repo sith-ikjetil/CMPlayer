@@ -48,6 +48,8 @@ internal class HelpWindow {
                                       " mode year [<year>]", " :: set playback of songs only from given years",
                                       " mode year <year from>-<year to>", " :: set playback of songs from given year interval",
                                       " mode year", " :: removes mode year playback and plays songs from entire library",
+                                      " mode search [<words]", " :: set playback of songs only from given search words",
+                                      " mode search", " :: removes mode search playback and plays songs from entire library",
                                       " reinitialize", " :: reinitializes library and should be called after mrp paths are changed",
                                       " info", " :: shows information about first song in playlist",
                                       " info <song no>", " :: show information about song with given song number"]

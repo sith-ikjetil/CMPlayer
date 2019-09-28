@@ -46,6 +46,7 @@ internal class MainWindow {
     private let commandsModeGenre: [String] = ["mode", "genre"]
     private let commandsModeArtist: [String] = ["mode", "artist"]
     private let commandsModeYear: [String] = ["mode", "year"]
+    private let commandsModeSearch: [String] = ["mode", "search"]
     private let commandsRebuildSongNo: [String] = ["rebuild songno"]
     private let commandsGenre: [String] = ["genre"]
     private let commandsArtist: [String] = ["artist"]
@@ -368,6 +369,9 @@ internal class MainWindow {
         else if parts.count > 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
             self.onCommandModeYear(parts: parts)
         }
+        else if parts.count > 2 && parts[0] == self.commandsModeSearch[0] && parts[1] == self.commandsModeSearch[1] {
+            self.onCommandModeSearch(parts: parts)
+        }
         else if parts.count == 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
             self.onCommandClearModeGenre(parts: parts)
         }
@@ -376,6 +380,9 @@ internal class MainWindow {
         }
         else if parts.count == 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
             self.onCommandClearModeYear(parts: parts)
+        }
+        else if parts.count == 2 && parts[0] == self.commandsModeSearch[0] && parts[1] == self.commandsModeSearch[1] {
+            self.onCommandClearModeSearch(parts: parts)
         }
         else if parts.count == 2 && parts[0] == self.commandsInfo[0] {
             self.onCommandInfoSong(parts: parts)
@@ -736,6 +743,36 @@ internal class MainWindow {
     }
     
     ///
+    /// Set  mode search.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandModeSearch(parts: [String]) -> Void {
+        g_lock.lock()
+        
+        let nparts = reparseCurrentCommandArguments(parts)
+        
+        let wnd: SearchWindow = SearchWindow()
+        wnd.performSearch(terms: nparts)
+        if wnd.searchResult.count > 0 {
+            var mode: [String] = []
+            var i: Int = 2
+            while i < nparts.count {
+                mode.append(nparts[i])
+                i += 1
+            }
+            g_modeSearch = mode
+            g_searchResult = wnd.searchResult
+        }
+        else {
+            g_modeSearch = []
+            g_searchResult = []
+        }
+        
+        g_lock.unlock()
+    }
+    
+    ///
     /// Clear mode genre.
     ///
     /// parameter parts: command array.
@@ -765,6 +802,17 @@ internal class MainWindow {
     func onCommandClearModeYear(parts: [String]) -> Void {
         g_lock.lock()
         g_modeRecordingYears.removeAll()
+        g_lock.unlock()
+    }
+    
+    ///
+    /// Clear mode year.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandClearModeSearch(parts: [String]) -> Void {
+        g_lock.lock()
+        g_modeSearch.removeAll()
         g_lock.unlock()
     }
     
