@@ -23,6 +23,7 @@ internal class MainWindow {
     private let commandsExit: [String] = ["exit", "quit"]
     private let commandsNextSong: [String] = ["next", "skip"]
     private let commandsHelp: [String] = ["help","?"]
+    private let commandsRestart: [String] = ["restart"]
     private let commandsPlay: [String] = ["play"]
     private let commandsPause: [String] = ["pause"]
     private let commandsResume: [String] = ["resume"]
@@ -315,6 +316,9 @@ internal class MainWindow {
         if isCommandInCommands(command, self.commandsExit) {
             return true
         }
+        else if isCommandInCommands(command, self.commandsRestart) {
+            self.onCommandRestart(parts: parts)
+        }
         else if isCommandInCommands(command, self.commandsNextSong) {
             self.onCommandNextSong(parts: parts)
         }
@@ -425,6 +429,24 @@ internal class MainWindow {
         }
         
         return false
+    }
+    
+    ///
+    /// Restarts current playing song.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandRestart(parts: [String]) -> Void {
+        g_lock.lock()
+       
+        if g_player.audioPlayerActive == 1 {
+            g_player.audio1?.currentTime = TimeInterval(exactly: 0.0)!
+        }
+        else if g_player.audioPlayerActive == 2 {
+            g_player.audio2?.currentTime = TimeInterval(exactly: 0.0)!
+        }
+    
+        g_lock.unlock()
     }
     
     ///
