@@ -19,7 +19,7 @@ internal class PlayerLibrary {
     // Private properties/constants
     //
     private let filename: String = "CMPLayer.Library.xml"
-    private var nextSongNo: Int = 0
+    private var nextSongNo: Int = 1
     private var dictionary: [String: Int] = [:]
     
     //

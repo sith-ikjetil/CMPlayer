@@ -187,8 +187,15 @@ internal class Console {
     ///
     static func initialize() -> Void {
         Console.setTerminalSize(width: 80, height: 24)
+        
         Console.hideCursor()
         Console.echoOff()
+        
+        atexit( {
+            Console.showCursor()
+            Console.echoOn()
+        })
+        
         //
         // Respond to window resize
         //

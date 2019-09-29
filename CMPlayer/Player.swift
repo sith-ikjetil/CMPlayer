@@ -101,8 +101,6 @@ internal class Player {
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
-                    Console.showCursor()
-                    Console.echoOn()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -117,8 +115,6 @@ internal class Player {
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
-                    Console.showCursor()
-                    Console.echoOn()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -134,8 +130,6 @@ internal class Player {
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
-                    Console.showCursor()
-                    Console.echoOn()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -150,8 +144,6 @@ internal class Player {
                 catch {
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
-                    Console.showCursor()
-                    Console.echoOn()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
