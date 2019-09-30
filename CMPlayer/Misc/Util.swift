@@ -354,6 +354,14 @@ internal extension Int {
     }
 }
 
+///
+/// Runs regular expression agains an input string.
+///
+/// parameter regex: input regular expression
+/// parameter text: input string to run regular expression on.
+///
+/// returns: string array result.
+///
 func regExMatches(for regex: String, in text: String) -> [String] {
     do {
         let regex = try NSRegularExpression(pattern: regex)

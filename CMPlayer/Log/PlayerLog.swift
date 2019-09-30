@@ -6,14 +6,23 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import.
+//
 import Foundation
 
+///
+/// PlayerLog log class.
+///
 internal class PlayerLog {
-    internal static let logFilename: String = "CMPlayer.Log.xml"
-    internal static var ApplicationLog: PlayerLog?
-    internal var entries: [PlayerLogEntry] = []
+    static let logFilename: String = "CMPlayer.Log.xml"
+    static var ApplicationLog: PlayerLog?
+    var entries: [PlayerLogEntry] = []
     private var autoSave: Bool = false
     
+    ///
+    /// Overloaded initializer.
+    ///
     init(autoSave: Bool, loadOldLog: Bool ){
         self.autoSave = autoSave
         
@@ -22,7 +31,10 @@ internal class PlayerLog {
         }
     }
     
-    internal func loadOldLog() {
+    ///
+    /// Loads old log into memory
+    ///
+    func loadOldLog() {
         let url: URL = PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent(PlayerLog.logFilename, isDirectory: false)
         
         do {
@@ -39,7 +51,13 @@ internal class PlayerLog {
         }
     }
     
-    internal func logError(title: String, text: String) {
+    ///
+    /// Logs an error
+    ///
+    /// parameter title: title of log entry
+    /// parameter text: log entry information
+    ///
+    func logError(title: String, text: String) {
         guard PlayerPreferences.logError else { return }
         if self.entries.count >= PlayerPreferences.logMaxSize {
             if PlayerPreferences.logMaxSizeReached == LogMaxSizeReached.EmptyLog {
@@ -54,7 +72,14 @@ internal class PlayerLog {
             self.saveLog()
         }
     }
-    internal func logWarning(title: String, text: String) {
+    
+    ///
+    /// Logs a warning
+    ///
+    /// parameter title: title of log entry
+    /// parameter text: log entry information
+    ///
+    func logWarning(title: String, text: String) {
         guard PlayerPreferences.logWarning else { return }
         if self.entries.count >= PlayerPreferences.logMaxSize {
             if PlayerPreferences.logMaxSizeReached == LogMaxSizeReached.EmptyLog {
@@ -69,7 +94,14 @@ internal class PlayerLog {
             self.saveLog()
         }
     }
-    internal func logInformation(title: String, text: String) {
+    
+    ///
+    /// Logs an informative entry
+    ///
+    /// parameter title: title of log entry
+    /// parameter text: log entry information
+    ///
+    func logInformation(title: String, text: String) {
         guard PlayerPreferences.logInformation else { return }
         if self.entries.count >= PlayerPreferences.logMaxSize {
             if PlayerPreferences.logMaxSizeReached == LogMaxSizeReached.EmptyLog {
@@ -84,7 +116,14 @@ internal class PlayerLog {
             self.saveLog()
         }
     }
-    internal func logDebug(title: String, text: String) {
+    
+    ///
+    /// Logs a debug entry
+    ///
+    /// parameter title: title of log entry
+    /// parameter text: log entry information
+    ///
+    func logDebug(title: String, text: String) {
         guard PlayerPreferences.logDebug else { return }
         if self.entries.count >= PlayerPreferences.logMaxSize {
             if PlayerPreferences.logMaxSizeReached == LogMaxSizeReached.EmptyLog {
@@ -99,7 +138,14 @@ internal class PlayerLog {
             self.saveLog()
         }
     }
-    internal func logOther(title: String, text: String) {
+    
+    ///
+    /// Logs an other entry.
+    ///
+    /// parameter title: title of log entry
+    /// parameter text: log entry information
+    ///
+    func logOther(title: String, text: String) {
         guard PlayerPreferences.logOther else { return }
         if self.entries.count >= PlayerPreferences.logMaxSize {
             if PlayerPreferences.logMaxSizeReached == LogMaxSizeReached.EmptyLog {
@@ -115,11 +161,18 @@ internal class PlayerLog {
         }
         
     }
-    internal func clear() {
+    
+    ///
+    /// Clears the log.
+    ///
+    func clear() {
         self.entries.removeAll()
     }
     
-    internal func saveLogAsXMLDocument() -> XMLDocument {
+    ///
+    /// Saves the log as an XML document
+    ///
+    func saveLogAsXMLDocument() -> XMLDocument {
         let xeRoot: XMLElement = XMLElement(name: "Log")
         let aRC24: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
         aRC24.name = "id"
@@ -134,6 +187,9 @@ internal class PlayerLog {
         return XMLDocument(rootElement: xeRoot)
     }
     
+    ///
+    /// Saves the log
+    ///
     internal func saveLog()
     {
         let xd: XMLDocument = self.saveLogAsXMLDocument()
@@ -148,7 +204,12 @@ internal class PlayerLog {
         }
     }
     
-    internal func saveLogAs(url: URL) {
+    ///
+    /// Saves the log as a file
+    ///
+    /// parameter url: file to save.
+    ///
+    func saveLogAs(url: URL) {
         let xd: XMLDocument = self.saveLogAsXMLDocument()
         let xml: String = xd.xmlString
         
@@ -160,9 +221,14 @@ internal class PlayerLog {
         }
     }
     
-    internal func saveLogToString() -> String {
+    ///
+    /// Saves log to a string.
+    ///
+    /// returnes: a string containing the xml log.
+    ///
+    func saveLogToString() -> String {
         let xd: XMLDocument = self.saveLogAsXMLDocument()
         return xd.xmlString
-    }
-}
+    }// saveLogToString
+}// PlayerLog
 

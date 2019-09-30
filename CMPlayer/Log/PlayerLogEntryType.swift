@@ -6,8 +6,14 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import.
+//
 import Foundation
 
+///
+/// Log entry type class.
+///
 internal enum PlayerLogEntryType: String {
     case Error = "Error"
     case Warning = "Warning"

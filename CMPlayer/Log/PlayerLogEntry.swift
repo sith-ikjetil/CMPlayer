@@ -6,15 +6,29 @@
 //  Copyright © 2019 Kjetil Kr Solberg. All rights reserved.
 //
 
+//
+// import.
+//
 import Foundation
 
+///
+/// Log entry class.
+///
 internal class PlayerLogEntry {
-    internal static let XML_ELEMENT_NAME: String = "LogEntry"
-    internal var type: PlayerLogEntryType
-    internal var title: String
-    internal var text: String
-    internal var timeStamp: Date
+    static let XML_ELEMENT_NAME: String = "LogEntry"
+    var type: PlayerLogEntryType
+    var title: String
+    var text: String
+    var timeStamp: Date
     
+    ///
+    /// Overloaded initializer
+    ///
+    /// parameter type: log entry type.
+    /// parameter title: log entry title.
+    /// parameter text: log entry information.
+    /// parameter timeStamp: date time of log entry.
+    ///
     init( type: PlayerLogEntryType, title: String, text: String, timeStamp: Date)
     {
         self.type = type
@@ -23,6 +37,11 @@ internal class PlayerLogEntry {
         self.timeStamp = timeStamp
     }
     
+    ///
+    /// Overloaded initializer
+    ///
+    /// parameter e: XML element representing a log entry
+    ///
     init( e: XMLElement )
     {
         self.title = e.attribute(forName: "Title")?.stringValue ?? ""
@@ -35,7 +54,12 @@ internal class PlayerLogEntry {
         self.timeStamp = dateFormatter.date(from: e.attribute(forName: "TimeStamp")?.stringValue ?? "") ?? Date()
     }
     
-    internal func toXMLElement() -> XMLElement {
+    ///
+    /// Creates an xml element representing this log entry.
+    ///
+    /// returnes: XML element.
+    ///
+    func toXMLElement() -> XMLElement {
         let xe = XMLElement(name: PlayerLogEntry.XML_ELEMENT_NAME)
         xe.setStringValue(self.text, resolvingEntities: true)
         
@@ -58,5 +82,5 @@ internal class PlayerLogEntry {
         xe.addAttribute(xnTimeStamp)
         
         return xe
-    }
-}
+    }//toXMLElement
+}// PlayerLogEntry

@@ -1098,7 +1098,7 @@ internal class MainWindow {
     ///
     /// parameter parts: command array.
     ///
-    func onCommandUpdate(parts: [String]) -> Void {
+    private func onCommandUpdate(parts: [String]) -> Void {
         self.addendumText = "Checking for updates..."
         var request = URLRequest(url: URL(string: "http://www.ikjetil.no/Home/GetFileName/45?GUID=4dae77f8-e7f3-4631-a8e5-8afda6d065af")! )
         let session = URLSession.shared
@@ -1159,7 +1159,10 @@ internal class MainWindow {
         task.resume()
     }
     
-    func onPerformUpdate() -> Void {
+    ///
+    /// We have found a new version and now we do the actual downloading and updating
+    ///
+    private func onPerformUpdate() -> Void {
         self.addendumText = "Updating..."
         
         var request = URLRequest(url: URL(string: "http://www.ikjetil.no/Home/DownloadFile/45?GUID=4dae77f8-e7f3-4631-a8e5-8afda6d065af")! )
@@ -1225,5 +1228,5 @@ internal class MainWindow {
         })
         
         task.resume()
-    }
+    }// onPerformUpdate
 }// CMPlayer
