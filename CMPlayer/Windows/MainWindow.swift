@@ -21,6 +21,7 @@ internal class MainWindow {
     private var quit: Bool = false
     private var currentCommand: String = ""
     private let commandsExit: [String] = ["exit", "quit"]
+    private let commandsUpdate: [String] = ["update cmplayer"]
     private let commandsNextSong: [String] = ["next", "skip"]
     private let commandsHelp: [String] = ["help","?"]
     private let commandsReplay: [String] = ["replay"]
@@ -58,6 +59,7 @@ internal class MainWindow {
     private var exitCode: Int32 = 0
     private var isShowingTopWindow = false
     private var isSkipping: Bool = false
+    private var addendumText: String = ""
     
     
     static private var timeElapsedMs: UInt64 = 0
@@ -211,6 +213,7 @@ internal class MainWindow {
                 if !self.isShowingTopWindow {
                     MainWindow.renderHeader(showTime: true)
                     self.renderSongs()
+                    Console.printXY(1, 22, self.addendumText, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
                 }
                 
                 g_lock.lock()
@@ -316,6 +319,9 @@ internal class MainWindow {
                     
         if isCommandInCommands(command, self.commandsExit) {
             return true
+        }
+        else if isCommandInCommands(command, self.commandsUpdate) {
+            self.onCommandUpdate(parts: parts)
         }
         else if isCommandInCommands(command, self.commandsReplay) {
             self.onCommandReplay(parts: parts)
@@ -1084,5 +1090,74 @@ internal class MainWindow {
             self.renderScreen()
             self.isShowingTopWindow = false
         }
-    }// onCommandSearch
+    }
+    
+    ///
+    /// Updates CMPlayer if newer version is available.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandUpdate(parts: [String]) -> Void {
+        self.addendumText = "Checking for updates..."
+        var request = URLRequest(url: URL(string: "http://www.ikjetil.no/Home/GetFileName/45?GUID=4dae77f8-e7f3-4631-a8e5-8afda6d065af")! )
+        let session = URLSession.shared
+
+        request.httpMethod = "GET"
+        //request.addValue("text/plain; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue("www.ikjetil.no", forHTTPHeaderField: "Host")
+        request.addValue("0", forHTTPHeaderField: "Content-Length")
+
+        let task = session.dataTask(with: request, completionHandler: {
+            (data, response, error) -> Void in
+           
+            if error != nil {
+               //IgnitionLog.ApplicationLog?.logWarning(title: "[MainWindowController].checkForUpdates_Clicked", text: "\(error!)")
+                self.addendumText = ""
+                return
+            }
+           
+            var didUpdate: Bool = false
+            if let textData = data {
+                let textRaw: String? = String(data: textData, encoding: .utf8)
+                if let text = textRaw {
+                    let version = regExMatches(for: "[0-9]+.[0-9]+.[0-9]+.[0-9]+", in: text)
+                    if version.count > 0 {
+                        self.addendumText = "Found version: \(version[0])"
+                        
+                        let partsServer = version[0].components(separatedBy: ".")
+                        let partsCMP = g_versionString.components(separatedBy: ".")
+                        
+                        if partsServer.count == 4 && partsCMP.count == 4 {
+                            let majorServer: Int = Int(partsServer[0]) ?? 0
+                            let minorServer: Int = Int(partsServer[1]) ?? 0
+                            let buildServer: Int = Int(partsServer[2]) ?? 0
+                            let revisionServer: Int = Int(partsServer[3]) ?? 0
+                            
+                            let majorCMP: Int = Int(partsCMP[0]) ?? 0
+                            let minorCMP: Int = Int(partsCMP[1]) ?? 0
+                            let buildCMP: Int = Int(partsCMP[2]) ?? 0
+                            let revisionCMP: Int = Int(partsCMP[3]) ?? 0
+                            
+                            if majorServer > majorCMP ||
+                               (majorServer == majorCMP && minorServer > minorCMP) ||
+                               (majorServer == majorCMP && minorServer == minorCMP && buildServer > buildCMP) ||
+                                (majorServer == majorCMP && minorServer == minorCMP && buildServer == buildCMP && revisionServer > revisionCMP)
+                            {
+                                didUpdate = true
+                                self.onPerformUpdate()
+                            }
+                        }
+                    }
+                }
+            }
+            if !didUpdate {
+                self.addendumText = ""
+            }
+        })
+        task.resume()
+    }
+    
+    func onPerformUpdate() -> Void {
+        self.addendumText = "Updating..."
+    }
 }// CMPlayer
