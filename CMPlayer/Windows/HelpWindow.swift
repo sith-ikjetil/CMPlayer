@@ -53,7 +53,8 @@ internal class HelpWindow {
                                       " mode search", " :: removes mode search playback and plays songs from entire library",
                                       " reinitialize", " :: reinitializes library and should be called after mrp paths are changed",
                                       " info", " :: shows information about first song in playlist",
-                                      " info <song no>", " :: show information about song with given song number"]
+                                      " info <song no>", " :: show information about song with given song number",
+                                      " update cmplayer", " :: updates cmplayer if new version is found online"]
     
     ///
     /// Shows this HelpWindow on screen.

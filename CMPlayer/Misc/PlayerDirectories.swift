@@ -26,7 +26,15 @@ internal class PlayerDirectories {
     internal static var consoleMusicPlayerDirectory: URL {
         return PlayerDirectories.homeDirectory.appendingPathComponent(".CMPlayer", isDirectory: true)
     }
- 
+    internal static var consoleMusicPlayerUpdateDirectory: URL {
+        return PlayerDirectories.consoleMusicPlayerDirectory.appendingPathComponent("Update", isDirectory: true)
+    }
+    internal static var applicationsDirectory: URL {
+        return URL(fileURLWithPath: "/Applications")
+    }
+    internal static var volumesDirectory: URL {
+        return URL(fileURLWithPath: "/Volumes")
+    }
     ///
     /// Ensures that directories needed exists. Is called upon application startup.
     ///
@@ -35,6 +43,16 @@ internal class PlayerDirectories {
         if FileManager.default.fileExists(atPath: cmpDir.path) == false {
             do {
                 try FileManager.default.createDirectory(at: cmpDir, withIntermediateDirectories: true, attributes: nil)
+            }
+            catch {
+                
+            }
+        }
+        
+        let cmpDir2: URL = PlayerDirectories.consoleMusicPlayerUpdateDirectory
+        if FileManager.default.fileExists(atPath: cmpDir2.path) == false {
+            do {
+                try FileManager.default.createDirectory(at: cmpDir2, withIntermediateDirectories: true, attributes: nil)
             }
             catch {
                 

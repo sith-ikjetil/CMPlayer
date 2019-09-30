@@ -10,6 +10,7 @@
 // import
 //
 import Foundation
+import Cocoa
 
 ///
 /// Represents CMPlayer MainWindow.
@@ -60,7 +61,7 @@ internal class MainWindow {
     private var isShowingTopWindow = false
     private var isSkipping: Bool = false
     private var addendumText: String = ""
-    
+    private var updateFileName: String = ""
     
     static private var timeElapsedMs: UInt64 = 0
     
@@ -1123,6 +1124,7 @@ internal class MainWindow {
                     let version = regExMatches(for: "[0-9]+.[0-9]+.[0-9]+.[0-9]+", in: text)
                     if version.count > 0 {
                         self.addendumText = "Found version: \(version[0])"
+                        self.updateFileName = text
                         
                         let partsServer = version[0].components(separatedBy: ".")
                         let partsCMP = g_versionString.components(separatedBy: ".")
@@ -1159,5 +1161,63 @@ internal class MainWindow {
     
     func onPerformUpdate() -> Void {
         self.addendumText = "Updating..."
+        
+        var request = URLRequest(url: URL(string: "http://www.ikjetil.no/Home/DownloadFile/45?GUID=4dae77f8-e7f3-4631-a8e5-8afda6d065af")! )
+        let session = URLSession.shared
+        
+        request.httpMethod = "GET"
+        //request.addValue("text/plain; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue("www.ikjetil.no", forHTTPHeaderField: "Host")
+        request.addValue("0", forHTTPHeaderField: "Content-Length")
+        
+        let task = session.dataTask(with: request, completionHandler: {
+            data, response, error -> Void in
+            
+            if error != nil {
+                //.ApplicationLog?.logError(title: "[MainWindowController].updateIgnition", text: "session.dataTask failed. With error: \(error!)")
+                self.addendumText = "Error downloading file: \(error!)"
+                return
+            }
+            
+            if let igData = data {
+                do {
+                    let filename = PlayerDirectories.consoleMusicPlayerUpdateDirectory.appendingPathComponent("\(self.updateFileName)")
+                    try igData.write(to: filename)
+                    
+                    NSWorkspace.shared.openFile(filename.path)
+                    
+                    self.addendumText = "Updating, please be patient..."
+                    
+                    sleep(7)
+                    
+                    do {
+                        let atFilename: URL = PlayerDirectories.volumesDirectory.appendingPathComponent("CMPlayer", isDirectory: true).appendingPathComponent("CMPlayer", isDirectory: false)
+                        //let atFilename: URL = URL(fileURLWithPath: "/Volumes/Ignition").appendingPathComponent("Ignition.app", isDirectory: true)
+                        let toFilename: URL = PlayerDirectories.applicationsDirectory.appendingPathComponent("CMPlayer", isDirectory: false)
+                        //let toFilename: URL = URL(fileURLWithPath: "/Applications").appendingPathComponent("Ignition.app", isDirectory: true)
+                        if FileManager.default.fileExists(atPath: toFilename.path) {
+                            try FileManager.default.removeItem(atPath: toFilename.path)
+                        }
+                        try FileManager.default.copyItem(at: atFilename, to: toFilename)
+                        
+                        sleep(2)
+                        
+                        try NSWorkspace.shared.unmountAndEjectDevice(at: PlayerDirectories.volumesDirectory.appendingPathComponent("CMPlayer", isDirectory: true))
+                        
+                        let _ = NSWorkspace.shared.openFile(toFilename.path)
+                        
+                        exit(0)
+                    }
+                    catch {
+                        self.addendumText = "Error updating CMPlayer: \(error)"
+                    }
+                }
+                catch {
+                    self.addendumText = "Error writing file: \(error)"
+                }
+            }
+        })
+        
+        task.resume()
     }
 }// CMPlayer
