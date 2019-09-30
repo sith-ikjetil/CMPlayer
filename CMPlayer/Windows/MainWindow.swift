@@ -23,7 +23,7 @@ internal class MainWindow {
     private let commandsExit: [String] = ["exit", "quit"]
     private let commandsNextSong: [String] = ["next", "skip"]
     private let commandsHelp: [String] = ["help","?"]
-    private let commandsRestart: [String] = ["restart"]
+    private let commandsReplay: [String] = ["replay"]
     private let commandsPlay: [String] = ["play"]
     private let commandsPause: [String] = ["pause"]
     private let commandsResume: [String] = ["resume"]
@@ -282,6 +282,7 @@ internal class MainWindow {
             var returnValue: Bool = false
             if self.currentCommand.count > 0 {
                 returnValue = self.processCommand(command: self.currentCommand)
+                self.quit = returnValue
             }
             self.currentCommand.removeAll()
             
@@ -316,8 +317,8 @@ internal class MainWindow {
         if isCommandInCommands(command, self.commandsExit) {
             return true
         }
-        else if isCommandInCommands(command, self.commandsRestart) {
-            self.onCommandRestart(parts: parts)
+        else if isCommandInCommands(command, self.commandsReplay) {
+            self.onCommandReplay(parts: parts)
         }
         else if isCommandInCommands(command, self.commandsNextSong) {
             self.onCommandNextSong(parts: parts)
@@ -436,7 +437,7 @@ internal class MainWindow {
     ///
     /// parameter parts: command array.
     ///
-    func onCommandRestart(parts: [String]) -> Void {
+    func onCommandReplay(parts: [String]) -> Void {
         g_lock.lock()
        
         if g_player.audioPlayerActive == 1 {
