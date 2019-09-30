@@ -53,6 +53,8 @@ internal class InfoWindow {
         self.infoText.append(" :: \(itsRenderMsToFullString(song.duration, false))")
         self.infoText.append("recording year")
         self.infoText.append(" :: \(song.recodingYear)")
+        self.infoText.append("genre")
+        self.infoText.append(" :: \(song.genre)")
         self.infoText.append("filename")
         self.infoText.append(" :: \(song.fileURL?.lastPathComponent ?? "")")
         
