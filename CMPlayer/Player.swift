@@ -46,6 +46,10 @@ internal class Player {
     func initialize() -> Void {
         PlayerDirectories.ensureDirectoriesExistence()
         PlayerPreferences.ensureLoadPreferences()
+        PlayerLog.ApplicationLog = PlayerLog(autoSave: true, loadOldLog: (PlayerPreferences.logApplicationStartLoadType == LogApplicationStartLoadType.LoadOldLog))
+        
+        PlayerLog.ApplicationLog?.logInformation(title: "CMPlayer", text: "Application Started.")
+        
         Console.initialize()
         
         self.musicFormats = PlayerPreferences.musicFormats.components(separatedBy: ";")
@@ -99,8 +103,11 @@ internal class Player {
                     self.isPaused = false
                 }
                 catch {
+                    let msg = "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)"
+                    PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
+                    
                     let wnd: ErrorWindow = ErrorWindow()
-                    wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    wnd.showWindow(message: msg)
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -113,8 +120,11 @@ internal class Player {
                     self.isPaused = false
                 }
                 catch {
+                    let msg = "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)"
+                    PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
+                    
                     let wnd: ErrorWindow = ErrorWindow()
-                    wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    wnd.showWindow(message: msg)
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -128,8 +138,11 @@ internal class Player {
                     self.isPaused = false
                 }
                 catch {
+                    let msg = "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)"
+                    PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
+                    
                     let wnd: ErrorWindow = ErrorWindow()
-                    wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    wnd.showWindow(message: msg)
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -142,8 +155,11 @@ internal class Player {
                     self.isPaused = false
                 }
                 catch {
+                    let msg = "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)"
+                    PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
+                    
                     let wnd: ErrorWindow = ErrorWindow()
-                    wnd.showWindow(message: "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)")
+                    wnd.showWindow(message: msg)
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -309,7 +325,11 @@ internal class Player {
     ///
     func run() -> Int32 {
         g_mainWindow = MainWindow()
-        return g_mainWindow?.showWindow() ?? 0
+        let retVal = g_mainWindow?.showWindow() ?? 0
+        
+        PlayerLog.ApplicationLog?.logInformation(title: "CMPlayer", text: "Application Exited Normally.")
+        
+        return retVal
     }
     
     ///

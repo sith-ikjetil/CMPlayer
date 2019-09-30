@@ -1112,8 +1112,8 @@ internal class MainWindow {
             (data, response, error) -> Void in
            
             if error != nil {
-               //IgnitionLog.ApplicationLog?.logWarning(title: "[MainWindowController].checkForUpdates_Clicked", text: "\(error!)")
-                self.addendumText = ""
+                PlayerLog.ApplicationLog?.logWarning(title: "MainWindow::onCommandUpdate", text: "session.dataTask failed. With error: \(error!)")
+                self.addendumText = "Error contacting server!"
                 return
             }
            
@@ -1174,8 +1174,8 @@ internal class MainWindow {
             data, response, error -> Void in
             
             if error != nil {
-                //.ApplicationLog?.logError(title: "[MainWindowController].updateIgnition", text: "session.dataTask failed. With error: \(error!)")
-                self.addendumText = "Error downloading file: \(error!)"
+                PlayerLog.ApplicationLog?.logError(title: "MainWindow::onPerformUpdate", text: "session.dataTask failed. With error: \(error!)")
+                self.addendumText = "Error downloading file!"
                 return
             }
             
@@ -1206,14 +1206,20 @@ internal class MainWindow {
                         
                         let _ = NSWorkspace.shared.openFile(toFilename.path)
                         
+                        PlayerLog.ApplicationLog?.logInformation(title: "MainWindow::onPerformUpdate", text: "Update Completed to: \(self.updateFileName)")
+                        
                         exit(0)
                     }
                     catch {
-                        self.addendumText = "Error updating CMPlayer: \(error)"
+                        let msg = "Error Updating CMPlayer: \(error)"
+                        PlayerLog.ApplicationLog?.logInformation(title: "MainWindow::onPerformUpdate", text: msg)
+                        self.addendumText = msg
                     }
                 }
                 catch {
-                    self.addendumText = "Error writing file: \(error)"
+                    let msg = "Error writing file '\(self.updateFileName)': \(error)"
+                    PlayerLog.ApplicationLog?.logInformation(title: "MainWindow::onPerformUpdate", text: msg)
+                    self.addendumText = msg
                 }
             }
         })

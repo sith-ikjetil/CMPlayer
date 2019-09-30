@@ -28,6 +28,9 @@
 		D0F162A723386F7A00754651 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162A623386F7A00754651 /* PreferencesWindow.swift */; };
 		D0F162A9233896E200754651 /* ConsoleKeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */; };
 		D0F162AB2338C8CF00754651 /* GenreWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F162AA2338C8CF00754651 /* GenreWindow.swift */; };
+		D0FD9B58234215EB00FB5A40 /* PlayerLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD9B57234215EB00FB5A40 /* PlayerLog.swift */; };
+		D0FD9B5A2342165500FB5A40 /* PlayerLogEntryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD9B592342165500FB5A40 /* PlayerLogEntryType.swift */; };
+		D0FD9B5C2342167600FB5A40 /* PlayerLogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FD9B5B2342167600FB5A40 /* PlayerLogEntry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -67,6 +70,9 @@
 		D0F162A623386F7A00754651 /* PreferencesWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
 		D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleKeyboardHandler.swift; sourceTree = "<group>"; };
 		D0F162AA2338C8CF00754651 /* GenreWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreWindow.swift; sourceTree = "<group>"; };
+		D0FD9B57234215EB00FB5A40 /* PlayerLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLog.swift; sourceTree = "<group>"; };
+		D0FD9B592342165500FB5A40 /* PlayerLogEntryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLogEntryType.swift; sourceTree = "<group>"; };
+		D0FD9B5B2342167600FB5A40 /* PlayerLogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLogEntry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +145,7 @@
 		D0ED142D23320B1B00FB51C8 /* CMPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				D0FD9B56234215D700FB5A40 /* Log */,
 				D0790E88233DD25E002A3B3E /* Console */,
 				D0C499FB2335372E001232A9 /* Misc */,
 				D0C499F4233536D9001232A9 /* Windows */,
@@ -148,6 +155,16 @@
 				D05E0A4F233B9F1D004A226E /* Media.xcassets */,
 			);
 			path = CMPlayer;
+			sourceTree = "<group>";
+		};
+		D0FD9B56234215D700FB5A40 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				D0FD9B57234215EB00FB5A40 /* PlayerLog.swift */,
+				D0FD9B592342165500FB5A40 /* PlayerLogEntryType.swift */,
+				D0FD9B5B2342167600FB5A40 /* PlayerLogEntry.swift */,
+			);
+			path = Log;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,9 +224,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0FD9B5C2342167600FB5A40 /* PlayerLogEntry.swift in Sources */,
 				D0B4E443233B4D090031584B /* ModeWindow.swift in Sources */,
 				D0ED142F23320B1B00FB51C8 /* main.swift in Sources */,
 				D0F162AB2338C8CF00754651 /* GenreWindow.swift in Sources */,
+				D0FD9B58234215EB00FB5A40 /* PlayerLog.swift in Sources */,
 				D042988F233A10DF00EBDC0B /* ArtistWindow.swift in Sources */,
 				D0F162A723386F7A00754651 /* PreferencesWindow.swift in Sources */,
 				D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */,
@@ -220,6 +239,7 @@
 				D0ED143E23323C5000FB51C8 /* SongEntry.swift in Sources */,
 				D0B4E441233B0E7D0031584B /* YearWindow.swift in Sources */,
 				D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */,
+				D0FD9B5A2342165500FB5A40 /* PlayerLogEntryType.swift in Sources */,
 				D0F162A9233896E200754651 /* ConsoleKeyboardHandler.swift in Sources */,
 				D093D0B323361497001842D6 /* PlayerLibrary.swift in Sources */,
 				D0C499F6233536F4001232A9 /* HelpWindow.swift in Sources */,
