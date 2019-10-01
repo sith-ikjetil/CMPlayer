@@ -991,9 +991,11 @@ internal class MainWindow {
         g_genres.removeAll()
         g_artists.removeAll()
         g_recordingYears.removeAll()
+        g_searchResult.removeAll()
         g_modeGenre.removeAll()
         g_modeArtist.removeAll()
         g_modeRecordingYears.removeAll()
+        g_modeSearch.removeAll()
         g_songs.removeAll()
         g_playlist.removeAll()
         g_library.library = []
