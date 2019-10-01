@@ -101,7 +101,12 @@ internal class SearchWindow {
             index_search += 1
         }
         
-        Console.printXY(1,23,"PRESS 'SPACEBAR' TO SET SEARCH MODE. PRESS ANY OTHER KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        if self.searchResult.count > 0 {
+            Console.printXY(1,23,"PRESS 'SPACEBAR' TO SET SEARCH MODE. PRESS ANY OTHER KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        }
+        else {
+            Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        }
         
         Console.printXY(1,24,"Songs Found: \(self.searchResult.count.itsToString())",80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
@@ -161,13 +166,15 @@ internal class SearchWindow {
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_SPACEBAR, closure: { () -> Bool in
-            g_modeArtist.removeAll()
-            g_modeGenre.removeAll()
-            g_modeRecordingYears.removeAll()
+            if self.searchResult.count > 0 {
+                g_modeArtist.removeAll()
+                g_modeGenre.removeAll()
+                g_modeRecordingYears.removeAll()
             
-            g_searchResult = self.searchResult
-            g_modeSearch = self.parts
-            g_modeSearchStats = self.stats
+                g_searchResult = self.searchResult
+                g_modeSearch = self.parts
+                g_modeSearchStats = self.stats
+            }
             return true
         })
         keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
