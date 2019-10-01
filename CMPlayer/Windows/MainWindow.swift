@@ -783,6 +783,10 @@ internal class MainWindow {
     func onCommandModeSearch(parts: [String]) -> Void {
         g_lock.lock()
         
+        g_modeSearch.removeAll()
+        g_modeSearchStats.removeAll()
+        g_searchResult.removeAll()
+        
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
         nparts.removeFirst()

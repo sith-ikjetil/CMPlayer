@@ -161,6 +161,10 @@ internal class SearchWindow {
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_SPACEBAR, closure: { () -> Bool in
+            g_modeArtist.removeAll()
+            g_modeGenre.removeAll()
+            g_modeRecordingYears.removeAll()
+            
             g_searchResult = self.searchResult
             g_modeSearch = self.parts
             g_modeSearchStats = self.stats
