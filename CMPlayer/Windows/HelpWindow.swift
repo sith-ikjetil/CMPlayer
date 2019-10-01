@@ -41,7 +41,7 @@ internal class HelpWindow {
                                       " disable aos", " :: disables playing on application startup",
                                       " rebuild songno"," :: rebuilds song numbers",
                                       " goto <mm:ss>", " :: moves playback point to minutes (mm) and seconds (ss) of current song",
-                                      " restart", " :: Restarts playing current playing song",
+                                      " replay", " :: starts playing current song from beginning again",
                                       " mode artist [<artist>]", " :: set playback of songs only from given artists",
                                       " mode artist", " :: removes mode artist playback and plays songs from entire library",
                                       " mode genre [<genre>]", " :: set playback of songs only from the given genres",
