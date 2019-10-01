@@ -53,7 +53,7 @@ internal class SearchWindow {
             }
         }
         
-        self.searchResult = self.searchResult.sorted { $0.artist < $1.artist }
+        self.searchResult = self.searchResult.sorted {sortSongEntry(se1: $0, se2: $1)} // $0.artist < $1.artist }
     }
     
     ///

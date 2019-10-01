@@ -328,7 +328,7 @@ internal func itsRenderMsToFullString(_ milliseconds: UInt64,_ bWithMilliseconds
 ///
 /// returns: True if path is under music root path. False otherwise.
 ///
-func isPathInMusicRootPath(path: String) -> Bool {
+internal func isPathInMusicRootPath(path: String) -> Bool {
     for p in PlayerPreferences.musicRootPath {
         if path.hasPrefix(p) {
             return true
@@ -362,7 +362,7 @@ internal extension Int {
 ///
 /// returns: string array result.
 ///
-func regExMatches(for regex: String, in text: String) -> [String] {
+internal func regExMatches(for regex: String, in text: String) -> [String] {
     do {
         let regex = try NSRegularExpression(pattern: regex)
         let results = regex.matches(in: text,
@@ -375,4 +375,24 @@ func regExMatches(for regex: String, in text: String) -> [String] {
     }
     
     return []
+}
+
+///
+/// Compares two song entries.
+///
+internal func sortSongEntry(se1: SongEntry, se2: SongEntry) -> Bool {
+    var cmp = se1.artist.compare(se2.artist)
+    
+    if cmp.rawValue == 0 {
+        cmp = se1.albumName.compare(se2.albumName)
+        if cmp.rawValue == 0 {
+            return se1.trackNo < se2.trackNo
+        }
+    }
+    
+    if cmp.rawValue < 0 {
+        return true
+    }
+    
+    return false
 }
