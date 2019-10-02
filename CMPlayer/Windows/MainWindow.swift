@@ -111,7 +111,7 @@ internal class MainWindow {
             Console.printXY(76,3,"Time", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
             //let sep = String("\u{2550}")
-            Console.printXY(1,4,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            Console.printXY(1,4,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.green, ConsoleColorModifier.bold)
         }
         else if PlayerPreferences.viewType == ViewType.Details {
             Console.printXY(1,3,"Song No.", g_fieldWidthSongNo, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
@@ -127,7 +127,7 @@ internal class MainWindow {
             Console.printXY(76,4,"Track", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
             //let sep = String("\u{2550}")
-            Console.printXY(1,5,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            Console.printXY(1,5,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.green, ConsoleColorModifier.bold)
         }
     }
 
