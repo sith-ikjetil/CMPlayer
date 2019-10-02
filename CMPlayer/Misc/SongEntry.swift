@@ -129,10 +129,15 @@ internal class SongEntry {
                 if let metadata = MDItemCreateWithURL(kCFAllocatorDefault, npath) {
                     if let ge = MDItemCopyAttribute(metadata,kMDItemMusicalGenre) as? String {
                         self.genre = ge.lowercased()
-                        
+                        if self.genre.count > 32 {
+                            self.genre = String(self.genre[self.genre.startIndex..<self.genre.index(self.genre.startIndex, offsetBy: 32)])
+                        }
                     }
                     if let an = MDItemCopyAttribute(metadata,kMDItemAlbum) as? String {
                         self.albumName = an
+                        if self.albumName.count > 32 {
+                            self.albumName = String(self.albumName[self.albumName.startIndex..<self.albumName.index(self.albumName.startIndex, offsetBy: 32)])
+                        }
                     }
                     if let geYear = MDItemCopyAttribute(metadata,kMDItemRecordingYear) as? Int {
                         self.recodingYear = geYear
