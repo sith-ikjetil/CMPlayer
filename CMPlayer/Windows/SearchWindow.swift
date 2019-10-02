@@ -22,13 +22,14 @@ internal class SearchWindow {
     var searchResult: [SongEntry] = []
     private var parts: [String] = []
     var stats: [Int] = []
+    private var type: SearchType = SearchType.ArtistOrTitle
     
     ///
     /// Performs search from arguments. Searches g_songs.
     ///
     /// parameter terms: Array of search terms.
     ///
-    func performSearch(terms: [String]) -> Void {
+    func performSearch(terms: [String], type: SearchType) -> Void {
         self.searchResult.removeAll(keepingCapacity: false)
 
         self.stats.removeAll()
@@ -39,28 +40,53 @@ internal class SearchWindow {
         for se in g_songs {
             let artist = se.artist.lowercased()
             let title = se.title.lowercased()
+            let album = se.albumName.lowercased()
             var index: Int = 0
             
             for t in terms {
                 let term = t.lowercased()
                 
-                if artist.contains(term) || title.contains(term) {
-                    self.searchResult.append(se)
-                    self.stats[index] += 1
-                    break
+                if type == SearchType.ArtistOrTitle {
+                    if artist.contains(term) || title.contains(term) {
+                        self.searchResult.append(se)
+                        self.stats[index] += 1
+                        break
+                    }
+                }
+                else if type == SearchType.Artist {
+                    if artist.contains(term) {
+                        self.searchResult.append(se)
+                        self.stats[index] += 1
+                        break
+                    }
+                }
+                else if type == SearchType.Title {
+                    if title.contains(term) {
+                        self.searchResult.append(se)
+                        self.stats[index] += 1
+                        break
+                    }
+                }
+                else if type == SearchType.Album {
+                    if album.contains(term) {
+                        self.searchResult.append(se)
+                        self.stats[index] += 1
+                        break
+                    }
                 }
                 index += 1
             }
         }
-        
+    
         self.searchResult = self.searchResult.sorted {sortSongEntry(se1: $0, se2: $1)} // $0.artist < $1.artist }
     }
     
     ///
     /// Shows this SearchWindow on screen.
     ///
-    func showWindow(parts: [String]) -> Void {
+    func showWindow(parts: [String], type: SearchType) -> Void {
         self.parts = parts
+        self.type = type
         self.renderSearch()
         self.run()
     }
@@ -123,7 +149,7 @@ internal class SearchWindow {
         }
         _ = p.removeFirst()
         self.searchIndex = 0
-        self.performSearch(terms: self.parts)
+        self.performSearch(terms: self.parts, type: self.type)
         self.renderSearch()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()

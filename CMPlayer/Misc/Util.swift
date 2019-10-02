@@ -12,6 +12,16 @@
 import Foundation
 
 ///
+/// SearchType, type of search
+///
+internal enum SearchType {
+    case Artist
+    case Title
+    case ArtistOrTitle
+    case Album
+}
+
+///
 /// SongEntry error when constructing a new object.
 ///
 internal enum SongEntryError : Error {
@@ -386,7 +396,12 @@ internal func sortSongEntry(se1: SongEntry, se2: SongEntry) -> Bool {
     if cmp.rawValue == 0 {
         cmp = se1.albumName.compare(se2.albumName)
         if cmp.rawValue == 0 {
-            return se1.trackNo < se2.trackNo
+            if se1.trackNo == se2.trackNo {
+                cmp = se1.title.compare(se2.title)
+            }
+            else {
+                return se1.trackNo < se2.trackNo
+            }
         }
     }
     

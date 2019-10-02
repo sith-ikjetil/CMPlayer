@@ -32,6 +32,9 @@ internal class MainWindow {
     private let commandsPause: [String] = ["pause"]
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
+    private let commandsSearchArtist: [String] = ["search-artist"]
+    private let commandsSearchTitle: [String] = ["search-title"]
+    private let commandsSearchAlbum : [String] = ["search-album"]
     private let commandsAbout: [String] = ["about"]
     private let commandsYear: [String] = ["year"]
     private let commandsGoTo: [String] = ["goto"]
@@ -438,9 +441,9 @@ internal class MainWindow {
         else if parts.count > 2 && parts[0] == self.commandsModeYear[0] && parts[1] == self.commandsModeYear[1] {
             self.onCommandModeYear(parts: parts)
         }
-        else if parts.count > 2 && parts[0] == self.commandsModeSearch[0] && parts[1] == self.commandsModeSearch[1] {
-            self.onCommandModeSearch(parts: parts)
-        }
+        //else if parts.count > 2 && parts[0] == self.commandsModeSearch[0] && parts[1] == self.commandsModeSearch[1] {
+        //    self.onCommandModeSearch(parts: parts)
+        //}
         else if parts.count == 2 && parts[0] == self.commandsModeGenre[0] && parts[1] == self.commandsModeGenre[1] {
             self.onCommandClearModeGenre(parts: parts)
         }
@@ -464,6 +467,15 @@ internal class MainWindow {
         }
         else if isCommandInCommands(command, self.commandsHelp) {
             self.onCommandHelp(parts: parts)
+        }
+        else if parts.count > 1 && parts[0] == self.commandsSearchArtist[0] {
+            self.onCommandSearchArtist(parts: parts)
+        }
+        else if parts.count > 1 && parts[0] == self.commandsSearchTitle[0] {
+            self.onCommandSearchTitle(parts: parts)
+        }
+        else if parts.count > 1 && parts[0] == self.commandsSearchAlbum[0] {
+            self.onCommandSearchAlbum(parts: parts)
         }
         else if isCommandInCommands(command, self.commandsClearMusicRootPath) {
             self.onCommandClearMusicRootPath(parts: parts)
@@ -870,39 +882,39 @@ internal class MainWindow {
     ///
     /// parameter parts: command array.
     ///
-    func onCommandModeSearch(parts: [String]) -> Void {
-        g_lock.lock()
-        
-        g_modeSearch.removeAll()
-        g_modeSearchStats.removeAll()
-        g_searchResult.removeAll()
-        
-        var nparts = reparseCurrentCommandArguments(parts)
-        nparts.removeFirst()
-        nparts.removeFirst()
-        
-        if nparts.count > 0 {
-            let wnd: SearchWindow = SearchWindow()
-            wnd.performSearch(terms: nparts)
-            if wnd.searchResult.count > 0 {
-                g_modeSearch = nparts
-                g_modeSearchStats = wnd.stats
-                g_searchResult = wnd.searchResult
-            }
-            else {
-                g_modeSearch = []
-                g_modeSearchStats = []
-                g_searchResult = []
-            }
-            
-            if g_modeSearch.count > 0 {
-                g_modeArtist.removeAll()
-                g_modeGenre.removeAll()
-                g_modeRecordingYears.removeAll()
-            }
-        }
-        g_lock.unlock()
-    }
+    //func onCommandModeSearch(parts: [String]) -> Void {
+    //    g_lock.lock()
+    //
+    //    g_modeSearch.removeAll()
+    //    g_modeSearchStats.removeAll()
+    //    g_searchResult.removeAll()
+    //
+    //    var nparts = reparseCurrentCommandArguments(parts)
+    //    nparts.removeFirst()
+    //    nparts.removeFirst()
+    //
+    //    if nparts.count > 0 {
+    //        let wnd: SearchWindow = SearchWindow()
+    //        wnd.performSearch(terms: nparts, type: SearchType.ArtistOrTitle)
+    //        if wnd.searchResult.count > 0 {
+    //            g_modeSearch = nparts
+    //            g_modeSearchStats = wnd.stats
+    //            g_searchResult = wnd.searchResult
+    //        }
+    //        else {
+    //            g_modeSearch = []
+    //            g_modeSearchStats = []
+    //            g_searchResult = []
+    //        }
+    //
+    //        if g_modeSearch.count > 0 {
+    //            g_modeArtist.removeAll()
+    //            g_modeGenre.removeAll()
+    //            g_modeRecordingYears.removeAll()
+    //        }
+    //    }
+    //    g_lock.unlock()
+    //}
     
     ///
     /// Clear mode genre.
@@ -1182,7 +1194,64 @@ internal class MainWindow {
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
-            wnd.showWindow(parts: nparts)
+            wnd.showWindow(parts: nparts, type: SearchType.ArtistOrTitle)
+            Console.clearScreen()
+            self.renderScreen()
+            self.isShowingTopWindow = false
+        }
+    }
+    
+    ///
+    /// Show search window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandSearchArtist(parts: [String]) -> Void {
+        var nparts = reparseCurrentCommandArguments(parts)
+        nparts.removeFirst()
+        
+        if nparts.count > 0 {
+            self.isShowingTopWindow = true
+            let wnd: SearchWindow = SearchWindow()
+            wnd.showWindow(parts: nparts, type: SearchType.Artist)
+            Console.clearScreen()
+            self.renderScreen()
+            self.isShowingTopWindow = false
+        }
+    }
+    
+    ///
+    /// Show search window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandSearchTitle(parts: [String]) -> Void {
+        var nparts = reparseCurrentCommandArguments(parts)
+        nparts.removeFirst()
+        
+        if nparts.count > 0 {
+            self.isShowingTopWindow = true
+            let wnd: SearchWindow = SearchWindow()
+            wnd.showWindow(parts: nparts, type: SearchType.Title)
+            Console.clearScreen()
+            self.renderScreen()
+            self.isShowingTopWindow = false
+        }
+    }
+    
+    ///
+    /// Show search window.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandSearchAlbum(parts: [String]) -> Void {
+        var nparts = reparseCurrentCommandArguments(parts)
+        nparts.removeFirst()
+        
+        if nparts.count > 0 {
+            self.isShowingTopWindow = true
+            let wnd: SearchWindow = SearchWindow()
+            wnd.showWindow(parts: nparts, type: SearchType.Album)
             Console.clearScreen()
             self.renderScreen()
             self.isShowingTopWindow = false
