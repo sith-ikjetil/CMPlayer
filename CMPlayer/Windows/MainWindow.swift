@@ -24,6 +24,7 @@ internal class MainWindow {
     private let commandsExit: [String] = ["exit", "quit"]
     private let commandsUpdate: [String] = ["update cmplayer"]
     private let commandsSetViewType: [String] = ["set", "viewtype"]
+    private let commandsSetBg: [String] = ["set", "theme"]
     private let commandsNextSong: [String] = ["next", "skip"]
     private let commandsHelp: [String] = ["help","?"]
     private let commandsReplay: [String] = ["replay"]
@@ -141,36 +142,39 @@ internal class MainWindow {
     ///
     func renderSong(_ y: Int, _ song: SongEntry, _ time: UInt64) -> Void
     {
+        let bgColor = (PlayerPreferences.songColorTheme == SongColorTheme.Blue) ? ConsoleColor.blue : ConsoleColor.black
+        let songNoColor = (PlayerPreferences.songColorTheme == SongColorTheme.Blue) ? ConsoleColor.white : ConsoleColor.cyan
+        
         if PlayerPreferences.viewType == ViewType.Default {
-            Console.printXY(1, y, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1, y, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, songNoColor, ConsoleColorModifier.bold)
             
-            Console.printXY(10, y, song.artist, g_fieldWidthArtist, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(10, y, song.artist, g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
-            Console.printXY(43, y, song.title, g_fieldWidthTitle, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(43, y, song.title, g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
             let timeString: String = itsRenderMsToFullString(time, false)
             let endTimePart: String = String(timeString[timeString.index(timeString.endIndex, offsetBy: -5)..<timeString.endIndex])
-            Console.printXY(76, y, endTimePart, g_fieldWidthDuration, .ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(76, y, endTimePart, g_fieldWidthDuration, .ignore, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         }
         else if PlayerPreferences.viewType == ViewType.Details {
-            Console.printXY(1, y, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-            Console.printXY(1, y+1, " ", g_fieldWidthSongNo+1, .right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1, y, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, songNoColor, ConsoleColorModifier.bold)
+            Console.printXY(1, y+1, " ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
-            Console.printXY(10, y, song.artist, g_fieldWidthArtist, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-            Console.printXY(10, y+1, song.albumName, g_fieldWidthArtist, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(10, y, song.artist, g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(10, y+1, song.albumName, g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
-            Console.printXY(43, y, song.title, g_fieldWidthTitle, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-            Console.printXY(43, y+1, song.genre, g_fieldWidthTitle, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(43, y, song.title, g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(43, y+1, song.genre, g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
             let timeString: String = itsRenderMsToFullString(time, false)
             let endTimePart: String = String(timeString[timeString.index(timeString.endIndex, offsetBy: -5)..<timeString.endIndex])
-            Console.printXY(76, y, endTimePart, g_fieldWidthDuration, .ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(76, y, endTimePart, g_fieldWidthDuration, .ignore, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
             var tno = String(song.trackNo)
             if tno.count > 5 {
                 tno = "?"
             }
-            Console.printXY(76, y+1, tno, g_fieldWidthDuration, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(76, y+1, tno, g_fieldWidthDuration, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         }
     }
     
@@ -455,6 +459,9 @@ internal class MainWindow {
         else if parts.count == 3 && parts[0] == self.commandsSetViewType[0] && parts[1] == self.commandsSetViewType[1] {
             self.onCommandSetViewType(parts: parts)
         }
+        else if parts.count == 3 && parts[0] == self.commandsSetBg[0] && parts[1] == self.commandsSetBg[1] {
+            self.onCommandSetSongColorTheme(parts: parts)
+        }
         else if isCommandInCommands(command, self.commandsHelp) {
             self.onCommandHelp(parts: parts)
         }
@@ -493,6 +500,22 @@ internal class MainWindow {
         }
         
         return false
+    }
+    
+    ///
+    /// Sets main window song bg color
+    ///
+    func onCommandSetSongColorTheme(parts: [String]) -> Void {
+        if parts.count == 3 {
+            if ( parts[2] == "blue" ) {
+                PlayerPreferences.songColorTheme = SongColorTheme.Blue
+                PlayerPreferences.savePreferences()
+            }
+            else if parts[2] == "black" {
+                PlayerPreferences.songColorTheme = SongColorTheme.Black
+                PlayerPreferences.savePreferences()
+            }
+        }
     }
     
     ///
