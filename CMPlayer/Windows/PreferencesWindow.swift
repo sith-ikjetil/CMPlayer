@@ -56,6 +56,8 @@ internal class PreferencesWindow {
         self.preferencesText.append(" :: \(PlayerPreferences.crossfadeSongs)")
         self.preferencesText.append(" Crossfade Time")
         self.preferencesText.append(" :: \(PlayerPreferences.crossfadeTimeInSeconds) seconds")
+        self.preferencesText.append(" View Type")
+        self.preferencesText.append(" :: \(PlayerPreferences.viewType.rawValue)")
     }
     
     ///

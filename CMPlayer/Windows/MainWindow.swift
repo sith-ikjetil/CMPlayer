@@ -23,6 +23,7 @@ internal class MainWindow {
     private var currentCommand: String = ""
     private let commandsExit: [String] = ["exit", "quit"]
     private let commandsUpdate: [String] = ["update cmplayer"]
+    private let commandsSetViewType: [String] = ["set", "viewtype"]
     private let commandsNextSong: [String] = ["next", "skip"]
     private let commandsHelp: [String] = ["help","?"]
     private let commandsReplay: [String] = ["replay"]
@@ -99,16 +100,34 @@ internal class MainWindow {
         
         MainWindow.renderHeader(showTime: true)
         
-        Console.printXY(1,3,"Song No.", g_fieldWidthSongNo, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        if PlayerPreferences.viewType == ViewType.Default {
+            Console.printXY(1,3,"Song No.", g_fieldWidthSongNo, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(10,3,"Artist", g_fieldWidthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(10,3,"Artist", g_fieldWidthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(43,3,"Title", g_fieldWidthTitle, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(43,3,"Title", g_fieldWidthTitle, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        Console.printXY(76,3,"Time", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(76,3,"Time", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-        //let sep = String("\u{2550}")
-        Console.printXY(1,4,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+            //let sep = String("\u{2550}")
+            Console.printXY(1,4,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        }
+        else if PlayerPreferences.viewType == ViewType.Details {
+            Console.printXY(1,3,"Song No.", g_fieldWidthSongNo, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(1,4," ", g_fieldWidthSongNo+1, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            
+            Console.printXY(10,3,"Artist", g_fieldWidthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(10,4,"Album Name", g_fieldWidthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+            Console.printXY(43,3,"Title", g_fieldWidthTitle, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(43,4,"Genre", g_fieldWidthTitle, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+            Console.printXY(76,3,"Time", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(76,4,"Track", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
+            //let sep = String("\u{2550}")
+            Console.printXY(1,5,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        }
     }
 
     ///
@@ -120,18 +139,39 @@ internal class MainWindow {
     /// parameter song. Title.
     /// parameter time. Duration (ms).
     ///
-    func renderSong(_ y: Int, _ songNo: Int, _ artist: String, _ song: String, _ time: UInt64) -> Void
+    func renderSong(_ y: Int, _ song: SongEntry, _ time: UInt64) -> Void
     {
-
-        Console.printXY(1, y, String(songNo)+" ", g_fieldWidthSongNo+1, .right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        Console.printXY(10, y, artist, g_fieldWidthArtist, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        Console.printXY(43, y, song, g_fieldWidthTitle, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        let timeString: String = itsRenderMsToFullString(time, false)
-        let endTimePart: String = String(timeString[timeString.index(timeString.endIndex, offsetBy: -5)..<timeString.endIndex])
-        Console.printXY(76, y, endTimePart, g_fieldWidthDuration, .ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        if PlayerPreferences.viewType == ViewType.Default {
+            Console.printXY(1, y, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            
+            Console.printXY(10, y, song.artist, g_fieldWidthArtist, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            
+            Console.printXY(43, y, song.title, g_fieldWidthTitle, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            
+            let timeString: String = itsRenderMsToFullString(time, false)
+            let endTimePart: String = String(timeString[timeString.index(timeString.endIndex, offsetBy: -5)..<timeString.endIndex])
+            Console.printXY(76, y, endTimePart, g_fieldWidthDuration, .ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        }
+        else if PlayerPreferences.viewType == ViewType.Details {
+            Console.printXY(1, y, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1, y+1, " ", g_fieldWidthSongNo+1, .right, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            
+            Console.printXY(10, y, song.artist, g_fieldWidthArtist, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(10, y+1, song.albumName, g_fieldWidthArtist, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            
+            Console.printXY(43, y, song.title, g_fieldWidthTitle, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(43, y+1, song.genre, g_fieldWidthTitle, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            
+            let timeString: String = itsRenderMsToFullString(time, false)
+            let endTimePart: String = String(timeString[timeString.index(timeString.endIndex, offsetBy: -5)..<timeString.endIndex])
+            Console.printXY(76, y, endTimePart, g_fieldWidthDuration, .ignore, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            
+            var tno = String(song.trackNo)
+            if tno.count > 5 {
+                tno = "?"
+            }
+            Console.printXY(76, y+1, tno, g_fieldWidthDuration, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        }
     }
     
     ///
@@ -158,31 +198,44 @@ internal class MainWindow {
     /// Traverses all songs and ask the screen renderer to render them on screen
     ///
     func renderSongs() -> Void {
-        var idx: Int = 5
+        var idx: Int = (PlayerPreferences.viewType == ViewType.Default) ? 5 : 6
+        let timeRow: Int = (PlayerPreferences.viewType == ViewType.Default) ? 5 : 6
         var index: Int = 0
-        while idx < 22 {
+        let max: Int = (PlayerPreferences.viewType == ViewType.Default) ? 22 : 21
+        while idx < max {
             if index < g_playlist.count {
                 let s = g_playlist[index]
                 
-                if idx == 5 {
+                if idx == timeRow {
                     if g_player.audioPlayerActive == -1 && g_playlist.count > 0{
-                        renderSong(idx, s.songNo, s.artist, s.title, g_playlist[0].duration)
+                        renderSong(idx, s, g_playlist[0].duration)
                     }
                     else if g_player.audioPlayerActive == 1 {
-                        renderSong(idx, s.songNo, s.artist, s.title, g_player.durationAudioPlayer1)
+                        renderSong(idx, s, g_player.durationAudioPlayer1)
                     }
                     else if g_player.audioPlayerActive == 2 {
-                        renderSong(idx, s.songNo, s.artist, s.title, g_player.durationAudioPlayer2)
+                        renderSong(idx, s, g_player.durationAudioPlayer2)
                     }
                 }
                 else {
-                    renderSong(idx, s.songNo, s.artist, s.title, s.duration)
+                    renderSong(idx, s, s.duration)
                 }
             }
             else {
-                Console.printXY(1, idx, " ", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                if PlayerPreferences.viewType == ViewType.Default {
+                    Console.printXY(1, idx, " ", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                }
+                else if PlayerPreferences.viewType == ViewType.Details {
+                    Console.printXY(1, idx, " ", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    Console.printXY(1, idx+1, " ", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                }
             }
-            idx += 1
+            if PlayerPreferences.viewType == ViewType.Default {
+                idx += 1
+            }
+            else if PlayerPreferences.viewType == ViewType.Details {
+                idx += 2
+            }
             index += 1
         }
     }
@@ -399,6 +452,9 @@ internal class MainWindow {
         else if parts.count == 2 && parts[0] == self.commandsInfo[0] {
             self.onCommandInfoSong(parts: parts)
         }
+        else if parts.count == 3 && parts[0] == self.commandsSetViewType[0] && parts[1] == self.commandsSetViewType[1] {
+            self.onCommandSetViewType(parts: parts)
+        }
         else if isCommandInCommands(command, self.commandsHelp) {
             self.onCommandHelp(parts: parts)
         }
@@ -437,6 +493,17 @@ internal class MainWindow {
         }
         
         return false
+    }
+    
+    ///
+    /// Sets ViewType on Main Window
+    ///
+    func onCommandSetViewType(parts: [String]) -> Void {
+        if parts.count == 3 {
+            PlayerPreferences.viewType = ViewType(rawValue: parts[2].lowercased() ) ?? ViewType.Default
+            PlayerPreferences.savePreferences()
+            self.renderFrame()
+        }
     }
     
     ///

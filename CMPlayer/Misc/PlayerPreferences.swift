@@ -29,6 +29,14 @@ internal enum LogApplicationStartLoadType: String {
 }
 
 ///
+/// MainWindow View Type
+///
+internal enum ViewType: String {
+    case Default = "default"
+    case Details = "details"
+}
+
+///
 /// Represents CMPlayer PlayerPreferences.
 ///
 internal class PlayerPreferences {
@@ -40,7 +48,8 @@ internal class PlayerPreferences {
     static var musicFormats: String = "mp3;mp4;m4a;wav"
     static var autoplayOnStartup: Bool = true
     static var crossfadeSongs: Bool = true
-    static var crossfadeTimeInSeconds: Int = 5
+    static var crossfadeTimeInSeconds: Int = 4
+    static var viewType: ViewType = ViewType.Default
     static var logInformation: Bool = true
     static var logWarning: Bool = true
     static var logError: Bool = true
@@ -85,6 +94,10 @@ internal class PlayerPreferences {
                         PlayerPreferences.crossfadeTimeInSeconds = cftis
                     }
                 }
+                if let aViewType = xeGeneral.attribute(forName: "viewType") {
+                    PlayerPreferences.viewType = ViewType(rawValue: aViewType.stringValue ?? "default") ?? ViewType.Default
+                }
+                
                 
                 let xeMusicRootPaths = xeGeneral.elements(forName: "musicRootPath")
                 for p in xeMusicRootPaths {
@@ -177,6 +190,11 @@ internal class PlayerPreferences {
         xnCrossfadeTimeInSeconds.name = "crossfadeTimeInSeconds"
         xnCrossfadeTimeInSeconds.setStringValue(String(PlayerPreferences.crossfadeTimeInSeconds), resolvingEntities: true)
         xeGeneral.addAttribute(xnCrossfadeTimeInSeconds)
+        
+        let xnViewType: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+        xnViewType.name = "viewType"
+        xnViewType.setStringValue(self.viewType.rawValue, resolvingEntities: true)
+        xeGeneral.addAttribute(xnViewType)
         
         //
         // log
