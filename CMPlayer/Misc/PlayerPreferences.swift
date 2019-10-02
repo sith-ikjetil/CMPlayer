@@ -54,7 +54,7 @@ internal class PlayerPreferences {
     static var autoplayOnStartup: Bool = true
     static var crossfadeSongs: Bool = true
     static var crossfadeTimeInSeconds: Int = 4
-    static var viewType: ViewType = ViewType.Default
+    static var viewType: ViewType = ViewType.Details
     static var songColorTheme: SongColorTheme = SongColorTheme.Blue
     static var logInformation: Bool = true
     static var logWarning: Bool = true
