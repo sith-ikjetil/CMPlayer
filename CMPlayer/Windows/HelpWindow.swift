@@ -58,7 +58,7 @@ internal class HelpWindow {
                                       " info <song no>", " :: show information about song with given song number",
                                       " update cmplayer", " :: updates cmplayer if new version is found online",
                                       " set viewtype <type>", " :: sets view type. can be 'default' or 'details'",
-                                      " set theme <color>", " :: sets song theme color. color can be 'blue' or 'black'"]
+                                      " set theme <color>", " :: sets theme color. color can be 'blue' or 'black'"]
     
     ///
     /// Shows this HelpWindow on screen.
