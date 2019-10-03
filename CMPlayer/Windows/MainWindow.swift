@@ -88,11 +88,13 @@ internal class MainWindow {
     /// parameter showTime: True if time string is to be shown in header. False otherwise.
     ///
     static func renderHeader(showTime: Bool) -> Void {
+        let bgColor = ConsoleColor.blue //g_mainWindow?.getThemeBgColor() ?? ConsoleColor.blue
+        
         if showTime {
-            Console.printXY(1,1,"CMPlayer | \(g_versionString) | \(itsRenderMsToFullString(MainWindow.timeElapsedMs, false))", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1,1,"CMPlayer | \(g_versionString) | \(itsRenderMsToFullString(MainWindow.timeElapsedMs, false))", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         }
         else {
-            Console.printXY(1,1,"CMPlayer | \(g_versionString)", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1,1,"CMPlayer | \(g_versionString)", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         }
     }
     
@@ -103,33 +105,37 @@ internal class MainWindow {
         
         MainWindow.renderHeader(showTime: true)
         
+        let bgColor = getThemeColor()
+        
+        Console.printXY(1,2," ", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+    
         if PlayerPreferences.viewType == ViewType.Default {
-            Console.printXY(1,3,"Song No.", g_fieldWidthSongNo, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(1,3,"Song No.", g_fieldWidthSongNo+1, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-            Console.printXY(10,3,"Artist", g_fieldWidthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(10,3,"Artist", g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-            Console.printXY(43,3,"Title", g_fieldWidthTitle, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(43,3,"Title", g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-            Console.printXY(76,3,"Time", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(76,3,"Time", g_fieldWidthDuration, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
             //let sep = String("\u{2550}")
-            Console.printXY(1,4,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.green, ConsoleColorModifier.bold)
+            Console.printXY(1,4,"=", 80, .left, "=", bgColor, ConsoleColorModifier.none, ConsoleColor.green, ConsoleColorModifier.bold)
         }
         else if PlayerPreferences.viewType == ViewType.Details {
-            Console.printXY(1,3,"Song No.", g_fieldWidthSongNo, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-            Console.printXY(1,4," ", g_fieldWidthSongNo+1, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(1,3,"Song No.", g_fieldWidthSongNo+1, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(1,4," ", g_fieldWidthSongNo+1, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
             
-            Console.printXY(10,3,"Artist", g_fieldWidthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-            Console.printXY(10,4,"Album Name", g_fieldWidthArtist, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(10,3,"Artist", g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(10,4,"Album Name", g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-            Console.printXY(43,3,"Title", g_fieldWidthTitle, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-            Console.printXY(43,4,"Genre", g_fieldWidthTitle, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(43,3,"Title", g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(43,4,"Genre", g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
-            Console.printXY(76,3,"Time", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-            Console.printXY(76,4,"Track", g_fieldWidthDuration, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(76,3,"Time", g_fieldWidthDuration, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+            Console.printXY(76,4,"Track", g_fieldWidthDuration, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
             //let sep = String("\u{2550}")
-            Console.printXY(1,5,"=", 80, .left, "=", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.green, ConsoleColorModifier.bold)
+            Console.printXY(1,5,"=", 80, .left, "=", bgColor, ConsoleColorModifier.none, ConsoleColor.green, ConsoleColorModifier.bold)
         }
     }
 
@@ -144,8 +150,8 @@ internal class MainWindow {
     ///
     func renderSong(_ y: Int, _ song: SongEntry, _ time: UInt64) -> Void
     {
-        let bgColor = (PlayerPreferences.songColorTheme == SongColorTheme.Blue) ? ConsoleColor.blue : ConsoleColor.black
-        let songNoColor = (PlayerPreferences.songColorTheme == SongColorTheme.Blue) ? ConsoleColor.white : ConsoleColor.cyan
+        let bgColor = getThemeColor()
+        let songNoColor = (PlayerPreferences.colorTheme == ColorTheme.Blue) ? ConsoleColor.white : ConsoleColor.cyan
         
         if PlayerPreferences.viewType == ViewType.Default {
             Console.printXY(1, y, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, songNoColor, ConsoleColorModifier.bold)
@@ -189,7 +195,7 @@ internal class MainWindow {
         if text.count > 77 {
             text = String(text[text.index(text.endIndex, offsetBy: -77)..<text.endIndex])
         }
-        Console.printXY(1,23,">: " + text, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,23,">: " + text, 80, .left, " ", getThemeColor(), ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     ///
@@ -197,7 +203,7 @@ internal class MainWindow {
     ///
     func renderStatusLine() -> Void
     {
-        Console.printXY(1,24,"Song Count: \(g_songs.count.itsToString())", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"Song Count: \(g_songs.count.itsToString())", 80, .center, " ", getThemeColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///
@@ -208,6 +214,7 @@ internal class MainWindow {
         let timeRow: Int = (PlayerPreferences.viewType == ViewType.Default) ? 5 : 6
         var index: Int = 0
         let max: Int = (PlayerPreferences.viewType == ViewType.Default) ? 22 : 21
+        let bgColor = getThemeColor()
         while idx < max {
             if index < g_playlist.count {
                 let s = g_playlist[index]
@@ -229,11 +236,11 @@ internal class MainWindow {
             }
             else {
                 if PlayerPreferences.viewType == ViewType.Default {
-                    Console.printXY(1, idx, " ", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    Console.printXY(1, idx, " ", 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
                 }
                 else if PlayerPreferences.viewType == ViewType.Details {
-                    Console.printXY(1, idx, " ", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-                    Console.printXY(1, idx+1, " ", 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    Console.printXY(1, idx, " ", 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    Console.printXY(1, idx+1, " ", 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
                 }
             }
             if PlayerPreferences.viewType == ViewType.Default {
@@ -244,6 +251,7 @@ internal class MainWindow {
             }
             index += 1
         }
+        Console.printXY(1, 22, self.addendumText, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///
@@ -273,7 +281,7 @@ internal class MainWindow {
                 if !self.isShowingTopWindow {
                     MainWindow.renderHeader(showTime: true)
                     self.renderSongs()
-                    Console.printXY(1, 22, self.addendumText, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    Console.printXY(1, 22, self.addendumText, 80, .left, " ", getThemeColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
                 }
                 
                 g_lock.lock()
@@ -462,7 +470,7 @@ internal class MainWindow {
             self.onCommandSetViewType(parts: parts)
         }
         else if parts.count == 3 && parts[0] == self.commandsSetBg[0] && parts[1] == self.commandsSetBg[1] {
-            self.onCommandSetSongColorTheme(parts: parts)
+            self.onCommandSetColorTheme(parts: parts)
         }
         else if isCommandInCommands(command, self.commandsHelp) {
             self.onCommandHelp(parts: parts)
@@ -516,16 +524,17 @@ internal class MainWindow {
     ///
     /// Sets main window song bg color
     ///
-    func onCommandSetSongColorTheme(parts: [String]) -> Void {
+    func onCommandSetColorTheme(parts: [String]) -> Void {
         if parts.count == 3 {
             if ( parts[2] == "blue" ) {
-                PlayerPreferences.songColorTheme = SongColorTheme.Blue
+                PlayerPreferences.colorTheme = ColorTheme.Blue
                 PlayerPreferences.savePreferences()
             }
             else if parts[2] == "black" {
-                PlayerPreferences.songColorTheme = SongColorTheme.Black
+                PlayerPreferences.colorTheme = ColorTheme.Black
                 PlayerPreferences.savePreferences()
             }
+            self.renderScreen()
         }
     }
     
@@ -610,7 +619,7 @@ internal class MainWindow {
     /// parameter parts: command array.
     ///
     func onCommandRepaint(parts: [String]) -> Void {
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
     }
     
@@ -972,7 +981,7 @@ internal class MainWindow {
                         self.isShowingTopWindow = true
                         let wnd: InfoWindow = InfoWindow()
                         wnd.showWindow(song: s)
-                        Console.clearScreen()
+                        Console.clearScreenCurrentTheme()
                         self.renderScreen()
                         self.isShowingTopWindow = false
                         break
@@ -991,7 +1000,7 @@ internal class MainWindow {
         self.isShowingTopWindow = true
         let wnd: HelpWindow = HelpWindow()
         wnd.showWindow()
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
         self.isShowingTopWindow = false
     }
@@ -1015,7 +1024,7 @@ internal class MainWindow {
         self.isShowingTopWindow = true
         let wnd: AboutWindow = AboutWindow()
         wnd.showWindow()
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
         self.isShowingTopWindow = false
     }
@@ -1029,7 +1038,7 @@ internal class MainWindow {
         self.isShowingTopWindow = true
         let wnd: ArtistWindow = ArtistWindow()
         wnd.showWindow()
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
         self.isShowingTopWindow = false
     }
@@ -1043,7 +1052,7 @@ internal class MainWindow {
         self.isShowingTopWindow = true
         let wnd: GenreWindow = GenreWindow()
         wnd.showWindow()
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
         self.isShowingTopWindow = false
     }
@@ -1057,7 +1066,7 @@ internal class MainWindow {
         self.isShowingTopWindow = true
         let wnd: ModeWindow = ModeWindow()
         wnd.showWindow()
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
         self.isShowingTopWindow = false
     }
@@ -1074,7 +1083,7 @@ internal class MainWindow {
         let song = g_playlist[0]
         g_lock.unlock()
         wnd.showWindow(song: song)
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
         self.isShowingTopWindow = false
     }
@@ -1114,13 +1123,13 @@ internal class MainWindow {
                 
             }
             PlayerPreferences.savePreferences()
-            Console.clearScreen()
+            Console.clearScreenCurrentTheme()
             MainWindow.renderHeader(showTime: false)
             self.isShowingTopWindow = true
             g_player.initializeSongs()
         }
         else {
-            Console.clearScreen()
+            Console.clearScreenCurrentTheme()
             MainWindow.renderHeader(showTime: false)
             self.isShowingTopWindow = true
             g_player.initializeSongs()
@@ -1162,7 +1171,7 @@ internal class MainWindow {
         self.isShowingTopWindow = true
         let wnd: PreferencesWindow = PreferencesWindow()
         wnd.showWindow()
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
         self.isShowingTopWindow = false
     }
@@ -1176,7 +1185,7 @@ internal class MainWindow {
         self.isShowingTopWindow = true
         let wnd: YearWindow = YearWindow()
         wnd.showWindow()
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         self.renderScreen()
         self.isShowingTopWindow = false
     }
@@ -1194,7 +1203,7 @@ internal class MainWindow {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
             wnd.showWindow(parts: nparts, type: SearchType.ArtistOrTitle)
-            Console.clearScreen()
+            Console.clearScreenCurrentTheme()
             self.renderScreen()
             self.isShowingTopWindow = false
         }
@@ -1213,7 +1222,7 @@ internal class MainWindow {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
             wnd.showWindow(parts: nparts, type: SearchType.Artist)
-            Console.clearScreen()
+            Console.clearScreenCurrentTheme()
             self.renderScreen()
             self.isShowingTopWindow = false
         }
@@ -1232,7 +1241,7 @@ internal class MainWindow {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
             wnd.showWindow(parts: nparts, type: SearchType.Title)
-            Console.clearScreen()
+            Console.clearScreenCurrentTheme()
             self.renderScreen()
             self.isShowingTopWindow = false
         }
@@ -1251,7 +1260,7 @@ internal class MainWindow {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
             wnd.showWindow(parts: nparts, type: SearchType.Album)
-            Console.clearScreen()
+            Console.clearScreenCurrentTheme()
             self.renderScreen()
             self.isShowingTopWindow = false
         }

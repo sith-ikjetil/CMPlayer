@@ -79,7 +79,7 @@ internal class Player {
             self.play(player: 1, playlistIndex: 0)
         }
         
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
     }
     
     ///

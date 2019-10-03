@@ -411,3 +411,15 @@ internal func sortSongEntry(se1: SongEntry, se2: SongEntry) -> Bool {
     
     return false
 }
+
+///
+/// Give current theme color
+///
+func getThemeColor() -> ConsoleColor {
+  switch PlayerPreferences.colorTheme {
+  case .Blue:
+      return ConsoleColor.blue
+  case .Black:
+      return ConsoleColor.black
+  }
+}

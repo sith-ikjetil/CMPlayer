@@ -36,7 +36,7 @@ internal enum ViewType: String {
     case Details = "details"
 }
 
-internal enum SongColorTheme: String {
+internal enum ColorTheme: String {
     case Blue = "blue"
     case Black = "black"
 }
@@ -55,7 +55,7 @@ internal class PlayerPreferences {
     static var crossfadeSongs: Bool = true
     static var crossfadeTimeInSeconds: Int = 4
     static var viewType: ViewType = ViewType.Details
-    static var songColorTheme: SongColorTheme = SongColorTheme.Blue
+    static var colorTheme: ColorTheme = ColorTheme.Blue
     static var logInformation: Bool = true
     static var logWarning: Bool = true
     static var logError: Bool = true
@@ -103,8 +103,8 @@ internal class PlayerPreferences {
                 if let aViewType = xeGeneral.attribute(forName: "viewType") {
                     PlayerPreferences.viewType = ViewType(rawValue: aViewType.stringValue ?? "default") ?? ViewType.Default
                 }
-                if let aSongColorTheme = xeGeneral.attribute(forName: "songColorTheme") {
-                    PlayerPreferences.songColorTheme = SongColorTheme(rawValue: aSongColorTheme.stringValue ?? "blue") ?? SongColorTheme.Blue
+                if let aColorTheme = xeGeneral.attribute(forName: "colorTheme") {
+                    PlayerPreferences.colorTheme = ColorTheme(rawValue: aColorTheme.stringValue ?? "blue") ?? ColorTheme.Blue
                 }
                 
                 
@@ -205,10 +205,10 @@ internal class PlayerPreferences {
         xnViewType.setStringValue(self.viewType.rawValue, resolvingEntities: true)
         xeGeneral.addAttribute(xnViewType)
         
-        let xnSongColorTheme: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
-        xnSongColorTheme.name = "songColorTheme"
-        xnSongColorTheme.setStringValue(self.songColorTheme.rawValue, resolvingEntities: true)
-        xeGeneral.addAttribute(xnSongColorTheme)
+        let xnColorTheme: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
+        xnColorTheme.name = "colorTheme"
+        xnColorTheme.setStringValue(self.colorTheme.rawValue, resolvingEntities: true)
+        xeGeneral.addAttribute(xnColorTheme)
         
         //
         // log

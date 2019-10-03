@@ -79,17 +79,18 @@ internal class ModeWindow {
     /// Renders screen output. Does clear screen first.
     ///
     func renderMode() -> Void {
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         
         MainWindow.renderHeader(showTime: false)
         
-        Console.printXY(1,3,"### MODE ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        let bgColor = getThemeColor()
+        Console.printXY(1,3,"### MODE ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var bMode: Bool = false;
         if g_modeRecordingYears.count > 0 || g_modeGenre.count > 0 || g_modeArtist.count > 0 {
             bMode = true
         }
-        Console.printXY(1,4,"mode is: \((!bMode) ? "off" : "on")", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,4,"mode is: \((!bMode) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = modeIndex
@@ -106,17 +107,17 @@ internal class ModeWindow {
             let se = modeText[index_search]
             
             if !se.hasPrefix(" ::") {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             }
             else {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             }
             
             index_screen_lines += 1
             index_search += 1
         }
         
-        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///

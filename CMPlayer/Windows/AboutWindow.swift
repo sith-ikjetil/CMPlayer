@@ -44,11 +44,12 @@ internal class AboutWindow {
     /// Renders screen output. Does clear screen first.
     ///
     func renderAbout() -> Void {
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         
         MainWindow.renderHeader(showTime: false)
         
-        Console.printXY(1,3,"### ABOUT ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        let bgColor = getThemeColor()
+        Console.printXY(1,3,"### ABOUT ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = self.aboutIndex
@@ -64,7 +65,7 @@ internal class AboutWindow {
             
             let se = self.aboutText[index_search]
             
-            Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             
             index_screen_lines += 1
             index_search += 1
@@ -72,7 +73,7 @@ internal class AboutWindow {
         
         //Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE TEXT. OTHER KEY TO EXIT ABOUT.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///

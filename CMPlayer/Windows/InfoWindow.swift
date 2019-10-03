@@ -76,11 +76,12 @@ internal class InfoWindow {
     /// Renders screen output. Does clear screen first.
     ///
     func renderInfo() -> Void {
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         
         MainWindow.renderHeader(showTime: false)
         
-        Console.printXY(1,3,"### SONG INFORMATION ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        let bgColor = getThemeColor()
+        Console.printXY(1,3,"### SONG INFORMATION ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = infoIndex
@@ -97,17 +98,17 @@ internal class InfoWindow {
             let se = infoText[index_search]
             
             if !se.hasPrefix(" ::") {
-                Console.printXY(1, index_screen_lines, se, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             }
             else {
-                Console.printXY(1, index_screen_lines, se, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             }
             
             index_screen_lines += 1
             index_search += 1
         }
         
-        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///

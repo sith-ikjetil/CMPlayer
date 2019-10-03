@@ -59,18 +59,19 @@ internal class PreferencesWindow {
         self.preferencesText.append(" View Type")
         self.preferencesText.append(" :: \(PlayerPreferences.viewType.rawValue)")
         self.preferencesText.append(" Song Theme Color")
-        self.preferencesText.append(" :: \(PlayerPreferences.songColorTheme.rawValue)")
+        self.preferencesText.append(" :: \(PlayerPreferences.colorTheme.rawValue)")
     }
     
     ///
     /// Renders screen output. Does clear screen first.
     ///
     func renderHelp() -> Void {
-        Console.clearScreen()
+        Console.clearScreenCurrentTheme()
         
         MainWindow.renderHeader(showTime: false)
         
-        Console.printXY(1,3,"### PREFERENCES ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        let bgColor = getThemeColor()
+        Console.printXY(1,3,"### PREFERENCES ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = preferencesIndex
@@ -87,17 +88,17 @@ internal class PreferencesWindow {
             let se = preferencesText[index_search]
             
             if se.hasPrefix(" ::") {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             }
             else {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             }
             
             index_screen_lines += 1
             index_search += 1
         }
         
-        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///

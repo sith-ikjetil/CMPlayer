@@ -65,6 +65,27 @@ internal class Console {
     }
     
     ///
+    /// Clears console screen given colors.
+    ///
+    static func clearScreen(colorBg: ConsoleColor, modBg: ConsoleColorModifier, colorText: ConsoleColor, modText: ConsoleColorModifier) -> Void {
+        print(applyTextColor(colorBg: colorBg, modifierBg: modBg, colorText: colorText, modifierText: modText, text: " "))
+        print("\u{001B}[2J")
+    }
+    
+    ///
+    /// Clears console screen current theme.
+    ///
+    static func clearScreenCurrentTheme() -> Void {
+        switch PlayerPreferences.colorTheme {
+        case .Blue:
+            print(applyTextColor(colorBg: ConsoleColor.blue, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
+        case .Black:
+            print(applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
+        }
+        print("\u{001B}[2J")
+    }
+    
+    ///
     /// Hides console cursor.
     ///
     static func hideCursor() -> Void {
