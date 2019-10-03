@@ -19,7 +19,7 @@ internal let g_fieldWidthArtist: Int = 33
 internal let g_fieldWidthTitle: Int = 33
 internal let g_fieldWidthDuration: Int = 5
 internal let g_player: Player = Player()
-internal let g_versionString: String = "1.8.2.7"
+internal let g_versionString: String = "1.8.2.8"
 internal let g_lock = NSLock()
 internal let g_windowContentLineCount = 17
 
