@@ -70,7 +70,7 @@ internal class YearWindow {
         
         MainWindow.renderHeader(showTime: false)
         
-        let bgColor = getThemeColor()
+        let bgColor = getThemeBgColor()
         Console.printXY(1,3,"### RECORDING YEARS ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         Console.printXY(1,4,"mode year is: \((g_modeRecordingYears.count == 0) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         

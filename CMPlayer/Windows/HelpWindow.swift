@@ -58,7 +58,7 @@ internal class HelpWindow {
                                       " info <song no>", " :: show information about song with given song number",
                                       " update cmplayer", " :: updates cmplayer if new version is found online",
                                       " set viewtype <type>", " :: sets view type. can be 'default' or 'details'",
-                                      " set theme <color>", " :: sets theme color. color can be 'blue' or 'black'"]
+                                      " set theme <color>", " :: sets theme color. color can be 'default', 'blue' or 'black'"]
     
     ///
     /// Shows this HelpWindow on screen.
@@ -77,7 +77,7 @@ internal class HelpWindow {
         
         MainWindow.renderHeader(showTime: false)
         
-        let bgColor = getThemeColor()
+        let bgColor = getThemeBgColor()
         Console.printXY(1,3,"### HELP ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5

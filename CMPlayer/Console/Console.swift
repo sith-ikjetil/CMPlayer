@@ -77,6 +77,8 @@ internal class Console {
     ///
     static func clearScreenCurrentTheme() -> Void {
         switch PlayerPreferences.colorTheme {
+        case .Default:
+            print(applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
         case .Blue:
             print(applyTextColor(colorBg: ConsoleColor.blue, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
         case .Black:

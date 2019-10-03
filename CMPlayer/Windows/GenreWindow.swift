@@ -70,7 +70,7 @@ internal class GenreWindow {
         
         MainWindow.renderHeader(showTime: false)
         
-        let bgColor = getThemeColor()
+        let bgColor = getThemeBgColor()
         Console.printXY(1,3,"### GENRE ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         Console.printXY(1,4,"mode genre is: \((g_modeGenre.count == 0) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         

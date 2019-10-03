@@ -80,7 +80,7 @@ internal class InfoWindow {
         
         MainWindow.renderHeader(showTime: false)
         
-        let bgColor = getThemeColor()
+        let bgColor = getThemeBgColor()
         Console.printXY(1,3,"### SONG INFORMATION ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5

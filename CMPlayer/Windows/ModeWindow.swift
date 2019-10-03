@@ -83,7 +83,7 @@ internal class ModeWindow {
         
         MainWindow.renderHeader(showTime: false)
         
-        let bgColor = getThemeColor()
+        let bgColor = getThemeBgColor()
         Console.printXY(1,3,"### MODE ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var bMode: Bool = false;

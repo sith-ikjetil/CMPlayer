@@ -105,7 +105,7 @@ internal class MainWindow {
         
         MainWindow.renderHeader(showTime: true)
         
-        let bgColor = getThemeColor()
+        let bgColor = getThemeBgColor()
         
         Console.printXY(1,2," ", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     
@@ -150,8 +150,8 @@ internal class MainWindow {
     ///
     func renderSong(_ y: Int, _ song: SongEntry, _ time: UInt64) -> Void
     {
-        let bgColor = getThemeColor()
-        let songNoColor = (PlayerPreferences.colorTheme == ColorTheme.Blue) ? ConsoleColor.white : ConsoleColor.cyan
+        let bgColor = getThemeSongBgColor()
+        let songNoColor = ConsoleColor.cyan
         
         if PlayerPreferences.viewType == ViewType.Default {
             Console.printXY(1, y, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, songNoColor, ConsoleColorModifier.bold)
@@ -195,7 +195,7 @@ internal class MainWindow {
         if text.count > 77 {
             text = String(text[text.index(text.endIndex, offsetBy: -77)..<text.endIndex])
         }
-        Console.printXY(1,23,">: " + text, 80, .left, " ", getThemeColor(), ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,23,">: " + text, 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     ///
@@ -203,7 +203,7 @@ internal class MainWindow {
     ///
     func renderStatusLine() -> Void
     {
-        Console.printXY(1,24,"Song Count: \(g_songs.count.itsToString())", 80, .center, " ", getThemeColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"Song Count: \(g_songs.count.itsToString())", 80, .center, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///
@@ -214,7 +214,7 @@ internal class MainWindow {
         let timeRow: Int = (PlayerPreferences.viewType == ViewType.Default) ? 5 : 6
         var index: Int = 0
         let max: Int = (PlayerPreferences.viewType == ViewType.Default) ? 22 : 21
-        let bgColor = getThemeColor()
+        let bgColor = getThemeBgColor()
         while idx < max {
             if index < g_playlist.count {
                 let s = g_playlist[index]
@@ -281,7 +281,7 @@ internal class MainWindow {
                 if !self.isShowingTopWindow {
                     MainWindow.renderHeader(showTime: true)
                     self.renderSongs()
-                    Console.printXY(1, 22, self.addendumText, 80, .left, " ", getThemeColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    Console.printXY(1, 22, self.addendumText, 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
                 }
                 
                 g_lock.lock()
@@ -532,6 +532,10 @@ internal class MainWindow {
             }
             else if parts[2] == "black" {
                 PlayerPreferences.colorTheme = ColorTheme.Black
+                PlayerPreferences.savePreferences()
+            }
+            else if parts[2] == "default" {
+                PlayerPreferences.colorTheme = ColorTheme.Default
                 PlayerPreferences.savePreferences()
             }
             self.renderScreen()

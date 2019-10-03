@@ -37,6 +37,7 @@ internal enum ViewType: String {
 }
 
 internal enum ColorTheme: String {
+    case Default = "default"
     case Blue = "blue"
     case Black = "black"
 }
@@ -55,7 +56,7 @@ internal class PlayerPreferences {
     static var crossfadeSongs: Bool = true
     static var crossfadeTimeInSeconds: Int = 4
     static var viewType: ViewType = ViewType.Details
-    static var colorTheme: ColorTheme = ColorTheme.Blue
+    static var colorTheme: ColorTheme = ColorTheme.Default
     static var logInformation: Bool = true
     static var logWarning: Bool = true
     static var logError: Bool = true
