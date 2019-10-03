@@ -64,7 +64,6 @@ internal class MainWindow {
     private var currentChar: Int32 = -1
     private var exitCode: Int32 = 0
     private var isShowingTopWindow = false
-    private var isSkipping: Bool = false
     private var addendumText: String = ""
     private var updateFileName: String = ""
     
@@ -296,13 +295,13 @@ internal class MainWindow {
                     
                     if g_player.audioPlayerActive == 1 && g_player.audio1 != nil {
                         if (PlayerPreferences.crossfadeSongs && g_player.durationAudioPlayer1 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || g_player.durationAudioPlayer1 <= 1000 || ( g_player.durationAudioPlayer1 > 0 && !g_player.isPaused && !g_player.audio1!.isPlaying && !self.isSkipping ) {
+                            || g_player.durationAudioPlayer1 <= 1000 || ( g_player.durationAudioPlayer1 > 0 && !g_player.isPaused && !g_player.audio1!.isPlaying ) {
                             g_player.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
                     else if g_player.audioPlayerActive == 2 && g_player.audio2 != nil {
                         if (PlayerPreferences.crossfadeSongs && g_player.durationAudioPlayer2 <= PlayerPreferences.crossfadeTimeInSeconds * 1000)
-                            || g_player.durationAudioPlayer2 <= 1000 || ( g_player.durationAudioPlayer2 > 0 && !g_player.isPaused && !g_player.audio2!.isPlaying && !self.isSkipping) {
+                            || g_player.durationAudioPlayer2 <= 1000 || ( g_player.durationAudioPlayer2 > 0 && !g_player.isPaused && !g_player.audio2!.isPlaying) {
                             g_player.skip(crossfade: PlayerPreferences.crossfadeSongs)
                         }
                     }
@@ -565,9 +564,9 @@ internal class MainWindow {
     /// parameter parts: command array.
     ///
     func onCommandNextSong(parts: [String]) -> Void {
-        self.isSkipping = true
+        g_lock.lock()
         g_player.skip(crossfade: false)
-        self.isSkipping = false
+        g_lock.unlock()
     }
     
     ///
