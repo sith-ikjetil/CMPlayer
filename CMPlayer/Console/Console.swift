@@ -40,8 +40,39 @@ internal class Console {
     //
     // Private properties/constants.
     //
-    //static private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1.console", attributes: .concurrent)
-    //static private let sigintSrc = DispatchSource.makeSignalSource(signal: Int32(SIGWINCH), queue: Console.concurrentQueue1)
+    static private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1.console", attributes: .concurrent)
+    //static private let sigintSrcSIGINT = DispatchSource.makeSignalSource(signal: Int32(SIGINT), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGQUIT = DispatchSource.makeSignalSource(signal: Int32(SIGQUIT), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGILL = DispatchSource.makeSignalSource(signal: Int32(SIGILL), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGTRAP = DispatchSource.makeSignalSource(signal: Int32(SIGTRAP), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGABRT = DispatchSource.makeSignalSource(signal: Int32(SIGABRT), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGEMT = DispatchSource.makeSignalSource(signal: Int32(SIGEMT), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGFPE = DispatchSource.makeSignalSource(signal: Int32(SIGFPE), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGKILL = DispatchSource.makeSignalSource(signal: Int32(SIGKILL), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGBUS = DispatchSource.makeSignalSource(signal: Int32(SIGBUS), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGSEGV = DispatchSource.makeSignalSource(signal: Int32(SIGSEGV), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGSYS = DispatchSource.makeSignalSource(signal: Int32(SIGSYS), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGPIPE = DispatchSource.makeSignalSource(signal: Int32(SIGPIPE), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGALRM = DispatchSource.makeSignalSource(signal: Int32(SIGALRM), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGHUP = DispatchSource.makeSignalSource(signal: Int32(SIGHUP), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGTERM = DispatchSource.makeSignalSource(signal: Int32(SIGTERM), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGURG = DispatchSource.makeSignalSource(signal: Int32(SIGURG), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGSTOP = DispatchSource.makeSignalSource(signal: Int32(SIGSTOP), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGTSTP = DispatchSource.makeSignalSource(signal: Int32(SIGTSTP), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGCONT = DispatchSource.makeSignalSource(signal: Int32(SIGCONT), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGCHLD = DispatchSource.makeSignalSource(signal: Int32(SIGCHLD), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGTTIN = DispatchSource.makeSignalSource(signal: Int32(SIGTTIN), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGTTOU = DispatchSource.makeSignalSource(signal: Int32(SIGTTOU), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGIO = DispatchSource.makeSignalSource(signal: Int32(SIGIO), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGXCPU = DispatchSource.makeSignalSource(signal: Int32(SIGXCPU), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGXFSZ = DispatchSource.makeSignalSource(signal: Int32(SIGXFSZ), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGVTALRM = DispatchSource.makeSignalSource(signal: Int32(SIGVTALRM), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGPROF = DispatchSource.makeSignalSource(signal: Int32(SIGPROF), queue: Console.concurrentQueue1)
+    static private let sigintSrcSIGWINCH = DispatchSource.makeSignalSource(signal: Int32(SIGWINCH), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGUSR1 = DispatchSource.makeSignalSource(signal: Int32(SIGUSR1), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGUSR2 = DispatchSource.makeSignalSource(signal: Int32(SIGUSR2), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGTHR = DispatchSource.makeSignalSource(signal: Int32(SIGTHR), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGLIBRT = DispatchSource.makeSignalSource(signal: Int32(SIGLIBRT), queue: Console.concurrentQueue1)
     
     //
     // Internal static constants
@@ -222,11 +253,11 @@ internal class Console {
         //
         // Respond to window resize
         //
-        //sigintSrc.setEventHandler {
-        //    Console.setTerminalSize(width: 80, height: 24)
-            //Console.clearScreen()
-            //g_mainWindow?.renderScreen()
-        //}
-        //sigintSrc.resume()
+        sigintSrcSIGWINCH.setEventHandler {
+            //Console.setTerminalSize(width: 80, height: 24)
+            Console.clearScreenCurrentTheme()
+            g_mainWindow?.renderScreen()
+        }
+        sigintSrcSIGWINCH.resume()
     }// initialize
 }// Console
