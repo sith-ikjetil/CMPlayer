@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer HelpWindow.
 ///
-internal class InfoWindow {
+internal class InfoWindow : TerminalSizeChangedProtocol {
     //
     // Private properties/constants
     //
@@ -28,9 +28,23 @@ internal class InfoWindow {
     ///
     func showWindow(song: SongEntry) -> Void {
         self.infoIndex = 0
+        
         self.updateInfoText(song: song)
+        
+        g_tscpStack.append(self)
+        
         self.renderInfo()
         self.run()
+        
+        g_tscpStack.removeLast()
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderInfo()
+        print("")
     }
     
     ///

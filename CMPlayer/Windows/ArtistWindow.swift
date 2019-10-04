@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer AboutWindow.
 ///
-internal class ArtistWindow {
+internal class ArtistWindow : TerminalSizeChangedProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -26,9 +26,23 @@ internal class ArtistWindow {
     ///
     func showWindow() -> Void {
         self.artistIndex = 0
+        
         self.updateArtistText()
+        
+        g_tscpStack.append(self)
+        
         self.renderArtist()
         self.run()
+        
+        g_tscpStack.removeLast()
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderArtist()
+        print("")
     }
     
     ///

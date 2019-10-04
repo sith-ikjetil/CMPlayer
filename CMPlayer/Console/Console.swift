@@ -91,16 +91,18 @@ internal class Console {
     /// Clears console screen.
     ///
     static func clearScreen() -> Void {
-        print(applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
-        print("\u{001B}[2J")
+        //print(applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
+        //print("\u{001B}[2J")
+        Console.printXY(1,1," ", g_rows*g_cols, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.none)
     }
     
     ///
     /// Clears console screen given colors.
     ///
     static func clearScreen(colorBg: ConsoleColor, modBg: ConsoleColorModifier, colorText: ConsoleColor, modText: ConsoleColorModifier) -> Void {
-        print(applyTextColor(colorBg: colorBg, modifierBg: modBg, colorText: colorText, modifierText: modText, text: " "))
-        print("\u{001B}[2J")
+        //print(applyTextColor(colorBg: colorBg, modifierBg: modBg, colorText: colorText, modifierText: modText, text: " "))
+        //print("\u{001B}[2J")
+        Console.printXY(1,1," ", g_rows*g_cols, .left, " ", colorBg, modBg, colorText, modText)
     }
     
     ///
@@ -109,13 +111,13 @@ internal class Console {
     static func clearScreenCurrentTheme() -> Void {
         switch PlayerPreferences.colorTheme {
         case .Default:
-            print(applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
+            Console.printXY(1,1," ", g_rows*g_cols, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.none)
         case .Blue:
-            print(applyTextColor(colorBg: ConsoleColor.blue, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
+            Console.printXY(1,1," ", g_rows*g_cols, .left, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.none)
         case .Black:
-            print(applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white , modifierText: ConsoleColorModifier.none , text: " "))
+            Console.printXY(1,1," ", g_rows*g_cols, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.none)
         }
-        print("\u{001B}[2J")
+        //print("\u{001B}[2J")
     }
     
     ///
@@ -203,7 +205,7 @@ internal class Console {
     /// parameter height: Number of characters in y axis.
     ///
     static func setTerminalSize(width: Int, height: Int) -> Void {
-        print("\u{001B}[8;\(height);\(width)t")
+        print("\u{001B}[8;\(height);\(width)t", terminator: "")
     }
     
     ///
@@ -254,9 +256,16 @@ internal class Console {
         // Respond to window resize
         //
         sigintSrcSIGWINCH.setEventHandler {
-            //Console.setTerminalSize(width: 80, height: 24)
-            Console.clearScreenCurrentTheme()
-            g_mainWindow?.renderScreen()
+            
+            var w = winsize()
+            if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
+                g_rows = Int(w.ws_row)
+                g_cols = Int(w.ws_col)
+            }
+            
+            if g_tscpStack.count > 0 {
+                g_tscpStack.last?.terminalSizeHasChanged()
+            }
         }
         sigintSrcSIGWINCH.resume()
     }// initialize

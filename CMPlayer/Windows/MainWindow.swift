@@ -15,7 +15,7 @@ import Cocoa
 ///
 /// Represents CMPlayer MainWindow.
 ///
-internal class MainWindow {
+internal class MainWindow : TerminalSizeChangedProtocol {
     //
     // Private properties/constants.
     //
@@ -74,11 +74,19 @@ internal class MainWindow {
     /// returns: ExitCode,  Int32
     ///
     func showWindow() -> Int32 {
+        g_tscpStack.append(self)
         self.renderScreen()
         let exitCode = self.run()
-        Console.showCursor()
-        Console.echoOn()
+        g_tscpStack.removeLast()
         return exitCode
+    }
+    
+    ///
+    /// Handler for TerminalSizeHasChangedProtocol
+    ///
+    func terminalSizeHasChanged() -> Void {
+        Console.clearScreenCurrentTheme()
+        self.renderScreen()
     }
 
     ///

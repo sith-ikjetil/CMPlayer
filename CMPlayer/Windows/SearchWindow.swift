@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer SearchWindow.
 ///
-internal class SearchWindow {
+internal class SearchWindow : TerminalSizeChangedProtocol {
     //
     // Private properties/constants.
     //
@@ -24,6 +24,14 @@ internal class SearchWindow {
     private var partsYear: [String] = []
     var stats: [Int] = []
     private var type: SearchType = SearchType.ArtistOrTitle
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderSearch()
+        print("")
+    }
     
     ///
     /// Performs search from arguments. Searches g_songs.
@@ -153,8 +161,13 @@ internal class SearchWindow {
     func showWindow(parts: [String], type: SearchType) -> Void {
         self.parts = parts
         self.type = type
+        
+        g_tscpStack.append(self)
+        
         self.renderSearch()
         self.run()
+        
+        g_tscpStack.removeLast()
     }
     
     ///

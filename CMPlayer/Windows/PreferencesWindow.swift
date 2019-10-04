@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer PreferencesWindow.
 ///
-internal class PreferencesWindow {
+internal class PreferencesWindow : TerminalSizeChangedProtocol {
     //
     // Private properties/constants
     //
@@ -26,9 +26,23 @@ internal class PreferencesWindow {
     ///
     func showWindow() -> Void {
         self.preferencesIndex = 0
+        
         self.updatePreferencesText()
-        self.renderHelp()
+        
+        g_tscpStack.append(self)
+        
+        self.renderPreferences()
         self.run()
+        
+        g_tscpStack.removeLast()
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderPreferences()
+        print("")
     }
     
     ///
@@ -65,7 +79,7 @@ internal class PreferencesWindow {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderHelp() -> Void {
+    func renderPreferences() -> Void {
         Console.clearScreenCurrentTheme()
         
         MainWindow.renderHeader(showTime: false)
@@ -106,20 +120,19 @@ internal class PreferencesWindow {
     ///
     func run() -> Void {
         self.preferencesIndex = 0
-        self.renderHelp()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.preferencesIndex + 17) < self.preferencesText.count {
                 self.preferencesIndex += 1
-                self.renderHelp()
+                self.renderPreferences()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.preferencesIndex > 0 {
                 self.preferencesIndex -= 1
-                self.renderHelp()
+                self.renderPreferences()
             }
             return false
         })

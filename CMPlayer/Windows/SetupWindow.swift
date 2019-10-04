@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer InitialSetupWindow.
 ///
-internal class SetupWindow {
+internal class SetupWindow : TerminalSizeChangedProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -28,7 +28,22 @@ internal class SetupWindow {
     ///
     func showWindow() -> Bool {
         self.renderInitialSetup(path: "")
-        return self.run()
+        
+        g_tscpStack.append(self)
+        
+        let retVal = self.run()
+        
+        g_tscpStack.removeLast()
+        
+        return retVal
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderInitialSetup(path: "")
+        print("")
     }
     
     ///

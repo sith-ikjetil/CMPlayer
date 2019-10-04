@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer HelpWindow.
 ///
-internal class HelpWindow {
+internal class HelpWindow : TerminalSizeChangedProtocol {
     //
     // Private properties/constants
     //
@@ -60,8 +60,18 @@ internal class HelpWindow {
     ///
     func showWindow() -> Void {
         self.helpIndex = 0
+        g_tscpStack.append(self)
         self.renderHelp()
         self.run()
+        g_tscpStack.removeLast()
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderHelp()
+        print("")
     }
     
     ///

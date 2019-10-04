@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer AboutWindow.
 ///
-internal class GenreWindow {
+internal class GenreWindow : TerminalSizeChangedProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -27,8 +27,21 @@ internal class GenreWindow {
     func showWindow() -> Void {
         self.genreIndex = 0
         self.updateGenreText()
+        
+        g_tscpStack.append(self)
+        
         self.renderGenre()
         self.run()
+        
+        g_tscpStack.removeLast()
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderGenre()
+        print("")
     }
     
     ///

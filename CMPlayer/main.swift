@@ -37,6 +37,9 @@ internal var g_modeSearch: [String] = []
 internal var g_modeSearchStats: [Int] = []
 internal var g_library: PlayerLibrary = PlayerLibrary()
 internal var g_mainWindow: MainWindow?
+internal var g_tscpStack: [TerminalSizeChangedProtocol] = []
+internal var g_rows: Int = 24
+internal var g_cols: Int = 80
 
 //
 // Startup code

@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer AboutWindow.
 ///
-internal class AboutWindow {
+internal class AboutWindow : TerminalSizeChangedProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -36,8 +36,21 @@ internal class AboutWindow {
     ///
     func showWindow() -> Void {
         self.aboutIndex = 0
+        
+        g_tscpStack.append(self)
+        
         self.renderAbout()
         self.run()
+        
+        g_tscpStack.removeLast()
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderAbout()
+        print("")
     }
     
     ///
@@ -48,8 +61,10 @@ internal class AboutWindow {
         
         MainWindow.renderHeader(showTime: false)
         
+        
         let bgColor = getThemeBgColor()
         Console.printXY(1,3,"### ABOUT ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        
         
         var index_screen_lines: Int = 5
         var index_search: Int = self.aboutIndex
@@ -58,20 +73,18 @@ internal class AboutWindow {
             if index_screen_lines == 22 {
                 break
             }
-            
+    
             if index_search > self.aboutText.count - 1 {
                 break
             }
-            
+    
             let se = self.aboutText[index_search]
-            
+    
             Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-            
+    
             index_screen_lines += 1
             index_search += 1
         }
-        
-        //Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE TEXT. OTHER KEY TO EXIT ABOUT.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
@@ -81,7 +94,6 @@ internal class AboutWindow {
     ///
     func run() -> Void {
         self.aboutIndex = 0
-        self.renderAbout()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in

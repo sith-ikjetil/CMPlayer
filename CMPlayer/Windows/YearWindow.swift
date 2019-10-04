@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer RecordingYearWindow.
 ///
-internal class YearWindow {
+internal class YearWindow : TerminalSizeChangedProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -27,8 +27,21 @@ internal class YearWindow {
     func showWindow() -> Void {
         self.yearIndex = 0
         self.updateRecordingYearsText()
+        
+        g_tscpStack.append(self)
+        
         self.renderRecordingYears()
         self.run()
+        
+        g_tscpStack.removeLast()
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderRecordingYears()
+        print("")
     }
     
     ///

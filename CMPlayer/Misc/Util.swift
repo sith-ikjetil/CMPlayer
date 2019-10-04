@@ -41,6 +41,13 @@ internal enum PrintPaddingTextAlign {
 }
 
 ///
+/// Protocol for terminal size changed protocol
+///
+internal protocol TerminalSizeChangedProtocol {
+    func terminalSizeHasChanged() -> Void
+}
+
+///
 /// Check to see if command is one of the supported given commands.
 ///
 /// parameter command: Command to check for.

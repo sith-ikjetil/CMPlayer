@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer ModeWindow.
 ///
-internal class ModeWindow {
+internal class ModeWindow : TerminalSizeChangedProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -28,8 +28,21 @@ internal class ModeWindow {
     func showWindow() -> Void {
         self.modeIndex = 0
         self.updateModeText()
+        
+        g_tscpStack.append(self)
+        
         self.renderMode()
         self.run()
+        
+        g_tscpStack.removeLast()
+    }
+    
+    ///
+    /// TerminalSizeChangedProtocol method
+    ///
+    func terminalSizeHasChanged() -> Void {
+        self.renderMode()
+        print("")
     }
     
     ///
@@ -98,7 +111,6 @@ internal class ModeWindow {
     ///
     func run() -> Void {
         self.modeIndex = 0
-        self.renderMode()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
