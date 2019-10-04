@@ -232,56 +232,12 @@ internal class Player {
         
         g_playlist.removeFirst()
         if g_playlist.count < 2 {
-            if g_modeGenre.count > 0 {
-                var list: [SongEntry] = []
-                for g in g_modeGenre {
-                    if g_genres[g] != nil {
-                        if let item = g_genres[g]?.randomElement() {
-                            list.append(item)
-                        }
-                    }
-                }
-                
-                let s = list.randomElement()!
-                g_playlist.append(s)
-            }
-            else if g_modeArtist.count > 0 {
-                var list: [SongEntry] = []
-                for g in g_modeArtist {
-                    if g_artists[g] != nil {
-                        if let item = g_artists[g]?.randomElement() {
-                            list.append(item)
-                        }
-                    }
-                }
-                
-                let s = list.randomElement()!
-                g_playlist.append(s)
-            }
-            else if g_modeRecordingYears.count > 0 {
-                var list: [SongEntry] = []
-                for g in g_modeRecordingYears {
-                    if g_recordingYears[g] != nil {
-                        if let item = g_recordingYears[g]?.randomElement() {
-                            list.append(item)
-                        }
-                    }
-                }
-                
-                let s = list.randomElement()!
-                g_playlist.append(s)
-            }
-            else if g_modeSearch.count > 0 && g_searchResult.count > 0 {
+            if g_modeSearch.count > 0 && g_searchResult.count > 0 {
                 let s = g_searchResult.randomElement()!
                 g_playlist.append(s)
             }
             else {
-                var s = g_songs.randomElement()!
-                if g_songs.count > 2 {
-                    while s.fileURL?.absoluteString == g_playlist[0].fileURL?.absoluteString {
-                        s = g_songs.randomElement()!
-                    }
-                }
+                let s = g_songs.randomElement()!
                 g_playlist.append(s)
             }
         }

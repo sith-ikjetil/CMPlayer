@@ -44,20 +44,7 @@ internal class YearWindow {
             let name = String(g.key)
             let desc = " :: \(g.value.count) Songs"
             
-            var hit = false
-            for e in g_modeRecordingYears {
-                if e == g.key {
-                    hit = true
-                    break;
-                }
-            }
-            
-            if hit {
-                self.yearText.append("\(name) (*)")
-            }
-            else {
-                self.yearText.append(name)
-            }
+            self.yearText.append(name)
             self.yearText.append(desc)
         }
     }
@@ -72,7 +59,7 @@ internal class YearWindow {
         
         let bgColor = getThemeBgColor()
         Console.printXY(1,3,"### RECORDING YEARS ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-        Console.printXY(1,4,"mode year is: \((g_modeRecordingYears.count == 0) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,4,"mode year is: \((g_searchType != SearchType.RecordedYear) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = yearIndex

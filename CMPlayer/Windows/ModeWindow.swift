@@ -20,6 +20,7 @@ internal class ModeWindow {
     ///
     private var modeIndex: Int = 0
     private var modeText: [String] = []
+    private var inMode: Bool = false
     
     ///
     /// Shows this AboutWindow on screen.
@@ -37,38 +38,15 @@ internal class ModeWindow {
     func updateModeText() -> Void
     {
         self.modeText.removeAll()
-      
-        self.modeText.append("genre")
-        if g_modeGenre.count == 0 {
-            self.modeText.append(" :: ")
-        }
-        for g in g_modeGenre {
-            self.modeText.append(" :: \(g), \(g_genres[g]!.count) Songs")
-        }
         
-        self.modeText.append("artist")
-        if g_modeArtist.count == 0 {
-            self.modeText.append(" :: ")
-        }
-        for a in g_modeArtist {
-            self.modeText.append(" :: \(a), \(g_artists[a]!.count) Songs")
-        }
-        
-        self.modeText.append("year")
-        if g_modeRecordingYears.count == 0 {
-            self.modeText.append(" :: ")
-        }
-        for y in g_modeRecordingYears {
-            self.modeText.append(" :: \(y), \(g_recordingYears[y]!.count) Songs")
-        }
-        
-        self.modeText.append("search")
+        self.modeText.append("\(g_searchType.rawValue)")
         if g_modeSearch.count == 0 || g_modeSearch.count != g_modeSearchStats.count {
             self.modeText.append(" :: ")
         }
         else {
             var index: Int = 0
             for y in g_modeSearch {
+                self.inMode = true
                 self.modeText.append(" :: \(y), \(g_modeSearchStats[index]) Songs")
                 index += 1
             }
@@ -85,12 +63,7 @@ internal class ModeWindow {
         
         let bgColor = getThemeBgColor()
         Console.printXY(1,3,"### MODE ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-        
-        var bMode: Bool = false;
-        if g_modeRecordingYears.count > 0 || g_modeGenre.count > 0 || g_modeArtist.count > 0 {
-            bMode = true
-        }
-        Console.printXY(1,4,"mode is: \((!bMode) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,4,"mode is: \((!self.inMode) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = modeIndex

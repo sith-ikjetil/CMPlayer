@@ -14,11 +14,13 @@ import Foundation
 ///
 /// SearchType, type of search
 ///
-internal enum SearchType {
-    case Artist
-    case Title
-    case ArtistOrTitle
-    case Album
+internal enum SearchType : String {
+    case Artist = "artist"
+    case Title = "title"
+    case ArtistOrTitle = "artist or title"
+    case Album = "album"
+    case Genre = "genre"
+    case RecordedYear = "year"
 }
 
 ///

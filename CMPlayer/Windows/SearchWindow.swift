@@ -21,6 +21,7 @@ internal class SearchWindow {
     private var searchIndex: Int = 0
     var searchResult: [SongEntry] = []
     private var parts: [String] = []
+    private var partsYear: [String] = []
     var stats: [Int] = []
     private var type: SearchType = SearchType.ArtistOrTitle
     
@@ -31,50 +32,115 @@ internal class SearchWindow {
     ///
     func performSearch(terms: [String], type: SearchType) -> Void {
         self.searchResult.removeAll(keepingCapacity: false)
-
+        self.partsYear.removeAll()
+        
         self.stats.removeAll()
         for _ in 0..<terms.count {
             self.stats.append(0)
         }
-        
-        for se in g_songs {
-            let artist = se.artist.lowercased()
-            let title = se.title.lowercased()
-            let album = se.albumName.lowercased()
+
+        if type == SearchType.Genre {
             var index: Int = 0
-            
-            for t in terms {
-                let term = t.lowercased()
-                
-                if type == SearchType.ArtistOrTitle {
-                    if artist.contains(term) || title.contains(term) {
-                        self.searchResult.append(se)
-                        self.stats[index] += 1
-                        break
-                    }
-                }
-                else if type == SearchType.Artist {
-                    if artist.contains(term) {
-                        self.searchResult.append(se)
-                        self.stats[index] += 1
-                        break
-                    }
-                }
-                else if type == SearchType.Title {
-                    if title.contains(term) {
-                        self.searchResult.append(se)
-                        self.stats[index] += 1
-                        break
-                    }
-                }
-                else if type == SearchType.Album {
-                    if album.contains(term) {
-                        self.searchResult.append(se)
-                        self.stats[index] += 1
-                        break
+            for name in terms {
+                let name = name.lowercased()
+                if g_genres[name] != nil {
+                    if g_genres[name]!.count >= 1 {
+                        self.searchResult.append(contentsOf: g_genres[name]!)
+                        self.stats[index] += g_genres[name]!.count
                     }
                 }
                 index += 1
+            }
+        }
+        else if type == SearchType.RecordedYear {
+            let currentYear = Calendar.current.component(.year, from: Date())
+            var index: Int = 0
+            for year in terms {
+                let yearsSubs = year.split(separator: "-")
+                
+                var years: [String] = []
+                for ys in yearsSubs {
+                    years.append(String(ys))
+                }
+                
+                if years.count == 1 {
+                    let resultYear = Int(years[0]) ?? -1
+                    if resultYear >= 0 && resultYear <= currentYear {
+                        if g_recordingYears[resultYear] != nil {
+                            if g_recordingYears[resultYear]!.count >= 1 {
+                                self.searchResult.append(contentsOf: g_recordingYears[resultYear]!)
+                                self.partsYear.append(String(resultYear))
+                                self.stats[index] += g_recordingYears[resultYear]!.count
+                            }
+                        }
+                    }
+                    index += 1
+                }
+                else if years.count == 2 {
+                    let from: Int = Int(years[0]) ?? -1
+                    let to: Int = Int(years[1]) ?? -1
+                    
+                    if to <= currentYear {
+                        if from != -1 && to != -1 && from <= to {
+                            let xfrom: Int = from + 1
+                            for _ in xfrom...to {
+                                self.stats.append(0)
+                            }
+                            for y in from...to {
+                                if g_recordingYears[y] != nil {
+                                    if g_recordingYears[y]!.count >= 1 {
+                                        self.searchResult.append(contentsOf: g_recordingYears[y]!)
+                                        self.partsYear.append(String(y))
+                                        self.stats[index] += g_recordingYears[y]!.count
+                                        index += 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            for se in g_songs {
+                let artist = se.artist.lowercased()
+                let title = se.title.lowercased()
+                let album = se.albumName.lowercased()
+                var index: Int = 0
+                
+                for t in terms {
+                    let term = t.lowercased()
+                    
+                    if type == SearchType.ArtistOrTitle {
+                        if artist.contains(term) || title.contains(term) {
+                            self.searchResult.append(se)
+                            self.stats[index] += 1
+                            break
+                        }
+                    }
+                    else if type == SearchType.Artist {
+                        if artist.contains(term) {
+                            self.searchResult.append(se)
+                            self.stats[index] += 1
+                            break
+                        }
+                    }
+                    else if type == SearchType.Title {
+                        if title.contains(term) {
+                            self.searchResult.append(se)
+                            self.stats[index] += 1
+                            break
+                        }
+                    }
+                    else if type == SearchType.Album {
+                        if album.contains(term) {
+                            self.searchResult.append(se)
+                            self.stats[index] += 1
+                            break
+                        }
+                    }
+                    index += 1
+                }
             }
         }
     
@@ -195,13 +261,23 @@ internal class SearchWindow {
         })
         keyHandler.addKeyHandler(key: Console.KEY_SPACEBAR, closure: { () -> Bool in
             if self.searchResult.count > 0 {
-                g_modeArtist.removeAll()
-                g_modeGenre.removeAll()
-                g_modeRecordingYears.removeAll()
+                if  self.type == SearchType.ArtistOrTitle ||
+                    self.type == SearchType.Artist ||
+                    self.type == SearchType.Title ||
+                    self.type == SearchType.Album
+                {
+                    g_modeSearch = self.parts
+                }
+                else if self.type == SearchType.Genre {
+                    g_modeSearch = self.parts
+                }
+                else if self.type == SearchType.RecordedYear {
+                    g_modeSearch = self.partsYear
+                }
             
                 g_searchResult = self.searchResult
-                g_modeSearch = self.parts
                 g_modeSearchStats = self.stats
+                g_searchType = self.type
             }
             return true
         })
