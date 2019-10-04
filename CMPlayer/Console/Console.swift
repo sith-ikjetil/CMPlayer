@@ -255,26 +255,26 @@ internal class Console {
         //
         // Respond to window resize
         //
-        sigintSrcSIGWINCH.setEventHandler {
-            
-            var w = winsize()
-            var rows: Int = g_rows
-            var cols: Int = g_cols
-            if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
-                rows = Int(w.ws_row)
-                cols = Int(w.ws_col)
-            }
-            
-            if g_tscpStack.count > 0 {
-                g_rows = rows
-                g_cols = cols
-                g_tscpStack.last?.terminalSizeHasChanged()
-            }
-            else {
-                g_rows = rows
-                g_cols = cols
-            }
-        }
-        sigintSrcSIGWINCH.resume()
+        //sigintSrcSIGWINCH.setEventHandler {
+        //
+        //    var w = winsize()
+        //    var rows: Int = g_rows
+        //    var cols: Int = g_cols
+        //    if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
+        //        rows = Int(w.ws_row)
+        //        cols = Int(w.ws_col)
+        //    }
+        //
+        //    if g_tscpStack.count > 0 {
+        //        g_rows = rows
+        //        g_cols = cols
+        //        g_tscpStack.last?.terminalSizeHasChanged()
+        //    }
+        //    else {
+        //        g_rows = rows
+        //        g_cols = cols
+        //    }
+        //}
+        //sigintSrcSIGWINCH.resume()
     }// initialize
 }// Console
