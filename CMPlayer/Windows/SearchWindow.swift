@@ -185,7 +185,7 @@ internal class SearchWindow : TerminalSizeChangedProtocol {
         
         let bgColor = getThemeBgColor()
         
-        Console.printXY(1,3,"### SEARCH RESULTS ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,3,":: SEARCH RESULT ::", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = searchIndex

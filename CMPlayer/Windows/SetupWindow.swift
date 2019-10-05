@@ -61,7 +61,7 @@ internal class SetupWindow : TerminalSizeChangedProtocol {
         
         MainWindow.renderHeader(showTime: false)
         
-        Console.printXY(1,3,"### SETUP ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,3,":: SETUP ::", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var y: Int = 5
         for txt in self.setupText {

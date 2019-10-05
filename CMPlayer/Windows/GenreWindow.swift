@@ -76,7 +76,7 @@ internal class GenreWindow : TerminalSizeChangedProtocol {
         MainWindow.renderHeader(showTime: false)
         
         let bgColor = getThemeBgColor()
-        Console.printXY(1,3,"### GENRE ###", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,3,":: GENRE ::", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         Console.printXY(1,4,"mode genre is: \((g_searchType != SearchType.Genre) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
