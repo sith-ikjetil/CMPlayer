@@ -73,7 +73,7 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol {
         self.preferencesText.append(" :: \(PlayerPreferences.crossfadeTimeInSeconds) seconds")
         self.preferencesText.append(" View Type")
         self.preferencesText.append(" :: \(PlayerPreferences.viewType.rawValue)")
-        self.preferencesText.append(" Song Theme Color")
+        self.preferencesText.append(" Theme")
         self.preferencesText.append(" :: \(PlayerPreferences.colorTheme.rawValue)")
     }
     
