@@ -15,14 +15,15 @@ import Foundation
 /// Represents console color.
 ///
 enum ConsoleColor : Int {
-    case black = 0
-    case red = 1
-    case green = 2
-    case yellow = 3
-    case blue = 4
-    case magenta = 5
-    case cyan = 6
-    case white = 7
+    case black = 30
+    case red = 31
+    case green = 32
+    case yellow = 33
+    case blue = 34
+    case magenta = 35
+    case cyan = 36
+    case white = 37
+    case reset = 0
 }
 
 ///
@@ -179,23 +180,10 @@ internal class Console {
     ///
     static func applyTextColor(colorBg: ConsoleColor, modifierBg:  ConsoleColorModifier, colorText: ConsoleColor, modifierText: ConsoleColorModifier, text: String) -> String {
         
-        var addToText = 30
-        var addToBg = 40
-        if modifierText == ConsoleColorModifier.bold {
-            addToText = 90
-        }
-        else {
-            addToText = addToText + modifierText.rawValue
-        }
+        let addToText: String = (modifierText == ConsoleColorModifier.bold) ? ";1": ""
+        let addToBg: String = (modifierBg == ConsoleColorModifier.bold) ? ";1": ""
         
-        if modifierBg == ConsoleColorModifier.bold {
-            addToBg = 100
-        }
-        else {
-            addToBg = addToBg + modifierBg.rawValue
-        }
-        
-        return "\u{001B}[\(colorText.rawValue+addToText)m\u{001B}[\(colorBg.rawValue+addToBg)m\(text)"
+        return "\u{001B}[\(colorText.rawValue)\(addToText)m\u{001B}[\(colorBg.rawValue+10)\(addToBg)m\(text)\u{001B}[0m"
     }
     
     ///
