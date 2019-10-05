@@ -396,7 +396,7 @@ internal class Player {
     func printWorkingInitializationSongs(path: String, completed: Int) -> Void {
         MainWindow.renderHeader(showTime: false)
         
-        Console.printXY(1,3,"### INITIALIZE ###", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,3,":: INITIALIZE ::", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         Console.printXY(1, 5, "Current Path: " + path, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
