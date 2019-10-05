@@ -15,6 +15,7 @@
 		D0A58DBB233644D8008868CE /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A58DBA233644D8008868CE /* AboutWindow.swift */; };
 		D0B4E441233B0E7D0031584B /* YearWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B4E440233B0E7D0031584B /* YearWindow.swift */; };
 		D0B4E443233B4D090031584B /* ModeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B4E442233B4D090031584B /* ModeWindow.swift */; };
+		D0C2314F2348D7D3008C4648 /* InitializeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C2314E2348D7D3008C4648 /* InitializeWindow.swift */; };
 		D0C499F6233536F4001232A9 /* HelpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F5233536F4001232A9 /* HelpWindow.swift */; };
 		D0C499F82335370B001232A9 /* SearchWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F72335370B001232A9 /* SearchWindow.swift */; };
 		D0C499FA23353721001232A9 /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C499F923353721001232A9 /* MainWindow.swift */; };
@@ -56,6 +57,7 @@
 		D0A58DBA233644D8008868CE /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		D0B4E440233B0E7D0031584B /* YearWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearWindow.swift; sourceTree = "<group>"; };
 		D0B4E442233B4D090031584B /* ModeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeWindow.swift; sourceTree = "<group>"; };
+		D0C2314E2348D7D3008C4648 /* InitializeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeWindow.swift; sourceTree = "<group>"; };
 		D0C499F5233536F4001232A9 /* HelpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpWindow.swift; sourceTree = "<group>"; };
 		D0C499F72335370B001232A9 /* SearchWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWindow.swift; sourceTree = "<group>"; };
 		D0C499F923353721001232A9 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				D0B4E440233B0E7D0031584B /* YearWindow.swift */,
 				D0B4E442233B4D090031584B /* ModeWindow.swift */,
 				D0777BCF233B7D3600BB603C /* InfoWindow.swift */,
+				D0C2314E2348D7D3008C4648 /* InitializeWindow.swift */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				D0A58DBB233644D8008868CE /* AboutWindow.swift in Sources */,
 				D0ED143E23323C5000FB51C8 /* SongEntry.swift in Sources */,
 				D0B4E441233B0E7D0031584B /* YearWindow.swift in Sources */,
+				D0C2314F2348D7D3008C4648 /* InitializeWindow.swift in Sources */,
 				D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */,
 				D0FD9B5A2342165500FB5A40 /* PlayerLogEntryType.swift in Sources */,
 				D0F162A9233896E200754651 /* ConsoleKeyboardHandler.swift in Sources */,

@@ -30,15 +30,9 @@ internal class Player {
     //
     // Private properties/constants.
     //
-    private var musicFormats: [String] = []
-    private var filesFound = false
-    private let findingFilesText: String = "Finding Song Files:"
-    private let initSongLibraryText: String = "Updating Song Library:"
-    private var helpIndex: Int = 0
     private var currentCommandReady: Bool = false
     private let EXIT_CODE_ERROR_FINDING_FILES: Int32 = 1
     private let EXIT_CODE_ERROR_PLAYING_FILE: Int32 = 2
-    //private let EXIT_CODE_ERROR_NOT_ENOUGH_MUSIC: Int32 = 3
     
     ///
     /// Initializes the application.
@@ -52,8 +46,6 @@ internal class Player {
         
         Console.initialize()
         
-        self.musicFormats = PlayerPreferences.musicFormats.components(separatedBy: ";")
-        
         g_library.load()
         
         if PlayerPreferences.musicRootPath.count == 0 {
@@ -62,15 +54,10 @@ internal class Player {
                 
             }
             PlayerPreferences.savePreferences()
-            Console.clearScreen()
-            MainWindow.renderHeader(showTime: false)
-            self.initializeSongs()
         }
-        else {
-            Console.clearScreen()
-            MainWindow.renderHeader(showTime: false)
-            self.initializeSongs()
-        }
+        
+        let wnd = InitializeWindow()
+        wnd.showWindow()
         
         g_library.library = g_songs
         g_library.save()
@@ -282,143 +269,7 @@ internal class Player {
     func run() -> Int32 {
         g_mainWindow = MainWindow()
         let retVal = g_mainWindow?.showWindow() ?? 0
-        
         PlayerLog.ApplicationLog?.logInformation(title: "CMPlayer", text: "Application Exited Normally.")
-        
         return retVal
     }
-    
-    ///
-    /// Initializes all the songs from files and library.
-    ///
-    func initializeSongs() -> Void {
-        g_songs.removeAll()
-        g_playlist.removeAll()
-        
-        for mrpath in PlayerPreferences.musicRootPath {
-            //#if DEBUG
-            //    let result = findSongs(path: "/Users/kjetilso/Music")//"/Volumes/ikjetil/Music/G")
-            //#else
-                let result = findSongs(path: mrpath)
-            //#endif
-            
-            filesFound = true
-            printWorkingInitializationSongs(path: mrpath, completed: 0)
-            
-            var i: Int = 1
-            for r in result {
-                printWorkingInitializationSongs( path: mrpath, completed: Int(Double(i) * Double(100.0) / Double(result.count)))
-                
-                let u: URL = URL(fileURLWithPath: r)
-                if let se = g_library.find(url: u) {
-                    g_songs.append(se)
-                }
-                else {
-                    let nasno = g_library.nextAvailableSongNo()
-                    do {
-                        g_songs.append(try SongEntry(path: URL(fileURLWithPath: r),songNo: nasno))
-                    }
-                    catch  {
-                        g_library.setNextAvailableSongNo(nasno)
-                    }
-                }
-                
-                i += 1
-            }
-        }
-        
-        if g_songs.count > 0 {
-            let r1 = g_songs.randomElement()
-            let r2 = g_songs.randomElement()
-            
-            g_playlist.append(r1!)
-            g_playlist.append(r2!)
-        }
-    }
-    
-    ///
-    /// Finds all songs from path and all folder paths under path. Songs must be of format in PlayerPreferences.musicFormats.
-    ///
-    /// parameter path: The root path to start finding supported audio files.
-    ///
-    /// returns: [String]. Array of file paths to audio files found.
-    ///
-    func findSongs(path: String) -> [String]
-    {
-        filesFound = false
-        var results: [String] = []
-        do
-        {
-            let result = try FileManager.default.contentsOfDirectory(atPath: path)
-            for r in result {
-                
-                var nr = "\(path)/\(r)"
-                if path.hasSuffix("/") {
-                    nr = "\(path)\(r)"
-                }
-                
-                printWorkingInitializationSongs(path: nr, completed: 0)
-                
-                if isDirectory(path: nr) {
-                    results.append(contentsOf: findSongs(path: nr))
-                }
-                else {
-                    if FileManager.default.isReadableFile(atPath: nr) {
-                        for f in self.musicFormats {
-                            if r.hasSuffix(f) {
-                                results.append(nr)
-                                break
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch {
-            results.removeAll()
-            
-            //let wnd: ErrorWindow = ErrorWindow()
-            //wnd.showWindow(message: "EXIT_CODE_ERROR_FINDING_FILES\n\(error)")
-            //Console.showCursor()
-            //Console.echoOn()
-            //exit(EXIT_CODE_ERROR_FINDING_FILES)
-        }
-        
-        return results
-    }
-    
-    ///
-    /// Prints the initialization of songs.
-    ///
-    /// parameter path: Current Path.
-    /// parameter completed: Percent completed.
-    ///
-    func printWorkingInitializationSongs(path: String, completed: Int) -> Void {
-        MainWindow.renderHeader(showTime: false)
-        
-        Console.printXY(1,3,":: INITIALIZE ::", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-        
-        Console.printXY(1, 5, "Current Path: " + path, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        let pstFiles: String = "\((filesFound) ? 100 : 0)%"
-        Console.printXY(1, 6, findingFilesText + " " + pstFiles, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        let pstLib: String = "\(completed)%"
-        Console.printXY(1, 7, initSongLibraryText + " " + pstLib, 80, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        
-        Console.printXY(1,23,"PLEASE BE PATIENT", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-    }
-    
-    ///
-    /// Determines if a path is a directory or not.
-    ///
-    /// parameter path. Path to check.
-    ///
-    /// returns: Bool. True if path is directory. False otherwise.
-    ///
-    func isDirectory(path: String) -> Bool {
-        var isDirectory: ObjCBool = true
-        FileManager().fileExists(atPath: path, isDirectory: &isDirectory)
-        return isDirectory.boolValue
-    }// isDirectory
 }// Player

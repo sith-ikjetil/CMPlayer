@@ -922,21 +922,19 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         
         if PlayerPreferences.musicRootPath.count == 0 {
             self.isShowingTopWindow = true
-            let wnd: SetupWindow = SetupWindow()
-            while !wnd.showWindow() {
+            let wndS: SetupWindow = SetupWindow()
+            while !wndS.showWindow() {
                 
             }
             PlayerPreferences.savePreferences()
-            Console.clearScreenCurrentTheme()
-            MainWindow.renderHeader(showTime: false)
             self.isShowingTopWindow = true
-            g_player.initializeSongs()
+            let wndI = InitializeWindow()
+            wndI.showWindow()
         }
         else {
-            Console.clearScreenCurrentTheme()
-            MainWindow.renderHeader(showTime: false)
             self.isShowingTopWindow = true
-            g_player.initializeSongs()
+            let wnd = InitializeWindow()
+            wnd.showWindow()
         }
         self.isShowingTopWindow = false
         
