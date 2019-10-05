@@ -30,6 +30,7 @@ internal class SearchWindow : TerminalSizeChangedProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderSearch()
+        Console.gotoXY(80,1)
         print("")
     }
     
@@ -175,6 +176,10 @@ internal class SearchWindow : TerminalSizeChangedProtocol {
     ///
     func renderSearch() -> Void {
         Console.clearScreenCurrentTheme()
+        
+        if g_rows < 24 || g_cols < 80 {
+            return
+        }
         
         MainWindow.renderHeader(showTime: false)
         

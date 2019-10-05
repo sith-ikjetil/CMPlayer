@@ -42,6 +42,7 @@ internal class ArtistWindow : TerminalSizeChangedProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderArtist()
+        Console.gotoXY(80,1)
         print("")
     }
     
@@ -68,6 +69,10 @@ internal class ArtistWindow : TerminalSizeChangedProtocol {
     ///
     func renderArtist() -> Void {
         Console.clearScreenCurrentTheme()
+        
+        if g_rows < 24 || g_cols < 80 {
+            return
+        }
         
         MainWindow.renderHeader(showTime: false)
         

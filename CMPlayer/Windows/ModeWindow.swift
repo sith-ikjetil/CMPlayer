@@ -42,6 +42,7 @@ internal class ModeWindow : TerminalSizeChangedProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderMode()
+        Console.gotoXY(80,1)
         print("")
     }
     
@@ -71,6 +72,10 @@ internal class ModeWindow : TerminalSizeChangedProtocol {
     ///
     func renderMode() -> Void {
         Console.clearScreenCurrentTheme()
+        
+        if g_rows < 24 || g_cols < 80 {
+            return
+        }
         
         MainWindow.renderHeader(showTime: false)
         

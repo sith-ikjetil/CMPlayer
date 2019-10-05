@@ -65,8 +65,8 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     private var isShowingTopWindow = false
     private var addendumText: String = ""
     private var updateFileName: String = ""
-    
     static private var timeElapsedMs: UInt64 = 0
+    private var isTooSmall: Bool = false
     
     ///
     /// Shows this MainWindow on screen.
@@ -86,7 +86,15 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        if g_rows >= 24 && g_cols >= 80 {
+            self.isTooSmall = false
+            self.renderScreen()
+        }
+        else {
+            self.isTooSmall = true
+            Console.gotoXY(80,1)
+            print("")
+        }
     }
 
     ///
@@ -95,7 +103,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     /// parameter showTime: True if time string is to be shown in header. False otherwise.
     ///
     static func renderHeader(showTime: Bool) -> Void {
-        let bgColor = ConsoleColor.blue //g_mainWindow?.getThemeBgColor() ?? ConsoleColor.blue
+        let bgColor = ConsoleColor.blue
         
         if showTime {
             Console.printXY(1,1,"CMPlayer | \(g_versionString) | \(itsRenderMsToFullString(MainWindow.timeElapsedMs, false))", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
@@ -282,9 +290,11 @@ internal class MainWindow : TerminalSizeChangedProtocol {
             while !self.quit {
                 
                 if !self.isShowingTopWindow {
-                    MainWindow.renderHeader(showTime: true)
-                    self.renderSongs()
-                    Console.printXY(1, 22, self.addendumText, 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    if !self.isTooSmall {
+                        MainWindow.renderHeader(showTime: true)
+                        self.renderScreen()
+                        Console.printXY(1, 22, self.addendumText, 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    }
                 }
                 
                 g_lock.lock()

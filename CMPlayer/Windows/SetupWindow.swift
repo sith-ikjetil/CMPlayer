@@ -43,6 +43,7 @@ internal class SetupWindow : TerminalSizeChangedProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderInitialSetup(path: "")
+        Console.gotoXY(80,1)
         print("")
     }
     
@@ -53,6 +54,10 @@ internal class SetupWindow : TerminalSizeChangedProtocol {
     ///
     func renderInitialSetup(path: String) -> Void {
         Console.clearScreen()
+        
+        if g_rows < 24 || g_cols < 80 {
+            return
+        }
         
         MainWindow.renderHeader(showTime: false)
         

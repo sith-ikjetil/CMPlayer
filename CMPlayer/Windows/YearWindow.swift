@@ -41,6 +41,7 @@ internal class YearWindow : TerminalSizeChangedProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderRecordingYears()
+        Console.gotoXY(80,1)
         print("")
     }
     
@@ -67,6 +68,10 @@ internal class YearWindow : TerminalSizeChangedProtocol {
     ///
     func renderRecordingYears() -> Void {
         Console.clearScreenCurrentTheme()
+        
+        if g_rows < 24 || g_cols < 80 {
+            return
+        }
         
         MainWindow.renderHeader(showTime: false)
         

@@ -42,6 +42,7 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderPreferences()
+        Console.gotoXY(80,1)
         print("")
     }
     
@@ -81,6 +82,10 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol {
     ///
     func renderPreferences() -> Void {
         Console.clearScreenCurrentTheme()
+        
+        if g_rows < 24 || g_cols < 80 {
+            return
+        }
         
         MainWindow.renderHeader(showTime: false)
         

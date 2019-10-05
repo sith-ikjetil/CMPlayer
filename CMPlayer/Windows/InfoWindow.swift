@@ -44,6 +44,7 @@ internal class InfoWindow : TerminalSizeChangedProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderInfo()
+        Console.gotoXY(80,1)
         print("")
     }
     
@@ -91,6 +92,10 @@ internal class InfoWindow : TerminalSizeChangedProtocol {
     ///
     func renderInfo() -> Void {
         Console.clearScreenCurrentTheme()
+        
+        if g_rows < 24 || g_cols < 80 {
+            return
+        }
         
         MainWindow.renderHeader(showTime: false)
         
