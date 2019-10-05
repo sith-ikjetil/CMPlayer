@@ -198,7 +198,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     }
     
     func renderAddendumText() -> Void {
-        Console.printXY(1,22, (self.addendumText.count > 0) ? self.addendumText : " ", 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        Console.printXY(1,22, (self.addendumText.count > 0) ? self.addendumText : " ", 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.none)
     }
     
     ///
