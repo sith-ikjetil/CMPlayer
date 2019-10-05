@@ -197,6 +197,10 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         }
     }
     
+    func renderAddendumText() -> Void {
+        Console.printXY(1,22, (self.addendumText.count > 0) ? self.addendumText : " ", 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+    }
+    
     ///
     /// Renders the command line on screen
     ///
@@ -262,7 +266,6 @@ internal class MainWindow : TerminalSizeChangedProtocol {
             }
             index += 1
         }
-        Console.printXY(1, 22, self.addendumText, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     }
     
     ///
@@ -271,6 +274,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     func renderScreen() -> Void {
         renderFrame()
         renderSongs()
+        renderAddendumText()
         renderCommandLine()
         renderStatusLine()
     }
@@ -293,7 +297,6 @@ internal class MainWindow : TerminalSizeChangedProtocol {
                     if !self.isTooSmall {
                         MainWindow.renderHeader(showTime: true)
                         self.renderScreen()
-                        Console.printXY(1, 22, self.addendumText, 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
                     }
                 }
                 
