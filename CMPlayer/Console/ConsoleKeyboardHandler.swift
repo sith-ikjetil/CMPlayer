@@ -12,6 +12,7 @@
 import Foundation
 import AppKit
 
+
 ///
 /// Represents CMPlayer ConsoleKeyboardHandler
 ///
@@ -56,13 +57,6 @@ internal class ConsoleKeyboardHandler {
     /// Runs keyboard processing using getchar(). Calls key event handlers .
     ///
     func run() {
-        //let nsScrollWheelEvent =  NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel], handler:
-        //{
-        //    (event: NSEvent) -> NSEvent in
-        //    print("HELLO WORLD")
-        //    return event
-        //})
-        
         var ch: Int32 = getchar()
         while true {
             if ch == 27 {
@@ -79,10 +73,6 @@ internal class ConsoleKeyboardHandler {
             
             ch = getchar()
         }
-        
-        //if nsScrollWheelEvent != nil {
-        //    NSEvent.removeMonitor(nsScrollWheelEvent!)
-        //}
     }
     
     ///

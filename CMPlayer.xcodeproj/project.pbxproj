@@ -61,6 +61,7 @@
 		D0C499F5233536F4001232A9 /* HelpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpWindow.swift; sourceTree = "<group>"; };
 		D0C499F72335370B001232A9 /* SearchWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWindow.swift; sourceTree = "<group>"; };
 		D0C499F923353721001232A9 /* MainWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
+		D0C4F23D2349F13C004ED33B /* ScratchPad.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ScratchPad.txt; sourceTree = "<group>"; };
 		D0ED142B23320B1B00FB51C8 /* CMPlayer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CMPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0ED142E23320B1B00FB51C8 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		D0ED143523320B4600FB51C8 /* Console.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Console.swift; sourceTree = "<group>"; };
@@ -156,6 +157,7 @@
 				D0ED142E23320B1B00FB51C8 /* main.swift */,
 				D05E0A4D233B9CC9004A226E /* CMPlayer.icns */,
 				D05E0A4F233B9F1D004A226E /* Media.xcassets */,
+				D0C4F23D2349F13C004ED33B /* ScratchPad.txt */,
 			);
 			path = CMPlayer;
 			sourceTree = "<group>";

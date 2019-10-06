@@ -1,0 +1,10 @@
+let nsScrollWheelEvent =  NSEvent.addLocalMonitorForEvents(matching: [.scrollWheel], handler:
+{
+    (event: NSEvent) -> NSEvent in
+    print("HELLO WORLD")
+    return event
+})
+
+if nsScrollWheelEvent != nil {
+    NSEvent.removeMonitor(nsScrollWheelEvent!)
+}
