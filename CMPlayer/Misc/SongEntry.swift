@@ -50,13 +50,30 @@ internal class SongEntry {
         self.trackNo = trackNo
 
         if isPathInMusicRootPath(path: url!.path) {
-            if self.genre.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
-                self.genre = "unknown"
+            self.albumName = self.albumName.trimmingCharacters(in: .whitespacesAndNewlines)
+            if self.albumName.count > 32 {
+                self.albumName = String(self.albumName[self.albumName.startIndex..<self.albumName.index(self.albumName.startIndex, offsetBy: 32)])
+            }
+            else if self.albumName.count == 0 {
+                self.albumName = "--unknown--"
+            }
+            
+            self.title = self.title.trimmingCharacters(in: .whitespacesAndNewlines)
+            if self.title.count > 32 {
+                self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
+            }
+            else if self.title.count == 0 {
+                self.title = "--unknown--"
             }
             
             //
             // Add to g_genres
             //
+            self.genre = self.genre.trimmingCharacters(in: .whitespacesAndNewlines)
+            if self.genre.count == 0 {
+                self.genre = "--unknown--"
+            }
+
             if g_genres[self.genre] == nil {
                 g_genres[self.genre] = []
             }
@@ -66,13 +83,16 @@ internal class SongEntry {
             //
             // Add to g_artists
             //
-            if self.artist.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
-                if g_artists[self.artist] == nil {
-                    g_artists[self.artist] = []
-                }
-            
-                g_artists[self.artist]?.append(self)
+            self.artist = self.artist.trimmingCharacters(in: .whitespacesAndNewlines)
+            if self.artist.count == 0 {
+                self.artist = "--unknown--"
             }
+            
+            if g_artists[self.artist] == nil {
+                g_artists[self.artist] = []
+            }
+
+            g_artists[self.artist]?.append(self)
             
             //
             // Add to g_releaseYears
@@ -112,8 +132,12 @@ internal class SongEntry {
                 if let keyValue = item.commonKey?.rawValue {
                     if keyValue == "title" {
                         self.title = item.stringValue!
+                        self.title = self.title.trimmingCharacters(in: .whitespacesAndNewlines)
                         if self.title.count > 32 {
                             self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
+                        }
+                        else if self.title.count == 0 {
+                            self.title = "--unknown--"
                         }
                     }
                     else if keyValue == "artist" {
@@ -134,9 +158,12 @@ internal class SongEntry {
                         }
                     }
                     if let an = MDItemCopyAttribute(metadata,kMDItemAlbum) as? String {
-                        self.albumName = an
+                        self.albumName = an.trimmingCharacters(in: .whitespacesAndNewlines)
                         if self.albumName.count > 32 {
                             self.albumName = String(self.albumName[self.albumName.startIndex..<self.albumName.index(self.albumName.startIndex, offsetBy: 32)])
+                        }
+                        else if self.albumName.count == 0 {
+                            self.albumName = "--unknown--"
                         }
                     }
                     if let geYear = MDItemCopyAttribute(metadata,kMDItemRecordingYear) as? Int {
@@ -157,8 +184,9 @@ internal class SongEntry {
         //
         // Add to genre
         //
-        if self.genre.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
-            self.genre = "unknown"
+        self.genre = self.genre.trimmingCharacters(in: .whitespacesAndNewlines)
+        if self.genre.count == 0 {
+            self.genre = "--unknown--"
         }
         
         if g_genres[self.genre] == nil {
@@ -170,13 +198,17 @@ internal class SongEntry {
         //
         // Add to g_artists
         //
-        if self.artist.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 {
-            if g_artists[self.artist] == nil {
-                g_artists[self.artist] = []
-            }
-        
-            g_artists[self.artist]?.append(self)
+        self.artist = self.artist.trimmingCharacters(in: .whitespacesAndNewlines)
+        if self.artist.count == 0 {
+            self.artist = "--unknown--"
         }
+    
+        if g_artists[self.artist] == nil {
+            g_artists[self.artist] = []
+        }
+    
+        g_artists[self.artist]?.append(self)
+    
         
         //
         // Add to g_releaseYears
