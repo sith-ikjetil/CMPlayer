@@ -19,6 +19,7 @@ internal class SongEntry {
     //
     // Properties/Constants.
     //
+    let unknownMetadataStringValue: String = "--unknown--"
     var songNo: Int = 0
     var artist: String = ""
     var title: String = ""
@@ -55,7 +56,7 @@ internal class SongEntry {
                 self.albumName = String(self.albumName[self.albumName.startIndex..<self.albumName.index(self.albumName.startIndex, offsetBy: 32)])
             }
             else if self.albumName.count == 0 {
-                self.albumName = "--unknown--"
+                self.albumName = self.unknownMetadataStringValue
             }
             
             self.title = self.title.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -63,7 +64,7 @@ internal class SongEntry {
                 self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
             }
             else if self.title.count == 0 {
-                self.title = "--unknown--"
+                self.title = self.unknownMetadataStringValue
             }
             
             //
@@ -71,7 +72,7 @@ internal class SongEntry {
             //
             self.genre = self.genre.trimmingCharacters(in: .whitespacesAndNewlines)
             if self.genre.count == 0 {
-                self.genre = "--unknown--"
+                self.genre = self.unknownMetadataStringValue
             }
 
             if g_genres[self.genre] == nil {
@@ -85,7 +86,7 @@ internal class SongEntry {
             //
             self.artist = self.artist.trimmingCharacters(in: .whitespacesAndNewlines)
             if self.artist.count == 0 {
-                self.artist = "--unknown--"
+                self.artist = self.unknownMetadataStringValue
             }
             
             if g_artists[self.artist] == nil {
@@ -137,7 +138,7 @@ internal class SongEntry {
                             self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
                         }
                         else if self.title.count == 0 {
-                            self.title = "--unknown--"
+                            self.title = self.unknownMetadataStringValue
                         }
                     }
                     else if keyValue == "artist" {
@@ -163,7 +164,7 @@ internal class SongEntry {
                             self.albumName = String(self.albumName[self.albumName.startIndex..<self.albumName.index(self.albumName.startIndex, offsetBy: 32)])
                         }
                         else if self.albumName.count == 0 {
-                            self.albumName = "--unknown--"
+                            self.albumName = self.unknownMetadataStringValue
                         }
                     }
                     if let geYear = MDItemCopyAttribute(metadata,kMDItemRecordingYear) as? Int {
@@ -186,7 +187,7 @@ internal class SongEntry {
         //
         self.genre = self.genre.trimmingCharacters(in: .whitespacesAndNewlines)
         if self.genre.count == 0 {
-            self.genre = "--unknown--"
+            self.genre = self.unknownMetadataStringValue
         }
         
         if g_genres[self.genre] == nil {
@@ -200,7 +201,7 @@ internal class SongEntry {
         //
         self.artist = self.artist.trimmingCharacters(in: .whitespacesAndNewlines)
         if self.artist.count == 0 {
-            self.artist = "--unknown--"
+            self.artist = self.unknownMetadataStringValue
         }
     
         if g_artists[self.artist] == nil {
@@ -218,5 +219,13 @@ internal class SongEntry {
         }
        
         g_recordingYears[self.recodingYear]?.append(self)
+        
+        if self.title.count == 0 {
+            self.title = self.unknownMetadataStringValue
+        }
+        if self.albumName.count == 0 {
+            self.albumName = self.unknownMetadataStringValue
+        }
+        
     }// init
 }// SongEntry
