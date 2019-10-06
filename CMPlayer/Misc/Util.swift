@@ -11,6 +11,10 @@
 //
 import Foundation
 
+internal enum ExitCodes: Int32 {
+    case ERROR_FINDING_FILES = 1
+    case ERROR_PLAYING_FILE = 2
+}
 ///
 /// SearchType, type of search
 ///
@@ -48,7 +52,7 @@ internal protocol TerminalSizeChangedProtocol {
 }
 
 ///
-/// Protocol for windows
+/// Protocol for windows show window
 ///
 internal protocol PlayerWindowProtocol {
     func showWindow() -> Void

@@ -31,8 +31,6 @@ internal class Player {
     // Private properties/constants.
     //
     private var currentCommandReady: Bool = false
-    private let EXIT_CODE_ERROR_FINDING_FILES: Int32 = 1
-    private let EXIT_CODE_ERROR_PLAYING_FILE: Int32 = 2
     
     ///
     /// Initializes the application.
@@ -88,12 +86,12 @@ internal class Player {
                 }
                 catch {
                     let msg = "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)"
-                    PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
+                    PlayerLog.ApplicationLog?.logError(title: "[Player].play", text: msg)
                     
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.message = msg
                     wnd.showWindow()
-                    exit(EXIT_CODE_ERROR_PLAYING_FILE)
+                    exit(ExitCodes.ERROR_PLAYING_FILE.rawValue)
                 }
             }
             else {
@@ -106,12 +104,12 @@ internal class Player {
                 }
                 catch {
                     let msg = "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)"
-                    PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
+                    PlayerLog.ApplicationLog?.logError(title: "[Player].play", text: msg)
                     
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.message = msg
                     wnd.showWindow()
-                    exit(EXIT_CODE_ERROR_PLAYING_FILE)
+                    exit(ExitCodes.ERROR_PLAYING_FILE.rawValue)
                 }
             }
         }
@@ -125,12 +123,12 @@ internal class Player {
                 }
                 catch {
                     let msg = "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)"
-                    PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
+                    PlayerLog.ApplicationLog?.logError(title: "[Player].play", text: msg)
                     
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.message = msg
                     wnd.showWindow()
-                    exit(EXIT_CODE_ERROR_PLAYING_FILE)
+                    exit(ExitCodes.ERROR_PLAYING_FILE.rawValue)
                 }
             }
             else {
@@ -143,12 +141,12 @@ internal class Player {
                 }
                 catch {
                     let msg = "EXIT_CODE_ERROR_PLAYING_FILE\nError playing player \(player) on index \(playlistIndex).\n\(error)"
-                    PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
+                    PlayerLog.ApplicationLog?.logError(title: "[Player].play", text: msg)
                     
                     let wnd: ErrorWindow = ErrorWindow()
                     wnd.message = msg
                     wnd.showWindow()
-                    exit(EXIT_CODE_ERROR_PLAYING_FILE)
+                    exit(ExitCodes.ERROR_PLAYING_FILE.rawValue)
                 }
             }
         }

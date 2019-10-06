@@ -396,6 +396,8 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     }
     
     func processCommand(command: String) -> Bool {
+        PlayerLog.ApplicationLog?.logInformation(title: "[MainWindow].processCommand(command:)", text: "Command: \(command)")
+        
         let parts = command.components(separatedBy: " ")
                     
         if isCommandInCommands(command, self.commandsExit) {
@@ -514,6 +516,9 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         }
         else if parts.count > 1 && isCommandInCommands(parts[0], self.commandsSearch) {
             self.onCommandSearch(parts: parts)
+        }
+        else {
+            PlayerLog.ApplicationLog?.logInformation(title: "[MainWindow].processCommand(command:)", text: "Command NOT Reckognized: \(command)")
         }
         
         return false

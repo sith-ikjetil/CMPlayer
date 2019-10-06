@@ -36,6 +36,9 @@ internal enum ViewType: String {
     case Details = "details"
 }
 
+//
+// Application Color Theme
+//
 internal enum ColorTheme: String {
     case Default = "default"
     case Blue = "blue"
@@ -62,8 +65,8 @@ internal class PlayerPreferences {
     static var logError: Bool = true
     static var logDebug: Bool = false
     static var logOther: Bool = false
-    static var logMaxSize: Int = 1000
-    static var logMaxSizeReached: LogMaxSizeReached = LogMaxSizeReached.StopLogging
+    static var logMaxSize: Int = 500
+    static var logMaxSizeReached: LogMaxSizeReached = LogMaxSizeReached.EmptyLog
     static let logMaxSizes: [Int] = [100, 500, 1000, 2000, 3000, 4000, 5000]
     static var logApplicationStartLoadType: LogApplicationStartLoadType = LogApplicationStartLoadType.LoadOldLog
     
