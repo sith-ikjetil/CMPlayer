@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer AboutWindow.
 ///
-internal class GenreWindow : TerminalSizeChangedProtocol {
+internal class GenreWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -30,7 +30,7 @@ internal class GenreWindow : TerminalSizeChangedProtocol {
         
         g_tscpStack.append(self)
         
-        self.renderGenre()
+        self.renderWindow()
         self.run()
         
         g_tscpStack.removeLast()
@@ -40,7 +40,7 @@ internal class GenreWindow : TerminalSizeChangedProtocol {
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderGenre()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -66,7 +66,7 @@ internal class GenreWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderGenre() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -114,20 +114,20 @@ internal class GenreWindow : TerminalSizeChangedProtocol {
     ///
     func run() -> Void {
         self.genreIndex = 0
-        self.renderGenre()
+        self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.genreIndex + 17) < self.genreText.count {
                 self.genreIndex += 1
-                self.renderGenre()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.genreIndex > 0 {
                 self.genreIndex -= 1
-                self.renderGenre()
+                self.renderWindow()
             }
             return false
         })
@@ -139,7 +139,7 @@ internal class GenreWindow : TerminalSizeChangedProtocol {
                 else {
                     self.genreIndex = 0
                 }
-                self.renderGenre()
+                self.renderWindow()
             }
             return false
         })
@@ -151,7 +151,7 @@ internal class GenreWindow : TerminalSizeChangedProtocol {
                 else {
                     self.genreIndex = self.genreText.count - g_windowContentLineCount
                 }
-                self.renderGenre()
+                self.renderWindow()
             }
             return false
         })

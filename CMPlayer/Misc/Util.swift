@@ -48,6 +48,13 @@ internal protocol TerminalSizeChangedProtocol {
 }
 
 ///
+/// Protocol for windows
+///
+internal protocol PlayerWindowProtocol {
+    func showWindow() -> Void
+}
+
+///
 /// Check to see if command is one of the supported given commands.
 ///
 /// parameter command: Command to check for.

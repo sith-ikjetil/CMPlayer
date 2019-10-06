@@ -14,26 +14,27 @@ import Foundation
 ///
 /// Represents CMPlayer HelpWindow.
 ///
-internal class InfoWindow : TerminalSizeChangedProtocol {
+internal class InfoWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     //
     // Private properties/constants
     //
     private var infoIndex: Int = 0
     private var infoText: [String] = []
+    var song: SongEntry?
     
     ///
     /// Shows this HelpWindow on screen.
     ///
     /// parameter song: Instance of SongEntry to render info.
     ///
-    func showWindow(song: SongEntry) -> Void {
+    func showWindow() -> Void {
         self.infoIndex = 0
         
-        self.updateInfoText(song: song)
+        self.updateInfoText()
         
         g_tscpStack.append(self)
         
-        self.renderInfo()
+        self.renderWindow()
         self.run()
         
         g_tscpStack.removeLast()
@@ -43,7 +44,7 @@ internal class InfoWindow : TerminalSizeChangedProtocol {
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderInfo()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -53,29 +54,29 @@ internal class InfoWindow : TerminalSizeChangedProtocol {
     ///
     /// parameter song: Instance of SongEntry to render info.
     ///
-    func updateInfoText(song: SongEntry) -> Void {
+    func updateInfoText() -> Void {
         self.infoText.append("song no.")
-        self.infoText.append(" :: \(song.songNo)")
+        self.infoText.append(" :: \(self.song?.songNo ?? 0)")
         self.infoText.append("artist")
-        self.infoText.append(" :: \(song.artist)")
+        self.infoText.append(" :: \(self.song?.artist ?? "")")
         self.infoText.append("album")
-        self.infoText.append(" :: \(song.albumName)")
+        self.infoText.append(" :: \(self.song?.albumName ?? "")")
         self.infoText.append("track no.")
-        self.infoText.append(" :: \(song.trackNo)")
+        self.infoText.append(" :: \(self.song?.trackNo ?? 0)")
         self.infoText.append("title")
-        self.infoText.append(" :: \(song.title)")
+        self.infoText.append(" :: \(self.song?.title ?? "")")
         self.infoText.append("duration")
-        self.infoText.append(" :: \(itsRenderMsToFullString(song.duration, false))")
+        self.infoText.append(" :: \(itsRenderMsToFullString(self.song?.duration ?? 0, false))")
         self.infoText.append("recording year")
-        self.infoText.append(" :: \(song.recodingYear)")
+        self.infoText.append(" :: \(self.song?.recodingYear ?? 0)")
         self.infoText.append("genre")
-        self.infoText.append(" :: \(song.genre)")
+        self.infoText.append(" :: \(self.song?.genre ?? "")")
         self.infoText.append("filename")
-        self.infoText.append(" :: \(song.fileURL?.lastPathComponent ?? "")")
+        self.infoText.append(" :: \(self.song?.fileURL?.lastPathComponent ?? "")")
         
-        let p = song.fileURL?.path ?? ""
+        let p = self.song?.fileURL?.path ?? ""
         if p.count > 0 {
-            let fparts = song.fileURL?.pathComponents ?? []
+            let fparts = self.song?.fileURL?.pathComponents ?? []
             var i: Int = 1
             var pathOnly: String = ""
             while i < fparts.count - 1 {
@@ -90,7 +91,7 @@ internal class InfoWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderInfo() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -135,20 +136,20 @@ internal class InfoWindow : TerminalSizeChangedProtocol {
     ///
     func run() -> Void {
         self.infoIndex = 0
-        self.renderInfo()
+        self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.infoIndex + 17) < self.infoText.count {
                 self.infoIndex += 1
-                self.renderInfo()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.infoIndex > 0 {
                 self.infoIndex -= 1
-                self.renderInfo()
+                self.renderWindow()
             }
             return false
         })
@@ -160,7 +161,7 @@ internal class InfoWindow : TerminalSizeChangedProtocol {
                 else {
                     self.infoIndex = 0
                 }
-                self.renderInfo()
+                self.renderWindow()
             }
             return false
         })
@@ -172,7 +173,7 @@ internal class InfoWindow : TerminalSizeChangedProtocol {
                 else {
                     self.infoIndex = self.infoText.count - g_windowContentLineCount
                 }
-                self.renderInfo()
+                self.renderWindow()
             }
             return false
         })

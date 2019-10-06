@@ -50,10 +50,7 @@ internal class Player {
         
         if PlayerPreferences.musicRootPath.count == 0 {
             let wnd: SetupWindow = SetupWindow()
-            while !wnd.showWindow() {
-                
-            }
-            PlayerPreferences.savePreferences()
+            wnd.showWindow()
         }
         
         let wnd = InitializeWindow()
@@ -94,7 +91,8 @@ internal class Player {
                     PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
                     
                     let wnd: ErrorWindow = ErrorWindow()
-                    wnd.showWindow(message: msg)
+                    wnd.message = msg
+                    wnd.showWindow()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -111,7 +109,8 @@ internal class Player {
                     PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
                     
                     let wnd: ErrorWindow = ErrorWindow()
-                    wnd.showWindow(message: msg)
+                    wnd.message = msg
+                    wnd.showWindow()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -129,7 +128,8 @@ internal class Player {
                     PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
                     
                     let wnd: ErrorWindow = ErrorWindow()
-                    wnd.showWindow(message: msg)
+                    wnd.message = msg
+                    wnd.showWindow()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -146,7 +146,8 @@ internal class Player {
                     PlayerLog.ApplicationLog?.logError(title: "Player::play", text: msg)
                     
                     let wnd: ErrorWindow = ErrorWindow()
-                    wnd.showWindow(message: msg)
+                    wnd.message = msg
+                    wnd.showWindow()
                     exit(EXIT_CODE_ERROR_PLAYING_FILE)
                 }
             }
@@ -268,8 +269,8 @@ internal class Player {
     ///
     func run() -> Int32 {
         g_mainWindow = MainWindow()
-        let retVal = g_mainWindow?.showWindow() ?? 0
+        g_mainWindow?.showWindow()
         PlayerLog.ApplicationLog?.logInformation(title: "CMPlayer", text: "Application Exited Normally.")
-        return retVal
+        return g_mainWindow?.exitValue ?? 0
     }
 }// Player

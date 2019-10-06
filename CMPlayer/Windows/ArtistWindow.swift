@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer AboutWindow.
 ///
-internal class ArtistWindow : TerminalSizeChangedProtocol {
+internal class ArtistWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -31,7 +31,7 @@ internal class ArtistWindow : TerminalSizeChangedProtocol {
         
         g_tscpStack.append(self)
         
-        self.renderArtist()
+        self.renderWindow()
         self.run()
         
         g_tscpStack.removeLast()
@@ -41,7 +41,7 @@ internal class ArtistWindow : TerminalSizeChangedProtocol {
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderArtist()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -67,7 +67,7 @@ internal class ArtistWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderArtist() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -115,20 +115,20 @@ internal class ArtistWindow : TerminalSizeChangedProtocol {
     ///
     func run() -> Void {
         self.artistIndex = 0
-        self.renderArtist()
+        self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.artistIndex + 17) < self.artistText.count {
                 self.artistIndex += 1
-                self.renderArtist()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.artistIndex > 0 {
                 self.artistIndex -= 1
-                self.renderArtist()
+                self.renderWindow()
             }
             return false
         })
@@ -140,7 +140,7 @@ internal class ArtistWindow : TerminalSizeChangedProtocol {
                 else {
                     self.artistIndex = 0
                 }
-                self.renderArtist()
+                self.renderWindow()
             }
             return false
         })
@@ -152,7 +152,7 @@ internal class ArtistWindow : TerminalSizeChangedProtocol {
                 else {
                     self.artistIndex = self.artistText.count - g_windowContentLineCount
                 }
-                self.renderArtist()
+                self.renderWindow()
             }
             return false
         })

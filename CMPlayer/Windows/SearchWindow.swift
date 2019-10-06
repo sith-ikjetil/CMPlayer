@@ -14,22 +14,26 @@ import Foundation
 ///
 /// Represents CMPlayer SearchWindow.
 ///
-internal class SearchWindow : TerminalSizeChangedProtocol {
+internal class SearchWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     //
-    // Private properties/constants.
+    // Private properties/variables/constants.
     //
     private var searchIndex: Int = 0
-    var searchResult: [SongEntry] = []
-    private var parts: [String] = []
     private var partsYear: [String] = []
+    
+    //
+    // Public properties/variables/constants
+    //
+    var searchResult: [SongEntry] = []
+    var parts: [String] = []
     var stats: [Int] = []
-    private var type: SearchType = SearchType.ArtistOrTitle
+    var type: SearchType = SearchType.ArtistOrTitle
     
     ///
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderSearch()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -159,22 +163,17 @@ internal class SearchWindow : TerminalSizeChangedProtocol {
     ///
     /// Shows this SearchWindow on screen.
     ///
-    func showWindow(parts: [String], type: SearchType) -> Void {
-        self.parts = parts
-        self.type = type
-        
+    func showWindow() -> Void {
         g_tscpStack.append(self)
-        
-        self.renderSearch()
+        self.renderWindow()
         self.run()
-        
         g_tscpStack.removeLast()
     }
     
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderSearch() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -236,20 +235,20 @@ internal class SearchWindow : TerminalSizeChangedProtocol {
         _ = p.removeFirst()
         self.searchIndex = 0
         self.performSearch(terms: self.parts, type: self.type)
-        self.renderSearch()
+        self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.searchIndex + 17) < self.searchResult.count {
                 self.searchIndex += 1
-                self.renderSearch()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.searchIndex > 0 {
                 self.searchIndex -= 1
-                self.renderSearch()
+                self.renderWindow()
             }
             return false
         })
@@ -261,7 +260,7 @@ internal class SearchWindow : TerminalSizeChangedProtocol {
                 else {
                     self.searchIndex = 0
                 }
-                self.renderSearch()
+                self.renderWindow()
             }
             return false
         })
@@ -273,7 +272,7 @@ internal class SearchWindow : TerminalSizeChangedProtocol {
                 else {
                     self.searchIndex = self.searchResult.count - g_windowContentLineCount
                 }
-                self.renderSearch()
+                self.renderWindow()
             }
             return false
         })

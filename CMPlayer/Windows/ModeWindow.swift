@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer ModeWindow.
 ///
-internal class ModeWindow : TerminalSizeChangedProtocol {
+internal class ModeWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -31,7 +31,7 @@ internal class ModeWindow : TerminalSizeChangedProtocol {
         
         g_tscpStack.append(self)
         
-        self.renderMode()
+        self.renderWindow()
         self.run()
         
         g_tscpStack.removeLast()
@@ -41,7 +41,7 @@ internal class ModeWindow : TerminalSizeChangedProtocol {
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderMode()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -70,7 +70,7 @@ internal class ModeWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderMode() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -121,14 +121,14 @@ internal class ModeWindow : TerminalSizeChangedProtocol {
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.modeIndex + 17) < self.modeText.count {
                 self.modeIndex += 1
-                self.renderMode()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.modeIndex > 0 {
                 self.modeIndex -= 1
-                self.renderMode()
+                self.renderWindow()
             }
             return false
         })
@@ -140,7 +140,7 @@ internal class ModeWindow : TerminalSizeChangedProtocol {
                 else {
                     self.modeIndex = 0
                 }
-                self.renderMode()
+                self.renderWindow()
             }
             return false
         })
@@ -152,7 +152,7 @@ internal class ModeWindow : TerminalSizeChangedProtocol {
                 else {
                     self.modeIndex = self.modeText.count - g_windowContentLineCount
                 }
-                self.renderMode()
+                self.renderWindow()
             }
             return false
         })

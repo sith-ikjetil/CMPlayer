@@ -15,7 +15,9 @@ import Cocoa
 ///
 /// Represents CMPlayer MainWindow.
 ///
-internal class MainWindow : TerminalSizeChangedProtocol {
+internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+    
+    
     //
     // Private properties/constants.
     //
@@ -61,24 +63,23 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.cmplayer.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.cmplayer.macos.2", attributes: .concurrent)
     private var currentChar: Int32 = -1
-    private var exitCode: Int32 = 0
+    var exitValue: Int32 = 0
     private var isShowingTopWindow = false
     private var addendumText: String = ""
     private var updateFileName: String = ""
     static private var timeElapsedMs: UInt64 = 0
     private var isTooSmall: Bool = false
-    
+
     ///
     /// Shows this MainWindow on screen.
     ///
     /// returns: ExitCode,  Int32
     ///
-    func showWindow() -> Int32 {
+    func showWindow() -> Void {
         g_tscpStack.append(self)
-        self.renderScreen()
-        let exitCode = self.run()
+        self.renderWindow()
+        self.run()
         g_tscpStack.removeLast()
-        return exitCode
     }
     
     ///
@@ -88,7 +89,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         Console.clearScreenCurrentTheme()
         if g_rows >= 24 && g_cols >= 80 {
             self.isTooSmall = false
-            self.renderScreen()
+            self.renderWindow()
         }
         else {
             self.isTooSmall = true
@@ -271,7 +272,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does not clear screen first.
     ///
-    func renderScreen() -> Void {
+    func renderWindow() -> Void {
         renderFrame()
         renderSongs()
         renderAddendumText()
@@ -282,10 +283,8 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     ///
     /// Runs MainWindow keyboard input and feedback. Delegation to other windows and command processing.
     ///
-    /// returns: Int32. Exit code.
-    ///
-    func run() -> Int32 {
-        self.renderScreen()
+    func run() -> Void {
+        self.renderWindow()
         
         //
         // Count down and render songs
@@ -296,7 +295,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
                 if !self.isShowingTopWindow {
                     if !self.isTooSmall {
                         MainWindow.renderHeader(showTime: true)
-                        self.renderScreen()
+                        self.renderWindow()
                     }
                 }
                 
@@ -394,8 +393,6 @@ internal class MainWindow : TerminalSizeChangedProtocol {
             return false
         })
         keyHandler.run()
-        
-        return self.exitCode
     }
     
     func processCommand(command: String) -> Bool {
@@ -539,7 +536,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
                 PlayerPreferences.colorTheme = ColorTheme.Default
                 PlayerPreferences.savePreferences()
             }
-            self.renderScreen()
+            self.renderWindow()
         }
     }
     
@@ -625,7 +622,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
     ///
     func onCommandRepaint(parts: [String]) -> Void {
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
     }
     
     ///
@@ -786,9 +783,10 @@ internal class MainWindow : TerminalSizeChangedProtocol {
                     if s.songNo == sno {
                         self.isShowingTopWindow = true
                         let wnd: InfoWindow = InfoWindow()
-                        wnd.showWindow(song: s)
+                        wnd.song = s
+                        wnd.showWindow()
                         Console.clearScreenCurrentTheme()
-                        self.renderScreen()
+                        self.renderWindow()
                         self.isShowingTopWindow = false
                         break
                     }
@@ -807,7 +805,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         let wnd: HelpWindow = HelpWindow()
         wnd.showWindow()
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
         self.isShowingTopWindow = false
     }
     
@@ -831,7 +829,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         let wnd: AboutWindow = AboutWindow()
         wnd.showWindow()
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
         self.isShowingTopWindow = false
     }
     
@@ -845,7 +843,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         let wnd: ArtistWindow = ArtistWindow()
         wnd.showWindow()
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
         self.isShowingTopWindow = false
     }
     
@@ -859,7 +857,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         let wnd: GenreWindow = GenreWindow()
         wnd.showWindow()
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
         self.isShowingTopWindow = false
     }
     
@@ -873,7 +871,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         let wnd: ModeWindow = ModeWindow()
         wnd.showWindow()
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
         self.isShowingTopWindow = false
     }
 
@@ -888,9 +886,10 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         g_lock.lock()
         let song = g_playlist[0]
         g_lock.unlock()
-        wnd.showWindow(song: song)
+        wnd.song = song
+        wnd.showWindow()
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
         self.isShowingTopWindow = false
     }
     
@@ -923,10 +922,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         if PlayerPreferences.musicRootPath.count == 0 {
             self.isShowingTopWindow = true
             let wndS: SetupWindow = SetupWindow()
-            while !wndS.showWindow() {
-                
-            }
-            PlayerPreferences.savePreferences()
+            wndS.showWindow()
             self.isShowingTopWindow = true
             let wndI = InitializeWindow()
             wndI.showWindow()
@@ -941,7 +937,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         g_library.library = g_songs
         g_library.save()
         
-        self.renderScreen()
+        self.renderWindow()
         
         g_lock.unlock()
         
@@ -974,7 +970,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         let wnd: PreferencesWindow = PreferencesWindow()
         wnd.showWindow()
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
         self.isShowingTopWindow = false
     }
     
@@ -988,7 +984,7 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         let wnd: YearWindow = YearWindow()
         wnd.showWindow()
         Console.clearScreenCurrentTheme()
-        self.renderScreen()
+        self.renderWindow()
         self.isShowingTopWindow = false
     }
     
@@ -1004,9 +1000,11 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
-            wnd.showWindow(parts: nparts, type: SearchType.ArtistOrTitle)
+            wnd.parts = nparts
+            wnd.type = SearchType.ArtistOrTitle
+            wnd.showWindow()
             Console.clearScreenCurrentTheme()
-            self.renderScreen()
+            self.renderWindow()
             self.isShowingTopWindow = false
         }
     }
@@ -1023,9 +1021,11 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
-            wnd.showWindow(parts: nparts, type: SearchType.Artist)
+            wnd.parts = nparts
+            wnd.type = SearchType.Artist
+            wnd.showWindow()
             Console.clearScreenCurrentTheme()
-            self.renderScreen()
+            self.renderWindow()
             self.isShowingTopWindow = false
         }
     }
@@ -1042,9 +1042,11 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
-            wnd.showWindow(parts: nparts, type: SearchType.Title)
+            wnd.parts = nparts
+            wnd.type = SearchType.Title
+            wnd.showWindow()
             Console.clearScreenCurrentTheme()
-            self.renderScreen()
+            self.renderWindow()
             self.isShowingTopWindow = false
         }
     }
@@ -1061,9 +1063,11 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
-            wnd.showWindow(parts: nparts, type: SearchType.Album)
+            wnd.parts = nparts
+            wnd.type = SearchType.Album
+            wnd.showWindow()
             Console.clearScreenCurrentTheme()
-            self.renderScreen()
+            self.renderWindow()
             self.isShowingTopWindow = false
         }
     }
@@ -1080,9 +1084,11 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
-            wnd.showWindow(parts: nparts, type: SearchType.Genre)
+            wnd.parts = nparts
+            wnd.type = SearchType.Genre
+            wnd.showWindow()
             Console.clearScreenCurrentTheme()
-            self.renderScreen()
+            self.renderWindow()
             self.isShowingTopWindow = false
         }
     }
@@ -1099,9 +1105,11 @@ internal class MainWindow : TerminalSizeChangedProtocol {
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
-            wnd.showWindow(parts: nparts, type: SearchType.RecordedYear)
+            wnd.parts = nparts
+            wnd.type = SearchType.RecordedYear
+            wnd.showWindow()
             Console.clearScreenCurrentTheme()
-            self.renderScreen()
+            self.renderWindow()
             self.isShowingTopWindow = false
         }
     }

@@ -11,15 +11,40 @@
 //
 import Foundation
 
-internal class ErrorWindow {
+internal class ErrorWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+    
+    var message: String = ""
     
     ///
     /// Shows this ErrorWindow on screen.
     ///
     /// parameter message: The message to show in error.
     ///
-    func showWindow(message: String) -> Void {
-        self.renderErrorMessage(message: message)
+    func showWindow() -> Void {
+        g_tscpStack.append(self)
+        self.renderWindow()
+        self.run()
+        g_tscpStack.removeLast()
+    }
+    
+    //
+    // TerminalSizeChangedProtocol implementation handler.
+    //
+    func terminalSizeHasChanged() {
+        self.renderWindow()
+        Console.gotoXY(80,1)
+        print("")
+    }
+    
+    //
+    // Run method.
+    //
+    func run() -> Void {
+        let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
+        keyHandler.addKeyHandler(key: Console.KEY_ENTER, closure: { () -> Bool in
+            return true
+        })
+        keyHandler.run()
     }
     
     ///
@@ -27,19 +52,13 @@ internal class ErrorWindow {
     ///
     /// parameter message: The message to show in error.
     ///
-    func renderErrorMessage(message: String) -> Void {
+    func renderWindow() -> Void {
         Console.clearScreen()
+        
         Console.printXY(1, 1, "CMPlayer Error", 80, .center, " ", ConsoleColor.blue, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        Console.printXY(1, 3, message, 800, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1, 3, self.message, 80*15, .ignore, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.red, ConsoleColorModifier.bold)
         print("")
         print("")
         print(Console.applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white, modifierText: ConsoleColorModifier.bold, text: "> Press ENTER Key To Continue <"))
-        
-        
-        let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: 10, closure: { () -> Bool in
-            return true
-        })
-        keyHandler.run()
     }// renderErrorMessage
 }// ErrorWindow

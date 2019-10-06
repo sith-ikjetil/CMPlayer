@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer RecordingYearWindow.
 ///
-internal class YearWindow : TerminalSizeChangedProtocol {
+internal class YearWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -30,7 +30,7 @@ internal class YearWindow : TerminalSizeChangedProtocol {
         
         g_tscpStack.append(self)
         
-        self.renderRecordingYears()
+        self.renderWindow()
         self.run()
         
         g_tscpStack.removeLast()
@@ -40,7 +40,7 @@ internal class YearWindow : TerminalSizeChangedProtocol {
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderRecordingYears()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -66,7 +66,7 @@ internal class YearWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderRecordingYears() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -114,20 +114,20 @@ internal class YearWindow : TerminalSizeChangedProtocol {
     ///
     func run() -> Void {
         self.yearIndex = 0
-        self.renderRecordingYears()
+        self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.yearIndex + 17) < self.yearText.count {
                 self.yearIndex += 1
-                self.renderRecordingYears()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.yearIndex > 0 {
                 self.yearIndex -= 1
-                self.renderRecordingYears()
+                self.renderWindow()
             }
             return false
         })
@@ -139,7 +139,7 @@ internal class YearWindow : TerminalSizeChangedProtocol {
                 else {
                     self.yearIndex = 0
                 }
-                self.renderRecordingYears()
+                self.renderWindow()
             }
             return false
         })
@@ -151,7 +151,7 @@ internal class YearWindow : TerminalSizeChangedProtocol {
                 else {
                     self.yearIndex = self.yearText.count - g_windowContentLineCount
                 }
-                self.renderRecordingYears()
+                self.renderWindow()
             }
             return false
         })

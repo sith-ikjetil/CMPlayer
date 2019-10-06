@@ -14,35 +14,34 @@ import Foundation
 ///
 /// Represents CMPlayer InitialSetupWindow.
 ///
-internal class SetupWindow : TerminalSizeChangedProtocol {
+internal class SetupWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
-    /// Private properties/constants.
+    /// Private properties/variables/constants.
     ///
     private let setupText: [String] = ["CMPlayer needs to have a path to search for music",
                                        "In CMPlayer you can have many root paths.",
                                        "In CMPlayer Use: add mrp <path> or: remove mrp <path> to add remove path.",
                                        "Please enter the path to the root directory of where your music resides."]
-
+    //
+    // Public propreties/variables/constants
+    //
+    var path: String = ""
+    
     ///
     /// Shows this InitialSetupWindow on screen.
     ///
-    func showWindow() -> Bool {
-        self.renderInitialSetup(path: "")
-        
+    func showWindow() -> Void {
         g_tscpStack.append(self)
-        
-        let retVal = self.run()
-        
+        self.renderWindow()
+        self.run()
         g_tscpStack.removeLast()
-        
-        return retVal
     }
     
     ///
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderInitialSetup(path: "")
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -52,7 +51,7 @@ internal class SetupWindow : TerminalSizeChangedProtocol {
     ///
     /// parameter path: Path to render on screen.
     ///
-    func renderInitialSetup(path: String) -> Void {
+    func renderWindow() -> Void {
         Console.clearScreen()
         
         if g_rows < 24 || g_cols < 80 {
@@ -69,9 +68,7 @@ internal class SetupWindow : TerminalSizeChangedProtocol {
             y += 1
         }
         
-        Console.printXY(1,y+1, ":> \(path)", 3+path.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-        
-        //Console.printXY(1,23,"PRESS UP KEY OR DOWN KEY FOR MORE RESULTS. OTHER KEY TO EXIT HELP.", 80, .center, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,y+1, ":> \(self.path)", 3+path.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     ///
@@ -79,22 +76,19 @@ internal class SetupWindow : TerminalSizeChangedProtocol {
     ///
     /// returns: Bool. True if path entered, false otherwise.
     ///
-    func run() -> Bool {
-        var path: String = ""
-        var retVal: Bool = false
-        
+    func run() -> Void {
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_BACKSPACE, closure: { () -> Bool in
-            if path.count > 0 {
-                path.removeLast()
-                self.renderInitialSetup(path: path)
+            if self.path.count > 0 {
+                self.path.removeLast()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_ENTER, closure: { () -> Bool in
-            if path.count > 0 {
-                PlayerPreferences.musicRootPath.append(path)
-                retVal = true
+            if self.path.count > 0 {
+                PlayerPreferences.musicRootPath.append(self.path)
+                PlayerPreferences.savePreferences()
                 return true
             }
             return false
@@ -105,13 +99,11 @@ internal class SetupWindow : TerminalSizeChangedProtocol {
                && key != 127
                && key != 27
             {
-                path.append(String(UnicodeScalar(UInt32(key))!))
-                self.renderInitialSetup(path: path)
+                self.path.append(String(UnicodeScalar(UInt32(key))!))
+                self.renderWindow()
             }
             return false
         })
         keyHandler.run()
-        
-        return retVal
     }// run
 }// InitialSetupWindow

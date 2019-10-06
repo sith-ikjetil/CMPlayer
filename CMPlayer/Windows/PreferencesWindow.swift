@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer PreferencesWindow.
 ///
-internal class PreferencesWindow : TerminalSizeChangedProtocol {
+internal class PreferencesWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     //
     // Private properties/constants
     //
@@ -31,7 +31,7 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol {
         
         g_tscpStack.append(self)
         
-        self.renderPreferences()
+        self.renderWindow()
         self.run()
         
         g_tscpStack.removeLast()
@@ -41,7 +41,7 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol {
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderPreferences()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -80,7 +80,7 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderPreferences() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -130,14 +130,14 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol {
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.preferencesIndex + 17) < self.preferencesText.count {
                 self.preferencesIndex += 1
-                self.renderPreferences()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.preferencesIndex > 0 {
                 self.preferencesIndex -= 1
-                self.renderPreferences()
+                self.renderWindow()
             }
             return false
         })

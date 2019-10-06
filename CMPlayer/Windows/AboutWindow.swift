@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer AboutWindow.
 ///
-internal class AboutWindow : TerminalSizeChangedProtocol {
+internal class AboutWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     /// Private properties/constants.
     ///
@@ -39,7 +39,7 @@ internal class AboutWindow : TerminalSizeChangedProtocol {
         
         g_tscpStack.append(self)
         
-        self.renderAbout()
+        self.renderWindow()
         self.run()
         
         g_tscpStack.removeLast()
@@ -49,7 +49,7 @@ internal class AboutWindow : TerminalSizeChangedProtocol {
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderAbout()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -57,7 +57,7 @@ internal class AboutWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderAbout() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -104,14 +104,14 @@ internal class AboutWindow : TerminalSizeChangedProtocol {
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.aboutIndex + 17) < self.aboutText.count {
                 self.aboutIndex += 1
-                self.renderAbout()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.aboutIndex > 0 {
                 self.aboutIndex -= 1
-                self.renderAbout()
+                self.renderWindow()
             }
             return false
         })
@@ -123,7 +123,7 @@ internal class AboutWindow : TerminalSizeChangedProtocol {
                 else {
                     self.aboutIndex = 0
                 }
-                self.renderAbout()
+                self.renderWindow()
             }
             return false
         })
@@ -135,7 +135,7 @@ internal class AboutWindow : TerminalSizeChangedProtocol {
                 else {
                     self.aboutIndex = self.aboutText.count - g_windowContentLineCount
                 }
-                self.renderAbout()
+                self.renderWindow()
             }
             return false
         })

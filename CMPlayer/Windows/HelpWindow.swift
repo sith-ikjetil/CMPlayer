@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer HelpWindow.
 ///
-internal class HelpWindow : TerminalSizeChangedProtocol {
+internal class HelpWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     //
     // Private properties/constants
     //
@@ -61,7 +61,7 @@ internal class HelpWindow : TerminalSizeChangedProtocol {
     func showWindow() -> Void {
         self.helpIndex = 0
         g_tscpStack.append(self)
-        self.renderHelp()
+        self.renderWindow()
         self.run()
         g_tscpStack.removeLast()
     }
@@ -70,7 +70,7 @@ internal class HelpWindow : TerminalSizeChangedProtocol {
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
-        self.renderHelp()
+        self.renderWindow()
         Console.gotoXY(80,1)
         print("")
     }
@@ -78,7 +78,7 @@ internal class HelpWindow : TerminalSizeChangedProtocol {
     ///
     /// Renders screen output. Does clear screen first.
     ///
-    func renderHelp() -> Void {
+    func renderWindow() -> Void {
         Console.clearScreenCurrentTheme()
         
         if g_rows < 24 || g_cols < 80 {
@@ -123,20 +123,20 @@ internal class HelpWindow : TerminalSizeChangedProtocol {
     ///
     func run() -> Void {
         self.helpIndex = 0
-        self.renderHelp()
+        self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
             if (self.helpIndex + 17) < self.helpText.count {
                 self.helpIndex += 1
-                self.renderHelp()
+                self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
             if self.helpIndex > 0 {
                 self.helpIndex -= 1
-                self.renderHelp()
+                self.renderWindow()
             }
             return false
         })
@@ -148,7 +148,7 @@ internal class HelpWindow : TerminalSizeChangedProtocol {
                 else {
                     self.helpIndex = 0
                 }
-                self.renderHelp()
+                self.renderWindow()
             }
             return false
         })
@@ -160,7 +160,7 @@ internal class HelpWindow : TerminalSizeChangedProtocol {
                 else {
                     self.helpIndex = self.helpText.count - g_windowContentLineCount
                 }
-                self.renderHelp()
+                self.renderWindow()
             }
             return false
         })
