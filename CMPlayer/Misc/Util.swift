@@ -168,8 +168,16 @@ internal extension String {
     func convertStringToLengthPaddedString(_ maxLength: Int,_ padding: PrintPaddingTextAlign,_ paddingChar: Character) -> String {
         var msg: String = self
         
-        if msg.count == 0 {
+        if msg.count == 0 && maxLength <= 0 {
             return msg
+        }
+        
+        if msg.count == 0 {
+            var result: String = ""
+            for _ in 0..<maxLength {
+                result.append(paddingChar)
+            }
+            return result
         }
         
         if msg.count > maxLength {
