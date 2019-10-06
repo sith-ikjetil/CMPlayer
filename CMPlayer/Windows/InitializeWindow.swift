@@ -195,6 +195,8 @@ internal class InitializeWindow : TerminalSizeChangedProtocol, PlayerWindowProto
     func run() -> Void {
         while !self.isFinished {
             self.renderWindow()
+            Console.gotoXY(80,1)
+            print("")
             let second: Double = 1_000_000
             usleep(useconds_t(0.150 * second))
         }
