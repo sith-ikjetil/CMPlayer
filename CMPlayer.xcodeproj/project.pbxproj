@@ -95,8 +95,8 @@
 			isa = PBXGroup;
 			children = (
 				D0ED143523320B4600FB51C8 /* Console.swift */,
-				D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */,
 				D0A65981234B9567009EDEF7 /* ConsoleKey.swift */,
+				D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */,
 			);
 			path = Console;
 			sourceTree = "<group>";
