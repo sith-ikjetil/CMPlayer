@@ -198,7 +198,7 @@ internal class InitializeWindow : TerminalSizeChangedProtocol, PlayerWindowProto
             Console.gotoXY(80,1)
             print("")
             let second: Double = 1_000_000
-            usleep(useconds_t(0.150 * second))
+            usleep(useconds_t(0.050 * second))
         }
     }// run
 }// HelpWindow
