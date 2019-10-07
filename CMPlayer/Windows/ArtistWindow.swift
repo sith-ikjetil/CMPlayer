@@ -42,8 +42,6 @@ internal class ArtistWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol 
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderWindow()
-        Console.gotoXY(80,1)
-        print("")
     }
     
     ///
@@ -108,6 +106,9 @@ internal class ArtistWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol 
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(1,24,"Artist Count: \(g_artists.count.itsToString())", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.gotoXY(80,1)
+        print("")
     }
     
     ///

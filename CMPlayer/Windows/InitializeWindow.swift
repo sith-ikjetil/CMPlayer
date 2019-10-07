@@ -160,8 +160,6 @@ internal class InitializeWindow : TerminalSizeChangedProtocol, PlayerWindowProto
     func terminalSizeHasChanged() -> Void {
         Console.clearScreenCurrentTheme()
         self.renderWindow()
-        Console.gotoXY(80,1)
-        print("")
     }
     
     ///
@@ -187,6 +185,9 @@ internal class InitializeWindow : TerminalSizeChangedProtocol, PlayerWindowProto
         Console.printXY(1, 7, "Updating Song Library: " + pstLib, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.printXY(1,23,"PLEASE BE PATIENT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.gotoXY(80,1)
+        print("")
     }
     
     ///
@@ -195,8 +196,7 @@ internal class InitializeWindow : TerminalSizeChangedProtocol, PlayerWindowProto
     func run() -> Void {
         while !self.isFinished {
             self.renderWindow()
-            Console.gotoXY(80,1)
-            print("")
+    
             let second: Double = 1_000_000
             usleep(useconds_t(0.050 * second))
         }

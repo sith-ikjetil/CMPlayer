@@ -32,8 +32,6 @@ internal class ErrorWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     //
     func terminalSizeHasChanged() {
         self.renderWindow()
-        Console.gotoXY(80,1)
-        print("")
     }
     
     //
@@ -60,5 +58,8 @@ internal class ErrorWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         print("")
         print("")
         print(Console.applyTextColor(colorBg: ConsoleColor.black, modifierBg: ConsoleColorModifier.none, colorText: ConsoleColor.white, modifierText: ConsoleColorModifier.bold, text: "> Press ENTER Key To Continue <"))
+        
+        Console.gotoXY(80,1)
+        print("")
     }// renderErrorMessage
 }// ErrorWindow

@@ -58,14 +58,35 @@ internal class ConsoleKeyboardHandler {
     /// Runs keyboard processing using getchar(). Calls key event handlers .
     ///
     func run() {
-        while true {
+        var b27: Bool = false
+        var b91: Bool = false
+        var doRun: Bool = true
+        while doRun {
             let inputData = FileHandle.standardInput.availableData
             if inputData.count > 0 {
                 let tmp = String(data: inputData, encoding: .utf8)
                 
                 if let inputString = tmp {
+                    
                     for c in inputString.unicodeScalars {
-                        if processKey(key: c.value) {
+                        if !b91 && !b27 && c.value == 27 {
+                            b27 = true
+                            continue
+                        }
+                        else if b27 && c.value == 91 {
+                            b91 = true
+                            continue
+                        }
+                        
+                        var key = c.value
+                        if b91 {
+                            b27 = false
+                            b91 = false
+                            key += 300 // WE HAVE ARROW KEYS
+                        }
+                        
+                        if processKey(key: key) {
+                            doRun = false
                             break;
                         }
                     }

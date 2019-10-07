@@ -42,8 +42,6 @@ internal class SetupWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderWindow()
-        Console.gotoXY(80,1)
-        print("")
     }
     
     ///
@@ -69,6 +67,9 @@ internal class SetupWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         }
         
         Console.printXY(1,y+1, ":> \(self.path)", 3+path.count, .left, " ", ConsoleColor.black, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        
+        Console.gotoXY(80,1)
+        print("")
     }
     
     ///

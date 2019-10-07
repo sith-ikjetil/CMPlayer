@@ -42,8 +42,6 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol, PlayerWindowProt
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderWindow()
-        Console.gotoXY(80,1)
-        print("")
     }
     
     ///
@@ -118,6 +116,9 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol, PlayerWindowProt
         }
         
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.gotoXY(80,1)
+        print("")
     }
     
     ///

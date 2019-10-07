@@ -288,6 +288,9 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         renderAddendumText()
         renderCommandLine()
         renderStatusLine()
+        
+        Console.gotoXY(80,1)
+        print("")
     }
     
     ///

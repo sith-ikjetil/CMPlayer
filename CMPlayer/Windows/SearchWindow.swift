@@ -34,8 +34,6 @@ internal class SearchWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol 
     ///
     func terminalSizeHasChanged() -> Void {
         self.renderWindow()
-        Console.gotoXY(80,1)
-        print("")
     }
     
     ///
@@ -220,6 +218,9 @@ internal class SearchWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol 
         }
         
         Console.printXY(1,24,"Songs Found: \(self.searchResult.count.itsToString())",80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        
+        Console.gotoXY(80,1)
+        print("")
     }
     
     ///
