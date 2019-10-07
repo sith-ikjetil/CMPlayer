@@ -71,6 +71,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
+        NSLog("(e): \(title): \(text)")
     }
     
     ///
@@ -93,6 +94,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
+        NSLog("(w): \(title): \(text)")
     }
     
     ///
@@ -115,6 +117,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
+        NSLog("(i): \(title): \(text)")
     }
     
     ///
@@ -137,6 +140,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
+        NSLog("(d): \(title): \(text)")
     }
     
     ///
@@ -159,7 +163,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
-        
+        NSLog("(o): \(title): \(text)")
     }
     
     ///
