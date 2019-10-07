@@ -32,6 +32,8 @@ internal enum SearchType : String {
 ///
 internal enum SongEntryError : Error {
     case DurationIsZero
+    case PathIsNil
+    case PathNotExist
 }
 
 ///

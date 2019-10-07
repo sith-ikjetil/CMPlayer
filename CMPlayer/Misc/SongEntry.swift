@@ -22,13 +22,18 @@ internal class SongEntry {
     let unknownMetadataStringValue: String = "--unknown--"
     var songNo: Int = 0
     var artist: String = ""
+    var fullArtist: String = ""
     var title: String = ""
+    var fullTitle: String = ""
     var duration: UInt64 = 0
     var fileURL: URL? = nil
     var genre: String = ""
+    var fullGenre: String = ""
     var albumName: String = ""
+    var fullAlbumName: String = ""
     var recodingYear: Int = 0
     var trackNo: Int = 0
+    let maxStringLength: Int = 32
     
     ///
     /// Overloaded initializer. Is only called from PlayerLibrary.load()
@@ -39,71 +44,68 @@ internal class SongEntry {
     /// parameter duration: Song length in milliseconds.
     /// parameter url: Song file path.
     ///
-    init(songNo: Int, artist: String, albumName: String, title: String, duration: UInt64, url: URL?, genre: String, recordingYear: Int, trackNo: Int) {
+    init(songNo: Int, artist: String, albumName: String, title: String, duration: UInt64, url: URL?, genre: String, recordingYear: Int, trackNo: Int) throws {
+        guard url != nil else {
+            throw SongEntryError.PathIsNil
+        }
+        
+        guard isPathInMusicRootPath(path: url!.path) else {
+            throw SongEntryError.PathNotExist
+        }
+        
         self.songNo = songNo
         self.artist = artist
+        self.fullArtist = artist
         self.albumName = albumName
+        self.fullAlbumName = albumName
         self.title = title
+        self.fullTitle = title
         self.duration = duration
         self.fileURL = url
         self.genre = genre.lowercased()
+        self.fullGenre = genre.lowercased()
         self.recodingYear = recordingYear
         self.trackNo = trackNo
 
-        if isPathInMusicRootPath(path: url!.path) {
-            self.albumName = self.albumName.trimmingCharacters(in: .whitespacesAndNewlines)
-            if self.albumName.count > 32 {
-                self.albumName = String(self.albumName[self.albumName.startIndex..<self.albumName.index(self.albumName.startIndex, offsetBy: 32)])
-            }
-            else if self.albumName.count == 0 {
-                self.albumName = self.unknownMetadataStringValue
-            }
-            
-            self.title = self.title.trimmingCharacters(in: .whitespacesAndNewlines)
-            if self.title.count > 32 {
-                self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
-            }
-            else if self.title.count == 0 {
-                self.title = self.unknownMetadataStringValue
-            }
-            
-            //
-            // Add to g_genres
-            //
-            self.genre = self.genre.trimmingCharacters(in: .whitespacesAndNewlines)
-            if self.genre.count == 0 {
-                self.genre = self.unknownMetadataStringValue
-            }
+    
+        self.fullTitle = trimAndSetStringDefaultValue(str: self.title)
+        self.title = trimAndSetStringDefaultValueMaxLength(str: self.title)
+        
+        self.fullAlbumName = trimAndSetStringDefaultValue(str: self.albumName)
+        self.albumName = trimAndSetStringDefaultValueMaxLength(str: self.albumName)
+        
+        //
+        // Add to g_genres
+        //
+        self.fullGenre = trimAndSetStringDefaultValue(str: self.genre)
+        self.genre = trimAndSetStringDefaultValueMaxLength(str: self.genre)
 
-            if g_genres[self.genre] == nil {
-                g_genres[self.genre] = []
-            }
-            
-            g_genres[self.genre]?.append(self)
-            
-            //
-            // Add to g_artists
-            //
-            self.artist = self.artist.trimmingCharacters(in: .whitespacesAndNewlines)
-            if self.artist.count == 0 {
-                self.artist = self.unknownMetadataStringValue
-            }
-            
-            if g_artists[self.artist] == nil {
-                g_artists[self.artist] = []
-            }
-
-            g_artists[self.artist]?.append(self)
-            
-            //
-            // Add to g_releaseYears
-            //
-            if g_recordingYears[self.recodingYear] == nil {
-                g_recordingYears[self.recodingYear] = []
-            }
-            
-            g_recordingYears[self.recodingYear]?.append(self)
+        if g_genres[self.genre] == nil {
+            g_genres[self.genre] = []
         }
+        
+        g_genres[self.genre]?.append(self)
+        
+        //
+        // Add to g_artists
+        //
+        self.fullArtist = trimAndSetStringDefaultValue(str: self.artist)
+        self.artist = trimAndSetStringDefaultValueMaxLength(str: self.artist)
+        
+        if g_artists[self.artist] == nil {
+            g_artists[self.artist] = []
+        }
+
+        g_artists[self.artist]?.append(self)
+        
+        //
+        // Add to g_releaseYears
+        //
+        if g_recordingYears[self.recodingYear] == nil {
+            g_recordingYears[self.recodingYear] = []
+        }
+        
+        g_recordingYears[self.recodingYear]?.append(self)
     }
     
     ///
@@ -114,8 +116,12 @@ internal class SongEntry {
     ///
     init(path: URL?, songNo: Int) throws
     {
-        if path == nil {
-            return
+        guard path != nil else {
+            throw SongEntryError.PathIsNil
+        }
+        
+        guard isPathInMusicRootPath(path: path!.path) else {
+            throw SongEntryError.PathNotExist
         }
         
         self.songNo = songNo
@@ -133,19 +139,9 @@ internal class SongEntry {
                 if let keyValue = item.commonKey?.rawValue {
                     if keyValue == "title" {
                         self.title = item.stringValue!
-                        self.title = self.title.trimmingCharacters(in: .whitespacesAndNewlines)
-                        if self.title.count > 32 {
-                            self.title = String(title[title.startIndex..<title.index(title.startIndex, offsetBy: 32)])
-                        }
-                        else if self.title.count == 0 {
-                            self.title = self.unknownMetadataStringValue
-                        }
                     }
                     else if keyValue == "artist" {
                         self.artist = item.stringValue!
-                        if self.artist.count > 32 {
-                            self.artist = String(artist[artist.startIndex..<artist.index(artist.startIndex, offsetBy: 32)])
-                        }
                     }
                 }
             }
@@ -154,18 +150,9 @@ internal class SongEntry {
                 if let metadata = MDItemCreateWithURL(kCFAllocatorDefault, npath) {
                     if let ge = MDItemCopyAttribute(metadata,kMDItemMusicalGenre) as? String {
                         self.genre = ge.lowercased()
-                        if self.genre.count > 32 {
-                            self.genre = String(self.genre[self.genre.startIndex..<self.genre.index(self.genre.startIndex, offsetBy: 32)])
-                        }
                     }
                     if let an = MDItemCopyAttribute(metadata,kMDItemAlbum) as? String {
                         self.albumName = an.trimmingCharacters(in: .whitespacesAndNewlines)
-                        if self.albumName.count > 32 {
-                            self.albumName = String(self.albumName[self.albumName.startIndex..<self.albumName.index(self.albumName.startIndex, offsetBy: 32)])
-                        }
-                        else if self.albumName.count == 0 {
-                            self.albumName = self.unknownMetadataStringValue
-                        }
                     }
                     if let geYear = MDItemCopyAttribute(metadata,kMDItemRecordingYear) as? Int {
                         self.recodingYear = geYear
@@ -185,11 +172,8 @@ internal class SongEntry {
         //
         // Add to genre
         //
-        self.genre = self.genre.trimmingCharacters(in: .whitespacesAndNewlines)
-        if self.genre.count == 0 {
-            self.genre = self.unknownMetadataStringValue
-        }
-        
+        self.fullGenre = trimAndSetStringDefaultValue(str: self.genre)
+        self.genre = trimAndSetStringDefaultValueMaxLength(str: self.genre)
         if g_genres[self.genre] == nil {
             g_genres[self.genre] = []
         }
@@ -199,11 +183,8 @@ internal class SongEntry {
         //
         // Add to g_artists
         //
-        self.artist = self.artist.trimmingCharacters(in: .whitespacesAndNewlines)
-        if self.artist.count == 0 {
-            self.artist = self.unknownMetadataStringValue
-        }
-    
+        self.fullArtist = trimAndSetStringDefaultValue(str: self.artist)
+        self.artist = trimAndSetStringDefaultValueMaxLength(str: self.artist)
         if g_artists[self.artist] == nil {
             g_artists[self.artist] = []
         }
@@ -220,12 +201,29 @@ internal class SongEntry {
        
         g_recordingYears[self.recodingYear]?.append(self)
         
-        if self.title.count == 0 {
-            self.title = self.unknownMetadataStringValue
-        }
-        if self.albumName.count == 0 {
-            self.albumName = self.unknownMetadataStringValue
-        }
+        self.fullTitle = trimAndSetStringDefaultValue(str: self.title)
+        self.title = trimAndSetStringDefaultValueMaxLength(str: self.title)
         
-    }// init
+        self.fullAlbumName = trimAndSetStringDefaultValue(str: self.albumName)
+        self.albumName = trimAndSetStringDefaultValueMaxLength(str: self.albumName)
+    }
+    
+    ///
+    /// Trims string and sets default value if it is empty
+    ///
+    func trimAndSetStringDefaultValue(str: String) -> String {
+        var s = str.trimmingCharacters(in: .whitespacesAndNewlines)
+        if s.count == 0 {
+            s = self.unknownMetadataStringValue
+        }
+        return s
+    }
+    
+    func trimAndSetStringDefaultValueMaxLength(str: String) -> String {
+        var s = self.trimAndSetStringDefaultValue(str: str)
+        if s.count > self.maxStringLength {
+            s = String(s[s.startIndex..<s.index(s.startIndex, offsetBy: self.maxStringLength)])
+        }
+        return s
+    }
 }// SongEntry

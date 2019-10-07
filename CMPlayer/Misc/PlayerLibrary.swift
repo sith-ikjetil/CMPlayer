@@ -95,13 +95,13 @@ internal class PlayerLibrary {
                         songNo = Int(aNumber.stringValue ?? "0") ?? 0
                     }
                     if let aArtist = s.attribute(forName: "artist") {
-                        artist = aArtist.stringValue ?? "<unknown>"
+                        artist = aArtist.stringValue ?? ""
                     }
                     if let aAlbumName = s.attribute(forName: "albumName") {
-                        albumName = aAlbumName.stringValue ?? "<unknown>"
+                        albumName = aAlbumName.stringValue ?? ""
                     }
                     if let aTitle = s.attribute(forName: "title") {
-                        title = aTitle.stringValue ?? "<unknown>"
+                        title = aTitle.stringValue ?? ""
                     }
                     if let aDuration = s.attribute(forName: "duration") {
                         duration = UInt64(aDuration.stringValue ?? "0") ?? 0
@@ -122,10 +122,17 @@ internal class PlayerLibrary {
                     if songNo > self.nextSongNo {
                         self.nextSongNo = songNo + 1
                     }
-                    let se = SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear, trackNo: trackNo)
-                    self.library.append(se)
-                    if url.count > 0 {
-                        self.dictionary[url] = self.library.count-1
+                    
+                    do
+                    {
+                        let se = try SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear, trackNo: trackNo)
+                        self.library.append(se)
+                        if url.count > 0 {
+                            self.dictionary[url] = self.library.count-1
+                        }
+                    }
+                    catch {
+                        
                     }
                 }
             }
@@ -152,17 +159,17 @@ internal class PlayerLibrary {
             
             let xnArtist: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
             xnArtist.name = "artist"
-            xnArtist.setStringValue(s.artist, resolvingEntities: true)
+            xnArtist.setStringValue(s.fullArtist, resolvingEntities: true)
             xeSong.addAttribute(xnArtist)
             
             let xnAlbumName: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
             xnAlbumName.name = "albumName"
-            xnAlbumName.setStringValue(s.albumName, resolvingEntities: true)
+            xnAlbumName.setStringValue(s.fullAlbumName, resolvingEntities: true)
             xeSong.addAttribute(xnAlbumName)
             
             let xnTitle: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
             xnTitle.name = "title"
-            xnTitle.setStringValue(s.title, resolvingEntities: true)
+            xnTitle.setStringValue(s.fullTitle, resolvingEntities: true)
             xeSong.addAttribute(xnTitle)
             
             let xnDuration: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
@@ -177,7 +184,7 @@ internal class PlayerLibrary {
             
             let xnGenre: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
             xnGenre.name = "genre"
-            xnGenre.setStringValue(s.genre, resolvingEntities: true)
+            xnGenre.setStringValue(s.fullGenre, resolvingEntities: true)
             xeSong.addAttribute(xnGenre)
             
             let xnRecordingYear: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)
