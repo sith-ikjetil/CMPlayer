@@ -41,7 +41,7 @@ internal class ErrorWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     //
     func run() -> Void {
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: Console.KEY_ENTER, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_ENTER.rawValue, closure: { () -> Bool in
             return true
         })
         keyHandler.run()

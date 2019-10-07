@@ -358,23 +358,23 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         }
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_UP.rawValue, closure: { () -> Bool in
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_HTAB, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_HTAB.rawValue, closure: { () -> Bool in
             self.onCommandNextSong(parts: [])
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_ENTER, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_ENTER.rawValue, closure: { () -> Bool in
             var returnValue: Bool = false
             if self.currentCommand.count > 0 {
                 returnValue = self.processCommand(command: self.currentCommand)
@@ -387,11 +387,11 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
             
             return returnValue
         })
-        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
-            if key != EOF && key != 10 && key != Console.KEY_BACKSPACE && key != 27 {
-                self.currentCommand.append(String(UnicodeScalar(UInt32(key))!))
+        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
+            if key != ConsoleKey.KEY_EOF.rawValue && key != ConsoleKey.KEY_ENTER.rawValue && key != ConsoleKey.KEY_BACKSPACE.rawValue  {
+                self.currentCommand.append(String(Character(UnicodeScalar(key)!)))
             }
-            else if key == Console.KEY_BACKSPACE {
+            else if key == ConsoleKey.KEY_BACKSPACE.rawValue {
                 if self.currentCommand.count > 0 {
                     self.currentCommand.removeLast()
                 }
@@ -405,6 +405,13 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         keyHandler.run()
     }
     
+    ///
+    /// Processes commands
+    ///
+    /// parameter command: Command string to process
+    ///
+    /// returns: Bool true if application should exit. False otherwise.
+    ///
     func processCommand(command: String) -> Bool {
         PlayerLog.ApplicationLog?.logInformation(title: "[MainWindow].processCommand(command:)", text: "Command: \(command)")
         

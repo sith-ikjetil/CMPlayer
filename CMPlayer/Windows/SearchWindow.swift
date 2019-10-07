@@ -238,21 +238,21 @@ internal class SearchWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol 
         self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
             if (self.searchIndex + 17) < self.searchResult.count {
                 self.searchIndex += 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_UP.rawValue, closure: { () -> Bool in
             if self.searchIndex > 0 {
                 self.searchIndex -= 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
             if self.searchIndex > 0  && self.searchResult.count > g_windowContentLineCount {
                 if self.searchIndex - g_windowContentLineCount > 0 {
                     self.searchIndex -= g_windowContentLineCount
@@ -264,7 +264,7 @@ internal class SearchWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol 
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
             if self.searchIndex >= 0  && self.searchResult.count > g_windowContentLineCount {
                 if self.searchIndex + g_windowContentLineCount < self.searchResult.count - g_windowContentLineCount {
                     self.searchIndex += g_windowContentLineCount
@@ -276,7 +276,7 @@ internal class SearchWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol 
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_SPACEBAR, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_SPACEBAR.rawValue, closure: { () -> Bool in
             if self.searchResult.count > 0 {
                 if  self.type == SearchType.ArtistOrTitle ||
                     self.type == SearchType.Artist ||
@@ -298,7 +298,7 @@ internal class SearchWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol 
             }
             return true
         })
-        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
             return true
         })
         keyHandler.run()

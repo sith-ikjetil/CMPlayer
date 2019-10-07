@@ -127,21 +127,21 @@ internal class PreferencesWindow : TerminalSizeChangedProtocol, PlayerWindowProt
         self.preferencesIndex = 0
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
             if (self.preferencesIndex + 17) < self.preferencesText.count {
                 self.preferencesIndex += 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_UP.rawValue, closure: { () -> Bool in
             if self.preferencesIndex > 0 {
                 self.preferencesIndex -= 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
             return true
         })
         keyHandler.run()

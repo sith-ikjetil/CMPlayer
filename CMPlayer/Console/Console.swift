@@ -74,20 +74,7 @@ internal class Console {
     //static private let sigintSrcSIGUSR2 = DispatchSource.makeSignalSource(signal: Int32(SIGUSR2), queue: Console.concurrentQueue1)
     //static private let sigintSrcSIGTHR = DispatchSource.makeSignalSource(signal: Int32(SIGTHR), queue: Console.concurrentQueue1)
     //static private let sigintSrcSIGLIBRT = DispatchSource.makeSignalSource(signal: Int32(SIGLIBRT), queue: Console.concurrentQueue1)
-    
-    //
-    // Internal static constants
-    //
-    static let KEY_BACKSPACE: Int32 = 127
-    static let KEY_ENTER: Int32 = 10
-    static let KEY_UP: Int32 = 300 + 65
-    static let KEY_DOWN: Int32 = 300 + 66
-    static let KEY_RIGHT: Int32 = 300 + 67
-    static let KEY_LEFT: Int32 = 300 + 68
-    static let KEY_HTAB: Int32 = 9
-    static let KEY_SPACEBAR: Int32 = 32
 
-    
     ///
     /// Clears console screen.
     ///

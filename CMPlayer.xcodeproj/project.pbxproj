@@ -13,6 +13,7 @@
 		D093D0B12335E51E001842D6 /* SetupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0B02335E51E001842D6 /* SetupWindow.swift */; };
 		D093D0B323361497001842D6 /* PlayerLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0B223361497001842D6 /* PlayerLibrary.swift */; };
 		D0A58DBB233644D8008868CE /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A58DBA233644D8008868CE /* AboutWindow.swift */; };
+		D0A65982234B9567009EDEF7 /* ConsoleKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A65981234B9567009EDEF7 /* ConsoleKey.swift */; };
 		D0B4E441233B0E7D0031584B /* YearWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B4E440233B0E7D0031584B /* YearWindow.swift */; };
 		D0B4E443233B4D090031584B /* ModeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B4E442233B4D090031584B /* ModeWindow.swift */; };
 		D0C2314F2348D7D3008C4648 /* InitializeWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C2314E2348D7D3008C4648 /* InitializeWindow.swift */; };
@@ -55,6 +56,7 @@
 		D093D0B02335E51E001842D6 /* SetupWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupWindow.swift; sourceTree = "<group>"; };
 		D093D0B223361497001842D6 /* PlayerLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLibrary.swift; sourceTree = "<group>"; };
 		D0A58DBA233644D8008868CE /* AboutWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
+		D0A65981234B9567009EDEF7 /* ConsoleKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleKey.swift; sourceTree = "<group>"; };
 		D0B4E440233B0E7D0031584B /* YearWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearWindow.swift; sourceTree = "<group>"; };
 		D0B4E442233B4D090031584B /* ModeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeWindow.swift; sourceTree = "<group>"; };
 		D0C2314E2348D7D3008C4648 /* InitializeWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeWindow.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			children = (
 				D0ED143523320B4600FB51C8 /* Console.swift */,
 				D0F162A8233896E200754651 /* ConsoleKeyboardHandler.swift */,
+				D0A65981234B9567009EDEF7 /* ConsoleKey.swift */,
 			);
 			path = Console;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				D0ED142F23320B1B00FB51C8 /* main.swift in Sources */,
 				D0F162AB2338C8CF00754651 /* GenreWindow.swift in Sources */,
 				D0FD9B58234215EB00FB5A40 /* PlayerLog.swift in Sources */,
+				D0A65982234B9567009EDEF7 /* ConsoleKey.swift in Sources */,
 				D042988F233A10DF00EBDC0B /* ArtistWindow.swift in Sources */,
 				D0F162A723386F7A00754651 /* PreferencesWindow.swift in Sources */,
 				D0ED144223323EF100FB51C8 /* PlayerPreferences.swift in Sources */,

@@ -78,14 +78,14 @@ internal class SetupWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     func run() -> Void {
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: Console.KEY_BACKSPACE, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_BACKSPACE.rawValue, closure: { () -> Bool in
             if self.path.count > 0 {
                 self.path.removeLast()
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_ENTER, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_ENTER.rawValue, closure: { () -> Bool in
             if self.path.count > 0 {
                 PlayerPreferences.musicRootPath.append(self.path)
                 PlayerPreferences.savePreferences()
@@ -93,7 +93,7 @@ internal class SetupWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
             }
             return false
         })
-        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
             if key != EOF
                && key != 10
                && key != 127

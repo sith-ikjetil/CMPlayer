@@ -20,8 +20,9 @@ internal class ConsoleKeyboardHandler {
     //
     // Private properties/constants
     //
-    private var keyHandlers: [Int32 : () -> Bool] = [:]
-    private var unknownKeyHandlers: [(Int32) -> Bool] = []
+    private var keyHandlers: [UInt32 : () -> Bool] = [:]
+    private var unknownKeyHandlers: [(UInt32) -> Bool] = []
+    //private var inputLocalte: locale_t = OpaquePointer(Locale(identifier: "nb_NO"))
     
     //
     // Default initializer
@@ -38,7 +39,7 @@ internal class ConsoleKeyboardHandler {
     ///
     /// returns: True if ConsoleKeyboardHandler should stop processing keys and return from run. False otherwise.
     ///
-    func addKeyHandler(key: Int32, closure: @escaping () -> Bool) {
+    func addKeyHandler(key: UInt32, closure: @escaping () -> Bool) {
         self.keyHandlers[key] = closure
     }
     
@@ -49,7 +50,7 @@ internal class ConsoleKeyboardHandler {
     ///
     /// returns: True is ConsoleKeyboardHandler should stop processing keys and return from run. False otherwise.
     ///
-    func addUnknownKeyHandler(closure: @escaping (Int32) -> Bool) {
+    func addUnknownKeyHandler(closure: @escaping (UInt32) -> Bool) {
         self.unknownKeyHandlers.append(closure)
     }
     
@@ -57,21 +58,19 @@ internal class ConsoleKeyboardHandler {
     /// Runs keyboard processing using getchar(). Calls key event handlers .
     ///
     func run() {
-        var ch: Int32 = getchar()
         while true {
-            if ch == 27 {
-                ch = getchar()
-                if ch == 91 {
-                    ch = getchar()
-                    ch += 300   // ARROWS, ADD NUMERIC BASE FOR ARROWS TO DISTINGUISH FROM A og B etc.
+            let inputData = FileHandle.standardInput.availableData
+            if inputData.count > 0 {
+                let tmp = String(data: inputData, encoding: .utf8)
+                
+                if let inputString = tmp {
+                    for c in inputString.unicodeScalars {
+                        if processKey(key: c.value) {
+                            break;
+                        }
+                    }
                 }
             }
-
-            if processKey(key: ch) {
-                break
-            }
-            
-            ch = getchar()
         }
     }
     
@@ -82,7 +81,7 @@ internal class ConsoleKeyboardHandler {
     ///
     /// returns: True if eventhandler processed the keystroke and eventhandler returned true. False if no eventhandler processed the key. Also false if eventhandler returned false.
     ///
-    func processKey(key: Int32) -> Bool {
+    func processKey(key: UInt32) -> Bool {
         var hit: Bool = false
         for kh in self.keyHandlers {
             if kh.key == key {

@@ -126,21 +126,21 @@ internal class HelpWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: Console.KEY_DOWN, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
             if (self.helpIndex + 17) < self.helpText.count {
                 self.helpIndex += 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_UP, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_UP.rawValue, closure: { () -> Bool in
             if self.helpIndex > 0 {
                 self.helpIndex -= 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_LEFT, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
             if self.helpIndex > 0  && self.helpText.count > g_windowContentLineCount {
                 if self.helpIndex - g_windowContentLineCount > 0 {
                     self.helpIndex -= g_windowContentLineCount
@@ -152,7 +152,7 @@ internal class HelpWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
             }
             return false
         })
-        keyHandler.addKeyHandler(key: Console.KEY_RIGHT, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
             if self.helpIndex >= 0  && self.helpText.count > g_windowContentLineCount {
                 if self.helpIndex + g_windowContentLineCount < self.helpText.count - g_windowContentLineCount {
                     self.helpIndex += g_windowContentLineCount
@@ -164,7 +164,7 @@ internal class HelpWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
             }
             return false
         })
-        keyHandler.addUnknownKeyHandler(closure: { (key: Int32) -> Bool in
+        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
             return true
         })
         keyHandler.run()

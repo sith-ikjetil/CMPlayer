@@ -158,6 +158,17 @@ internal func reparseCurrentCommandArguments(_ command: [String]) -> [String] {
 /// String extension methods.
 ///
 internal extension String {
+    
+    func decodeString()-> String {
+        let data = self.data(using: .utf8)
+        if let message = String(data: data!, encoding: .utf8) {
+            return message
+        }
+        return ""
+    }
+    
+  
+    
     ///
     /// Converts a string to a padded string of given length.
     ///
