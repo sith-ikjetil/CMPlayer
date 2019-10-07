@@ -219,7 +219,7 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     func renderStatusLine() -> Void
     {
-        var text: String = "Song Count: \(g_songs.count.itsToString())"
+        var text: String = "Songs: \(g_songs.count.itsToString())"
         
         let modeInfo = getModeStatus()
         if modeInfo.isInMode {
