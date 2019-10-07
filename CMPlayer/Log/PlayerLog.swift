@@ -10,6 +10,7 @@
 // import.
 //
 import Foundation
+import os
 
 ///
 /// PlayerLog log class.
@@ -71,9 +72,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
-        #if DEBUG
-        NSLog("(e): \(title): \(text)")
-        #endif
+        os_log("(e): %{public}s","\(title): \(text)")
     }
     
     ///
@@ -96,9 +95,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
-        #if DEBUG
-        NSLog("(w): \(title): \(text)")
-        #endif
+        os_log("(w): %{public}s","\(title): \(text)")
     }
     
     ///
@@ -121,9 +118,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
-        #if DEBUG
-        NSLog("(i): \(title): \(text)")
-        #endif
+        os_log("(i): %{public}s","\(title): \(text)")
     }
     
     ///
@@ -146,9 +141,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
-        #if DEBUG
-        NSLog("(d): \(title): \(text)")
-        #endif
+        os_log("(d): %{public}s","\(title): \(text)")
     }
     
     ///
@@ -171,9 +164,7 @@ internal class PlayerLog {
         if self.autoSave {
             self.saveLog()
         }
-        #if DEBUG
-        NSLog("(o): \(title): \(text)")
-        #endif
+        os_log("(o): %{public}s","\(title): \(text)")
     }
     
     ///
