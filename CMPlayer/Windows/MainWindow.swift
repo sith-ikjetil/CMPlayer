@@ -390,13 +390,20 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
             
             return returnValue
         })
-        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
-            if key != ConsoleKey.KEY_EOF.rawValue && key != ConsoleKey.KEY_ENTER.rawValue && key != ConsoleKey.KEY_BACKSPACE.rawValue  {
-                self.currentCommand.append(String(Character(UnicodeScalar(key)!)))
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_BACKSPACE.rawValue, closure: { () -> Bool in
+            if self.currentCommand.count > 0 {
+                self.currentCommand.removeLast()
             }
-            else if key == ConsoleKey.KEY_BACKSPACE.rawValue {
-                if self.currentCommand.count > 0 {
-                    self.currentCommand.removeLast()
+            return false
+        })
+        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
+            if key != ConsoleKey.KEY_EOF.rawValue  {
+                let scalar = UnicodeScalar(key)
+                if let s = scalar {
+                    let ch = Character(s)
+                    if ch.isLetter || ch.isNumber || ch.isWhitespace || ch.isPunctuation {
+                        self.currentCommand.append(String(Character(UnicodeScalar(key)!)))
+                    }
                 }
             }
             
