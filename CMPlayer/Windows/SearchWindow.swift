@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer SearchWindow.
 ///
-internal class SearchWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
     //
     // Private properties/variables/constants.
     //

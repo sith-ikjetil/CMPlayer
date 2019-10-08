@@ -15,7 +15,7 @@ import Cocoa
 ///
 /// Represents CMPlayer MainWindow.
 ///
-internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
     
     
     //

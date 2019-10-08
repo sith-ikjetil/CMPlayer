@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer HelpWindow.
 ///
-internal class InfoWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+internal class InfoWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
     //
     // Private properties/constants
     //

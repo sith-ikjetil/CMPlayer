@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer RecordingYearWindow.
 ///
-internal class YearWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+internal class YearWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
     ///
     /// Private properties/constants.
     ///

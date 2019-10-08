@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer ModeWindow.
 ///
-internal class ModeWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
     ///
     /// Private properties/constants.
     ///

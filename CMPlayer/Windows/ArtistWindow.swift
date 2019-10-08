@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Represents CMPlayer AboutWindow.
 ///
-internal class ArtistWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+internal class ArtistWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
     ///
     /// Private properties/constants.
     ///

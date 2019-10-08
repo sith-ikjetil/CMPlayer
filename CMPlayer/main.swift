@@ -19,7 +19,7 @@ internal let g_fieldWidthArtist: Int = 33
 internal let g_fieldWidthTitle: Int = 33
 internal let g_fieldWidthDuration: Int = 5
 internal let g_player: Player = Player()
-internal let g_versionString: String = "1.9.0.2"
+internal let g_versionString: String = "1.9.0.3"
 internal let g_lock = NSLock()
 internal let g_windowContentLineCount = 17
 
@@ -37,7 +37,7 @@ internal var g_modeSearch: [String] = []
 internal var g_modeSearchStats: [Int] = []
 internal var g_library: PlayerLibrary = PlayerLibrary()
 internal var g_mainWindow: MainWindow?
-internal var g_tscpStack: [TerminalSizeChangedProtocol] = []
+internal var g_tscpStack: [TerminalSizeHasChangedProtocol] = []
 internal var g_rows: Int = 24
 internal var g_cols: Int = 80
 

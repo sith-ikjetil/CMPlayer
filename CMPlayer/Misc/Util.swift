@@ -11,10 +11,14 @@
 //
 import Foundation
 
+///
+/// Enum exit codes
+///
 internal enum ExitCodes: Int32 {
     case ERROR_FINDING_FILES = 1
     case ERROR_PLAYING_FILE = 2
 }
+
 ///
 /// SearchType, type of search
 ///
@@ -47,14 +51,14 @@ internal enum PrintPaddingTextAlign {
 }
 
 ///
-/// Protocol for terminal size changed protocol
+/// Protocol for terminal size changed
 ///
-internal protocol TerminalSizeChangedProtocol {
+internal protocol TerminalSizeHasChangedProtocol {
     func terminalSizeHasChanged() -> Void
 }
 
 ///
-/// Protocol for windows show window
+/// Protocol for windows
 ///
 internal protocol PlayerWindowProtocol {
     func showWindow() -> Void
@@ -454,7 +458,7 @@ internal func sortSongEntry(se1: SongEntry, se2: SongEntry) -> Bool {
 ///
 /// Give current theme color
 ///
-func getThemeBgColor() -> ConsoleColor {
+internal func getThemeBgColor() -> ConsoleColor {
   switch PlayerPreferences.colorTheme {
   case .Default:
         return ConsoleColor.black
@@ -468,7 +472,7 @@ func getThemeBgColor() -> ConsoleColor {
 ///
 /// Give song background theme color
 ///
-func getThemeSongBgColor() -> ConsoleColor {
+internal func getThemeSongBgColor() -> ConsoleColor {
   switch PlayerPreferences.colorTheme {
   case .Default:
         return ConsoleColor.blue

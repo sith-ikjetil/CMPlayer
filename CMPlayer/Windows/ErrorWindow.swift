@@ -11,7 +11,7 @@
 //
 import Foundation
 
-internal class ErrorWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
+internal class ErrorWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
     
     var message: String = ""
     
