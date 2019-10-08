@@ -379,7 +379,6 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_ENTER.rawValue, closure: { () -> Bool in
             var returnValue: Bool = false
-            self.currentCommand = self.currentCommand.trimmingCharacters(in: .whitespacesAndNewlines)
             if self.currentCommand.count > 0 {
                 returnValue = self.processCommand(command: self.currentCommand)
                 self.quit = returnValue

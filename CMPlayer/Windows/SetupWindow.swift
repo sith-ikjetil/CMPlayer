@@ -94,15 +94,10 @@ internal class SetupWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
             }
             return false
         })
-        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
-            if key != EOF
-               && key != 10
-               && key != 127
-               && key != 27
-            {
-                self.path.append(String(UnicodeScalar(UInt32(key))!))
-                self.renderWindow()
-            }
+        keyHandler.addCharacterKeyHandler(closure: { (ch: Character) -> Bool in
+            self.path.append(String(ch))
+            self.renderWindow()
+            
             return false
         })
         keyHandler.run()

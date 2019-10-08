@@ -98,7 +98,7 @@ internal class ConsoleKeyboardHandler {
                         }
                         
                         let ch: Character = Character(c)
-                        if ch.isLetter || ch.isNumber || ch.isWhitespace || ch.isPunctuation && !ch.isNewline {
+                        if (ch.isLetter || ch.isNumber || ch.isWhitespace || ch.isPunctuation || ch.isMathSymbol) && !ch.isNewline {
                             for handler in self.characterKeyHandlers {
                                 if handler(ch) {
                                     doRun = false
