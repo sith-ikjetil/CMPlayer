@@ -22,7 +22,7 @@ internal class ConsoleKeyboardHandler {
     //
     private var keyHandlers: [UInt32 : () -> Bool] = [:]
     private var unknownKeyHandlers: [(UInt32) -> Bool] = []
-    //private var inputLocalte: locale_t = OpaquePointer(Locale(identifier: "nb_NO"))
+    private var characterKeyHandlers: [(Character) -> Bool] = []
     
     //
     // Default initializer
@@ -55,6 +55,17 @@ internal class ConsoleKeyboardHandler {
     }
     
     ///
+    /// Adds a closure keyboard handler for given input character.
+    ///
+    /// parameter closure: A Closure for handling key pressed.
+    ///
+    /// returns: True is ConsoleKeyboardHandler should stop processing keys and return from run. False otherwise.
+    ///
+    func addCharacterKeyHandler(closure: @escaping (Character) -> Bool) {
+        self.characterKeyHandlers.append(closure)
+    }
+    
+    ///
     /// Runs keyboard processing using getchar(). Calls key event handlers .
     ///
     func run() {
@@ -69,6 +80,7 @@ internal class ConsoleKeyboardHandler {
                 if let inputString = tmp {
                     
                     for c in inputString.unicodeScalars {
+                        
                         if !b91 && !b27 && c.value == 27 {
                             b27 = true
                             continue
@@ -83,6 +95,16 @@ internal class ConsoleKeyboardHandler {
                             b27 = false
                             b91 = false
                             key += 300 // WE HAVE ARROW KEYS
+                        }
+                        
+                        let ch: Character = Character(c)
+                        if ch.isLetter || ch.isNumber || ch.isWhitespace || ch.isPunctuation && !ch.isNewline {
+                            for handler in self.characterKeyHandlers {
+                                if handler(ch) {
+                                    doRun = false
+                                    break;
+                                }
+                            }
                         }
                         
                         if processKey(key: key) {

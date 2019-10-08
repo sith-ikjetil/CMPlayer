@@ -34,12 +34,12 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     private let commandsPause: [String] = ["pause"]
     private let commandsResume: [String] = ["resume"]
     private let commandsSearch: [String] = ["search"]
-    private let commandsSearchArtist: [String] = ["search-artist"]
-    private let commandsSearchTitle: [String] = ["search-title"]
-    private let commandsSearchAlbum : [String] = ["search-album"]
-    private let commandsSearchGenre: [String] = ["search-genre"]
-    private let commandsSearchYear: [String] = ["search-year"]
-    private let commandsClearMode: [String] = ["clear","mode"]
+    private let commandsSearchArtist: [String] = ["search", "artist"]
+    private let commandsSearchTitle: [String] = ["search", "title"]
+    private let commandsSearchAlbum : [String] = ["search", "album"]
+    private let commandsSearchGenre: [String] = ["search", "genre"]
+    private let commandsSearchYear: [String] = ["search", "year"]
+    private let commandsClearMode: [String] = ["mode","off"]
     private let commandsAbout: [String] = ["about"]
     private let commandsYear: [String] = ["year"]
     private let commandsGoTo: [String] = ["goto"]
@@ -379,6 +379,7 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_ENTER.rawValue, closure: { () -> Bool in
             var returnValue: Bool = false
+            self.currentCommand = self.currentCommand.trimmingCharacters(in: .whitespacesAndNewlines)
             if self.currentCommand.count > 0 {
                 returnValue = self.processCommand(command: self.currentCommand)
                 self.quit = returnValue
@@ -396,17 +397,13 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
             }
             return false
         })
-        keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
-            if key != ConsoleKey.KEY_EOF.rawValue  {
-                let scalar = UnicodeScalar(key)
-                if let s = scalar {
-                    let ch = Character(s)
-                    if ch.isLetter || ch.isNumber || ch.isWhitespace || ch.isPunctuation {
-                        self.currentCommand.append(String(Character(UnicodeScalar(key)!)))
-                    }
-                }
+        keyHandler.addCharacterKeyHandler(closure: { (ch: Character) -> Bool in
+            if self.currentCommand.count == 0 && ch.isWhitespace {
+                return false
             }
             
+            self.currentCommand.append(ch)
+        
             self.renderCommandLine()
             self.renderStatusLine()
             
@@ -496,19 +493,19 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         else if isCommandInCommands(command, self.commandsHelp) {
             self.onCommandHelp(parts: parts)
         }
-        else if parts.count > 1 && parts[0] == self.commandsSearchArtist[0] {
+        else if parts.count > 2 && parts[0] == self.commandsSearchArtist[0] && parts[1] == self.commandsSearchArtist[1] {
             self.onCommandSearchArtist(parts: parts)
         }
-        else if parts.count > 1 && parts[0] == self.commandsSearchTitle[0] {
+        else if parts.count > 2 && parts[0] == self.commandsSearchTitle[0] && parts[1] == self.commandsSearchTitle[1] {
             self.onCommandSearchTitle(parts: parts)
         }
-        else if parts.count > 1 && parts[0] == self.commandsSearchAlbum[0] {
+        else if parts.count > 2 && parts[0] == self.commandsSearchAlbum[0] && parts[1] == self.commandsSearchAlbum[1] {
             self.onCommandSearchAlbum(parts: parts)
         }
-        else if parts.count > 1 && parts[0] == self.commandsSearchGenre[0] {
+        else if parts.count > 2 && parts[0] == self.commandsSearchGenre[0] && parts[1] == self.commandsSearchGenre[1] {
             self.onCommandSearchGenre(parts: parts)
         }
-        else if parts.count > 1 && parts[0] == self.commandsSearchYear[0] {
+        else if parts.count > 2 && parts[0] == self.commandsSearchYear[0] && parts[1] == self.commandsSearchYear[1] {
             self.onCommandSearchYear(parts: parts)
         }
         else if isCommandInCommands(command, self.commandsClearMusicRootPath) {
@@ -1049,6 +1046,7 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     func onCommandSearchArtist(parts: [String]) -> Void {
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
+        nparts.removeFirst()
         
         if nparts.count > 0 {
             self.isShowingTopWindow = true
@@ -1069,6 +1067,7 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     ///
     func onCommandSearchTitle(parts: [String]) -> Void {
         var nparts = reparseCurrentCommandArguments(parts)
+        nparts.removeFirst()
         nparts.removeFirst()
         
         if nparts.count > 0 {
@@ -1091,6 +1090,7 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     func onCommandSearchAlbum(parts: [String]) -> Void {
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
+        nparts.removeFirst()
         
         if nparts.count > 0 {
             self.isShowingTopWindow = true
@@ -1112,7 +1112,8 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     func onCommandSearchGenre(parts: [String]) -> Void {
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
-             
+        nparts.removeFirst()
+        
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
@@ -1133,7 +1134,8 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     func onCommandSearchYear(parts: [String]) -> Void {
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
-
+        nparts.removeFirst()
+        
         if nparts.count > 0 {
             self.isShowingTopWindow = true
             let wnd: SearchWindow = SearchWindow()
