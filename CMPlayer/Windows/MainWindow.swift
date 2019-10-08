@@ -223,7 +223,7 @@ internal class MainWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
         
         let modeInfo = getModeStatus()
         if modeInfo.isInMode {
-            text.append( " | Mode: \(modeInfo.modeName) with \(modeInfo.numberOfSongsInMode) Songs")
+            text.append( " | Mode: \(modeInfo.modeName) with \(modeInfo.numberOfSongsInMode.itsToString()) Songs")
         }
         else {
             text.append( " | Mode: off" )
