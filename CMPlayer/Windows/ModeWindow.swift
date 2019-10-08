@@ -51,17 +51,17 @@ internal class ModeWindow : TerminalSizeChangedProtocol, PlayerWindowProtocol {
     {
         self.modeText.removeAll()
         
-        self.modeText.append("\(g_searchType.rawValue)")
-        if g_modeSearch.count == 0 || g_modeSearch.count != g_modeSearchStats.count {
-            self.modeText.append(" :: ")
-        }
-        else {
+        if g_modeSearch.count == g_modeSearchStats.count {
             var index: Int = 0
             for y in g_modeSearch {
                 self.inMode = true
                 self.modeText.append(" :: \(y), \(g_modeSearchStats[index]) Songs")
                 index += 1
             }
+        }
+        
+        if self.inMode {
+            self.modeText.insert("\(g_searchType.rawValue)", at: 0)
         }
     }
     
