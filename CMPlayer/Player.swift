@@ -44,12 +44,13 @@ internal class Player {
         
         Console.initialize()
         
-        g_library.load()
-        
         if PlayerPreferences.musicRootPath.count == 0 {
             let wnd: SetupWindow = SetupWindow()
             wnd.showWindow()
         }
+        
+        g_library.load()
+        
         
         let wnd = InitializeWindow()
         wnd.showWindow()

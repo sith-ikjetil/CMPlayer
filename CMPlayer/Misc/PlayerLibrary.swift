@@ -123,16 +123,18 @@ internal class PlayerLibrary {
                         self.nextSongNo = songNo + 1
                     }
                     
-                    do
-                    {
-                        let se = try SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear, trackNo: trackNo)
-                        self.library.append(se)
-                        if url.count > 0 {
-                            self.dictionary[url] = self.library.count-1
+                    if isPathInMusicRootPath(path: url) {
+                        do
+                        {
+                            let se = try SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear, trackNo: trackNo)
+                            self.library.append(se)
+                            if url.count > 0 {
+                                self.dictionary[url] = self.library.count-1
+                            }
                         }
-                    }
-                    catch {
-                        
+                        catch {
+                            
+                        }
                     }
                 }
             }
