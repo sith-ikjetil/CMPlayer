@@ -79,7 +79,9 @@ internal class Player {
         if player == 1 {
             if self.audio1 == nil {
                 do {
-                    self.audio1 = try AVAudioPlayer(contentsOf:g_playlist[playlistIndex].fileURL!)
+                    try autoreleasepool {
+                        self.audio1 = try AVAudioPlayer(contentsOf:g_playlist[playlistIndex].fileURL!)
+                    }
                     self.durationAudioPlayer1 = g_playlist[playlistIndex].duration
                     self.audio1?.play()
                     self.isPaused = false
@@ -97,7 +99,9 @@ internal class Player {
             else {
                 do {
                     self.audio1?.stop()
-                    self.audio1 = try AVAudioPlayer(contentsOf: g_playlist[playlistIndex].fileURL!)
+                    try autoreleasepool {
+                        self.audio1 = try AVAudioPlayer(contentsOf: g_playlist[playlistIndex].fileURL!)
+                    }
                     self.durationAudioPlayer1 = g_playlist[playlistIndex].duration
                     self.audio1?.play()
                     self.isPaused = false
@@ -116,7 +120,9 @@ internal class Player {
         else if player == 2 {
             if self.audio2 == nil {
                 do {
-                    self.audio2 = try AVAudioPlayer(contentsOf:g_playlist[playlistIndex].fileURL!)
+                    try autoreleasepool {
+                        self.audio2 = try AVAudioPlayer(contentsOf:g_playlist[playlistIndex].fileURL!)
+                    }
                     self.durationAudioPlayer2 = g_playlist[playlistIndex].duration
                     self.audio2?.play()
                     self.isPaused = false
@@ -134,7 +140,9 @@ internal class Player {
             else {
                 do {
                     self.audio2?.stop()
-                    self.audio2 = try AVAudioPlayer(contentsOf: g_playlist[playlistIndex].fileURL!)
+                    try autoreleasepool {
+                        self.audio2 = try AVAudioPlayer(contentsOf: g_playlist[playlistIndex].fileURL!)
+                    }
                     self.durationAudioPlayer2 = g_playlist[playlistIndex].duration
                     self.audio2?.play()
                     self.isPaused = false
