@@ -223,7 +223,16 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         
         let modeInfo = getModeStatus()
         if modeInfo.isInMode {
-            text.append( " | Mode: \(modeInfo.modeName) with \(modeInfo.numberOfSongsInMode.itsToString()) Songs")
+            text.append( " | Mode: ")
+            var b: Bool = false
+            for mn in modeInfo.modeName {
+                if b {
+                    text.append(", ")
+                }
+                text.append(mn)
+                b = true
+            }
+            text.append(" with \(modeInfo.numberOfSongsInMode.itsToString()) Songs")
         }
         else {
             text.append( " | Mode: off" )
@@ -792,7 +801,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     ///
     func onCommandClearMode(parts: [String]) -> Void {
         g_lock.lock()
-        g_searchType = SearchType.ArtistOrTitle
+        g_searchType.removeAll()
         g_searchResult.removeAll()
         g_modeSearch.removeAll()
         g_modeSearchStats.removeAll()
@@ -931,7 +940,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                 
         g_lock.lock()
         
-        g_searchType = SearchType.ArtistOrTitle
+        g_searchType.removeAll()
         g_genres.removeAll()
         g_artists.removeAll()
         g_recordingYears.removeAll()

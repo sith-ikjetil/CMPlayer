@@ -489,23 +489,26 @@ internal func getThemeSongBgColor() -> ConsoleColor {
 ///
 /// returns: set of isInMode, mode name, number of songs
 ///
-internal func getModeStatus() -> (isInMode: Bool, modeName: String, numberOfSongsInMode: Int) {
+internal func getModeStatus() -> (isInMode: Bool, modeName: [String], numberOfSongsInMode: Int) {
     var isInMode: Bool = false
-    var modeName: String = ""
-    var numberOfSongsInMode: Int = 0
+    var modeName: [String] = []
+    let numberOfSongsInMode: Int = g_searchResult.count
     
-    if g_modeSearch.count != 0 && g_modeSearch.count == g_modeSearchStats.count {
-        var index: Int = 0
-        for _ in g_modeSearch {
-            isInMode = true
-            numberOfSongsInMode +=  g_modeSearchStats[index]
-            index += 1
-        }
+    for type in g_searchType {
+        modeName.append( type.rawValue )
+        isInMode = true
     }
-    
-    if isInMode {
-        modeName = "\(g_searchType.rawValue)"
-    }
-    
+
     return (isInMode: isInMode, modeName: modeName, numberOfSongsInMode: numberOfSongsInMode)
 }
+
+
+internal func isSearchTypeInMode(_ type: SearchType) -> Bool {
+    for t in g_searchType {
+        if t == type {
+            return true
+        }
+    }
+    return false
+}
+ 

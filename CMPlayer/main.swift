@@ -32,9 +32,9 @@ internal var g_genres: [String: [SongEntry]] = [:]
 internal var g_artists: [String: [SongEntry]] = [:]
 internal var g_recordingYears: [Int: [SongEntry]] = [:]
 internal var g_searchResult: [SongEntry] = []
-internal var g_searchType: SearchType = SearchType.ArtistOrTitle
-internal var g_modeSearch: [String] = []
-internal var g_modeSearchStats: [Int] = []
+internal var g_searchType: [SearchType] = []    // One SearchType for search, and n more for n search+ searches, no duplicates
+internal var g_modeSearch: [[String]] = []      // Search terms for each element in g_searchType
+internal var g_modeSearchStats: [[Int]] = []  // Search stats for each element in g_searchType matching g_modeSearch
 internal var g_library: PlayerLibrary = PlayerLibrary()
 internal var g_mainWindow: MainWindow?
 internal var g_tscpStack: [TerminalSizeHasChangedProtocol] = []

@@ -76,7 +76,7 @@ internal class ArtistWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
         
         let bgColor = getThemeBgColor()
         Console.printXY(1,3,":: ARTIST ::", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-        Console.printXY(1,4,"mode artist is: \((g_searchType != SearchType.Artist) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,4,"mode artist is: \((isSearchTypeInMode(SearchType.Artist)) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = artistIndex

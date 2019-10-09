@@ -37,11 +37,142 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
     }
     
     ///
+    /// Perform narrow search from arguments.
+    ///
+    func performNarrowSearch(terms: [String], type: SearchType) -> Void {
+        for t in g_searchType {
+            if t == type {
+                return  // Can only search for type once
+            }
+        }
+        
+        self.searchResult.removeAll(keepingCapacity: false)
+        self.partsYear.removeAll()
+        
+        self.stats.removeAll()
+        for _ in 0..<terms.count {
+            self.stats.append(0)
+        }
+
+        if type == SearchType.Genre {
+            var index: Int = 0
+            for name in terms {
+                let name = name.lowercased()
+                for s in g_searchResult {
+                    if s.genre == name {
+                        self.searchResult.append(s)
+                        self.stats[index] += 1
+                    }
+                }
+                index += 1
+            }
+        }
+        else if type == SearchType.RecordedYear {
+            let currentYear = Calendar.current.component(.year, from: Date())
+            var index: Int = 0
+            for year in terms {
+                let yearsSubs = year.split(separator: "-")
+                
+                var years: [String] = []
+                for ys in yearsSubs {
+                    years.append(String(ys))
+                }
+                
+                if years.count == 1 {
+                    let resultYear = Int(years[0]) ?? -1
+                    if resultYear >= 0 && resultYear <= currentYear {
+                        for s in g_searchResult {
+                            if s.recodingYear == resultYear {
+                                self.searchResult.append(s)
+                                self.stats[index] += 1
+                            }
+                        }
+                        self.partsYear.append(String(resultYear))
+                    }
+                    index += 1
+                }
+                else if years.count == 2 {
+                    let from: Int = Int(years[0]) ?? -1
+                    let to: Int = Int(years[1]) ?? -1
+                    
+                    if to <= currentYear {
+                        if from != -1 && to != -1 && from <= to {
+                            let xfrom: Int = from + 1
+                            for _ in xfrom...to {
+                                self.stats.append(0)
+                            }
+                            for y in from...to {
+                                for s in g_searchResult {
+                                    if s.recodingYear == y {
+                                        self.searchResult.append(s)
+                                        self.stats[index] += 1
+                                    }
+                                }
+                                index += 1
+                                self.partsYear.append(String(y))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            for se in g_searchResult {
+                let artist = se.artist.lowercased()
+                let title = se.title.lowercased()
+                let album = se.albumName.lowercased()
+                var index: Int = 0
+                
+                for t in terms {
+                    let term = t.lowercased()
+                    
+                    if type == SearchType.ArtistOrTitle {
+                        if artist.contains(term) || title.contains(term) {
+                            self.searchResult.append(se)
+                            self.stats[index] += 1
+                            break
+                        }
+                    }
+                    else if type == SearchType.Artist {
+                        if artist.contains(term) {
+                            self.searchResult.append(se)
+                            self.stats[index] += 1
+                            break
+                        }
+                    }
+                    else if type == SearchType.Title {
+                        if title.contains(term) {
+                            self.searchResult.append(se)
+                            self.stats[index] += 1
+                            break
+                        }
+                    }
+                    else if type == SearchType.Album {
+                        if album.contains(term) {
+                            self.searchResult.append(se)
+                            self.stats[index] += 1
+                            break
+                        }
+                    }
+                    index += 1
+                }
+            }
+        }
+    
+        self.searchResult = self.searchResult.sorted {sortSongEntry(se1: $0, se2: $1)} // $0.artist < $1.artist }
+    }
+    
+    ///
     /// Performs search from arguments. Searches g_songs.
     ///
     /// parameter terms: Array of search terms.
     ///
     func performSearch(terms: [String], type: SearchType) -> Void {
+        if g_searchResult.count > 0 {
+            performNarrowSearch(terms: terms, type: type)
+            return
+        }
+        
         self.searchResult.removeAll(keepingCapacity: false)
         self.partsYear.removeAll()
         
@@ -284,18 +415,18 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
                     self.type == SearchType.Title ||
                     self.type == SearchType.Album
                 {
-                    g_modeSearch = self.parts
+                    g_modeSearch.append(self.parts)
                 }
                 else if self.type == SearchType.Genre {
-                    g_modeSearch = self.parts
+                    g_modeSearch.append(self.parts)
                 }
                 else if self.type == SearchType.RecordedYear {
-                    g_modeSearch = self.partsYear
+                    g_modeSearch.append(self.partsYear)
                 }
             
                 g_searchResult = self.searchResult
-                g_modeSearchStats = self.stats
-                g_searchType = self.type
+                g_modeSearchStats.append(self.stats)
+                g_searchType.append(self.type)
             }
             return true
         })

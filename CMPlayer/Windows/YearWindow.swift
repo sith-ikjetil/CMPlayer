@@ -75,7 +75,7 @@ internal class YearWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         
         let bgColor = getThemeBgColor()
         Console.printXY(1,3,":: RECORDING YEAR ::", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
-        Console.printXY(1,4,"mode year is: \((g_searchType != SearchType.RecordedYear) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,4,"mode year is: \((isSearchTypeInMode(SearchType.RecordedYear)) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = yearIndex
