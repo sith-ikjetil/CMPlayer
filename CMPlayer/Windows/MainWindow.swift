@@ -1031,6 +1031,12 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandSearch(parts: [String]) -> Void {
+        for t in g_searchType {
+            if t == SearchType.ArtistOrTitle || t == SearchType.Artist || t == SearchType.Title {
+                return  // Can only search for type once
+            }
+        }
+        
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
         
@@ -1052,6 +1058,12 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandSearchArtist(parts: [String]) -> Void {
+        for t in g_searchType {
+            if t == SearchType.Artist || t == SearchType.ArtistOrTitle {
+                return  // Can only search for type once
+            }
+        }
+        
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
         nparts.removeFirst()
@@ -1074,6 +1086,12 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandSearchTitle(parts: [String]) -> Void {
+        for t in g_searchType {
+            if t == SearchType.Title || t == SearchType.ArtistOrTitle {
+                return  // Can only search for type once
+            }
+        }
+        
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
         nparts.removeFirst()
@@ -1096,6 +1114,12 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandSearchAlbum(parts: [String]) -> Void {
+        for t in g_searchType {
+            if t == SearchType.Album {
+                return  // Can only search for type once
+            }
+        }
+        
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
         nparts.removeFirst()
@@ -1118,6 +1142,12 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandSearchGenre(parts: [String]) -> Void {
+        for t in g_searchType {
+            if t == SearchType.Genre {
+                return  // Can only search for type once
+            }
+        }
+        
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
         nparts.removeFirst()
@@ -1140,6 +1170,12 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandSearchYear(parts: [String]) -> Void {
+        for t in g_searchType {
+            if t == SearchType.RecordedYear {
+                return  // Can only search for type once
+            }
+        }
+        
         var nparts = reparseCurrentCommandArguments(parts)
         nparts.removeFirst()
         nparts.removeFirst()
