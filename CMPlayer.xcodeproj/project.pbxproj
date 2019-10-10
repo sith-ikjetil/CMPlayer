@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0379C02234FE2D0009569C3 /* PlayerCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0379C01234FE2D0009569C3 /* PlayerCommand.swift */; };
 		D042988F233A10DF00EBDC0B /* ArtistWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D042988E233A10DF00EBDC0B /* ArtistWindow.swift */; };
 		D0777BD0233B7D3600BB603C /* InfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0777BCF233B7D3600BB603C /* InfoWindow.swift */; };
 		D093D0AF2335D3EA001842D6 /* ErrorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D093D0AE2335D3EA001842D6 /* ErrorWindow.swift */; };
@@ -48,6 +49,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D0379C01234FE2D0009569C3 /* PlayerCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCommand.swift; sourceTree = "<group>"; };
 		D042988E233A10DF00EBDC0B /* ArtistWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistWindow.swift; sourceTree = "<group>"; };
 		D05E0A4D233B9CC9004A226E /* CMPlayer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CMPlayer.icns; sourceTree = "<group>"; };
 		D05E0A4F233B9F1D004A226E /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				D0ED143F23323DC400FB51C8 /* PlayerDirectories.swift */,
 				D0ED144123323EF100FB51C8 /* PlayerPreferences.swift */,
 				D093D0B223361497001842D6 /* PlayerLibrary.swift */,
+				D0379C01234FE2D0009569C3 /* PlayerCommand.swift */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0FD9B5C2342167600FB5A40 /* PlayerLogEntry.swift in Sources */,
+				D0379C02234FE2D0009569C3 /* PlayerCommand.swift in Sources */,
 				D0B4E443233B4D090031584B /* ModeWindow.swift in Sources */,
 				D0ED142F23320B1B00FB51C8 /* main.swift in Sources */,
 				D0F162AB2338C8CF00754651 /* GenreWindow.swift in Sources */,

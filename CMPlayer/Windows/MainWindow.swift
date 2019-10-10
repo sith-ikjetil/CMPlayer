@@ -17,57 +17,21 @@ import Cocoa
 ///
 internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
     //
-    // Private properties/constants/variables.
+    // properties/constants/variables.
     //
+    static private var timeElapsedMs: UInt64 = 0
     private var quit: Bool = false
     private var currentCommand: String = ""
-    private let commandsExit: [String] = ["exit", "quit", "q"]
-    private let commandsUpdate: [String] = ["update cmplayer"]
-    private let commandsSetViewType: [String] = ["set", "viewtype"]
-    private let commandsSetBg: [String] = ["set", "theme"]
-    private let commandsNextSong: [String] = ["next", "skip"]
-    private let commandsHelp: [String] = ["help","?"]
-    private let commandsReplay: [String] = ["replay"]
-    private let commandsPlay: [String] = ["play"]
-    private let commandsPause: [String] = ["pause"]
-    private let commandsResume: [String] = ["resume"]
-    private let commandsSearch: [String] = ["search"]
-    private let commandsSearchArtist: [String] = ["search", "artist"]
-    private let commandsSearchTitle: [String] = ["search", "title"]
-    private let commandsSearchAlbum : [String] = ["search", "album"]
-    private let commandsSearchGenre: [String] = ["search", "genre"]
-    private let commandsSearchYear: [String] = ["search", "year"]
-    private let commandsClearMode: [String] = ["mode","off"]
-    private let commandsAbout: [String] = ["about"]
-    private let commandsYear: [String] = ["year"]
-    private let commandsGoTo: [String] = ["goto"]
-    private let commandsMode: [String] = ["mode"]
-    private let commandsInfo: [String] = ["info"]
-    private let commandsRepaint: [String] = ["repaint","redraw"]
-    private let commandsAddMusicRootPath: [String] = ["add", "mrp"]
-    private let commandsRemoveMusicRootPath: [String] = ["remove", "mrp"]
-    private let commandsClearMusicRootPath: [String] = ["clear mrp"]
-    private let commandsSetCrossfadeTimeInSeconds: [String] = ["set", "cft"]
-    private let commandsSetMusicFormats: [String] = ["set", "mf"]
-    private let commandsEnableCrossfade: [String] = ["enable crossfade"]
-    private let commandsDisableCrossfade: [String] = ["disable crossfade"]
-    private let commandsEnableAutoPlayOnStartup: [String] = ["enable aos"]
-    private let commandsDisableAutoPlayOnStartup: [String] = ["disable aos"]
-    private let commandsReinitialize: [String] = ["reinitialize"]
-    private let commandsRebuildSongNo: [String] = ["rebuild songno"]
-    private let commandsGenre: [String] = ["genre"]
-    private let commandsArtist: [String] = ["artist"]
-    private let commandsPreferences: [String] = ["pref"]
+    private var commands: [PlayerCommand] = []
+    private var commandReturnValue: Bool = false
     private let concurrentQueue1 = DispatchQueue(label: "cqueue.cmplayer.macos.1", attributes: .concurrent)
     private let concurrentQueue2 = DispatchQueue(label: "cqueue.cmplayer.macos.2", attributes: .concurrent)
-    private var currentChar: Int32 = -1
-    var exitValue: Int32 = 0
     private var isShowingTopWindow = false
     private var addendumText: String = ""
     private var updateFileName: String = ""
-    static private var timeElapsedMs: UInt64 = 0
     private var isTooSmall: Bool = false
-
+    var exitValue: Int32 = 0
+    
     ///
     /// Shows this MainWindow on screen.
     ///
@@ -307,6 +271,49 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         self.renderWindow()
         
         //
+        // Setup command processing
+        //
+        self.commands = [PlayerCommand(commands: [["exit"],["quit"],["q"]], closure: { ([String]) -> Void in }),
+                         PlayerCommand(commands: [["update"], ["cmplayer"]], closure: self.onCommandUpdate),
+                         PlayerCommand(commands: [["set", "viewtype"]], closure: self.onCommandSetViewType),
+                         PlayerCommand(commands: [["set", "theme"]], closure: self.onCommandSetColorTheme),
+                         PlayerCommand(commands: [["next"], ["skip"]], closure: self.onCommandNextSong),
+                         PlayerCommand(commands: [["help"], ["?"]], closure: self.onCommandHelp),
+                         PlayerCommand(commands: [["replay"]], closure: self.onCommandReplay),
+                         PlayerCommand(commands: [["play"]], closure: self.onCommandPlay),
+                         PlayerCommand(commands: [["pause"]], closure: self.onCommandPause),
+                         PlayerCommand(commands: [["pause"]], closure: self.onCommandPause),
+                         PlayerCommand(commands: [["resume"]], closure: self.onCommandResume),
+                         PlayerCommand(commands: [["search"]], closure: self.onCommandSearch),
+                         PlayerCommand(commands: [["search", "artist"]], closure: self.onCommandSearchArtist),
+                         PlayerCommand(commands: [["search", "title"]], closure: self.onCommandSearchTitle),
+                         PlayerCommand(commands: [["search", "album"]], closure: self.onCommandSearchAlbum),
+                         PlayerCommand(commands: [["search", "genre"]], closure: self.onCommandSearchGenre),
+                         PlayerCommand(commands: [["search", "year"]], closure: self.onCommandSearchYear),
+                         PlayerCommand(commands: [["mode","off"], ["clear","mode"], ["mo"], ["cm"]], closure: self.onCommandClearMode),
+                         PlayerCommand(commands: [["about"]], closure: self.onCommandAbout),
+                         PlayerCommand(commands: [["year"]], closure: self.onCommandYear),
+                         PlayerCommand(commands: [["goto"]], closure: self.onCommandGoTo),
+                         PlayerCommand(commands: [["mode"]], closure: self.onCommandMode),
+                         PlayerCommand(commands: [["info"]], closure: self.onCommandInfo),
+                         PlayerCommand(commands: [["repaint","redraw"]], closure: self.onCommandRepaint),
+                         PlayerCommand(commands: [["add", "mrp"]], closure: self.onCommandAddMusicRootPath),
+                         PlayerCommand(commands: [["remove", "mrp"]], closure: self.onCommandRemoveMusicRootPath),
+                         PlayerCommand(commands: [["clear mrp"]], closure: self.onCommandClearMusicRootPath),
+                         PlayerCommand(commands: [["set", "cft"]], closure: self.onCommandSetCrossfadeTimeInSeconds),
+                         PlayerCommand(commands: [["set", "mf"]], closure: self.onCommandSetMusicFormats),
+                         PlayerCommand(commands: [["enable crossfade"]], closure: self.onCommandEnableCrossfade),
+                         PlayerCommand(commands: [["disable crossfade"]], closure: self.onCommandDisableCrossfade),
+                         PlayerCommand(commands: [["enable aos"]], closure: self.onCommandEnableAutoPlayOnStartup),
+                         PlayerCommand(commands: [["disable aos"]], closure: self.onCommandDisableAutoPlayOnStartup),
+                         PlayerCommand(commands: [["reinitialize"]], closure: self.onCommandReinitialize),
+                         PlayerCommand(commands: [["rebuild songno"]], closure: self.onCommandRebuildSongNo),
+                         PlayerCommand(commands: [["genre"]], closure: self.onCommandGenre),
+                         PlayerCommand(commands: [["artist"]], closure: self.onCommandArtist),
+                         PlayerCommand(commands: [["pref"], ["preferences"]], closure: onCommandPreferences)]
+        
+        
+        //
         // Count down and render songs
         //
         concurrentQueue1.async {
@@ -429,129 +436,20 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         PlayerLog.ApplicationLog?.logInformation(title: "[MainWindow].processCommand(command:)", text: "Command: \(command)")
         
         let parts = command.components(separatedBy: " ")
+        
+        var isHandled = false
+        for cmd in self.commands {
+            if cmd.execute(command: parts) {
+                isHandled = true
+                break
+            }
+        }
                     
-        if isCommandInCommands(command, self.commandsExit) {
-            return true
-        }
-        else if isCommandInCommands(command, self.commandsUpdate) {
-            self.onCommandUpdate(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsReplay) {
-            self.onCommandReplay(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsNextSong) {
-            self.onCommandNextSong(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsPlay) {
-            self.onCommandPlay(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsPause) {
-            self.onCommandPause(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsResume) {
-            self.onCommandResume(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsRepaint) {
-            self.onCommandRepaint(parts: parts)
-        }
-        else if let num = Int(command) {
-            self.onCommandAddSongToPlaylist(parts: parts, songNo: num)
-        }
-        else if isCommandInCommands(command, self.commandsEnableCrossfade) {
-            self.onCommandEnableCrossfade(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsDisableCrossfade) {
-            self.onCommandDisableCrossfade(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsEnableAutoPlayOnStartup) {
-            self.onCommandEnableAutoPlayOnStartup(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsDisableAutoPlayOnStartup) {
-            self.onCommandDisableAutoPlayOnStartup(parts: parts)
-        }
-        else if parts.count == 3 && parts[0] == self.commandsAddMusicRootPath[0] && parts[1] == self.commandsAddMusicRootPath[1] {
-            self.onCommandAddMusicRootPath(parts: parts)
-        }
-        else if parts.count == 3 && parts[0] == self.commandsRemoveMusicRootPath[0] && parts[1] == self.commandsRemoveMusicRootPath[1] {
-            self.onCommandRemoveMusicRootPath(parts: parts)
-        }
-        else if parts.count == 3 && parts[0] == self.commandsSetCrossfadeTimeInSeconds[0] && parts[1] == self.commandsSetCrossfadeTimeInSeconds[1] {
-            self.onCommandSetCrossfadeTimeInSeconds(parts: parts)
-        }
-        else if parts.count == 3 && parts[0] == self.commandsSetMusicFormats[0] && parts[1] == self.commandsSetMusicFormats[1] {
-            self.onCommandSetMusicFormats(parts: parts)
-        }
-        else if parts.count == 2 && parts[0] == self.commandsGoTo[0] {
-            self.onCommandGoTo(parts: parts)
-        }
-        else if parts.count == 2 && parts[0] == self.commandsClearMode[0] && parts[1] == self.commandsClearMode[1] {
-            self.onCommandClearMode(parts: parts)
-        }
-        else if parts.count == 2 && parts[0] == self.commandsInfo[0] {
-            self.onCommandInfoSong(parts: parts)
-        }
-        else if parts.count == 3 && parts[0] == self.commandsSetViewType[0] && parts[1] == self.commandsSetViewType[1] {
-            self.onCommandSetViewType(parts: parts)
-        }
-        else if parts.count == 3 && parts[0] == self.commandsSetBg[0] && parts[1] == self.commandsSetBg[1] {
-            self.onCommandSetColorTheme(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsHelp) {
-            self.onCommandHelp(parts: parts)
-        }
-        else if parts.count > 2 && parts[0] == self.commandsSearchArtist[0] && parts[1] == self.commandsSearchArtist[1] {
-            self.onCommandSearchArtist(parts: parts)
-        }
-        else if parts.count > 2 && parts[0] == self.commandsSearchTitle[0] && parts[1] == self.commandsSearchTitle[1] {
-            self.onCommandSearchTitle(parts: parts)
-        }
-        else if parts.count > 2 && parts[0] == self.commandsSearchAlbum[0] && parts[1] == self.commandsSearchAlbum[1] {
-            self.onCommandSearchAlbum(parts: parts)
-        }
-        else if parts.count > 2 && parts[0] == self.commandsSearchGenre[0] && parts[1] == self.commandsSearchGenre[1] {
-            self.onCommandSearchGenre(parts: parts)
-        }
-        else if parts.count > 2 && parts[0] == self.commandsSearchYear[0] && parts[1] == self.commandsSearchYear[1] {
-            self.onCommandSearchYear(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsClearMusicRootPath) {
-            self.onCommandClearMusicRootPath(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsAbout) {
-            self.onCommandAbout(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsGenre) {
-            self.onCommandGenre(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsArtist) {
-            self.onCommandArtist(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsMode) {
-            self.onCommandMode(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsInfo) {
-            self.onCommandInfo(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsReinitialize) {
-            self.onCommandReinitialize(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsRebuildSongNo) {
-            self.onCommandRebuildSongNo(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsPreferences) {
-            self.onCommandPreferences(parts: parts)
-        }
-        else if isCommandInCommands(command, self.commandsYear) {
-            self.onCommandYear(parts: parts)
-        }
-        else if parts.count > 1 && isCommandInCommands(parts[0], self.commandsSearch) {
-            self.onCommandSearch(parts: parts)
-        }
-        else {
+        if !isHandled {
             PlayerLog.ApplicationLog?.logInformation(title: "[MainWindow].processCommand(command:)", text: "Command NOT Reckognized: \(command)")
         }
         
-        return false
+        return commandReturnValue
     }
     
     ///
@@ -1196,7 +1094,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     ///
     /// parameter parts: command array.
     ///
-    private func onCommandUpdate(parts: [String]) -> Void {
+    func onCommandUpdate(parts: [String]) -> Void {
         self.addendumText = "Checking for updates..."
         var request = URLRequest(url: URL(string: "http://www.ikjetil.no/Home/GetFileName/45?GUID=4dae77f8-e7f3-4631-a8e5-8afda6d065af")! )
         let session = URLSession.shared
