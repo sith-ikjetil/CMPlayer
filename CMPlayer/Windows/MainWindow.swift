@@ -944,6 +944,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         g_recordingYears.removeAll()
         g_searchResult.removeAll()
         g_modeSearch.removeAll()
+        g_modeSearchStats.removeAll()
         g_songs.removeAll()
         g_playlist.removeAll()
         g_library.library = []
