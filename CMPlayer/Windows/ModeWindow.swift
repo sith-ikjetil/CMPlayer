@@ -115,10 +115,6 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                     }
                 }
                 else {
-                    if index_search == self.modeText.count {
-                        index_screen_lines += 1
-                    }
-                    
                     let se = self.searchResult[index_search-self.modeText.count]
                 
                     Console.printXY(1, index_screen_lines, "\(se.songNo) ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
@@ -184,6 +180,7 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         }
         
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"Songs: \(g_searchResult.count.itsToString())", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.gotoXY(80,1)
         print("")
@@ -209,6 +206,7 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             return 2
         }
     }
+
     
     ///
     /// Runs AboutWindow keyboard input and feedback.
@@ -220,9 +218,17 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
-            if self.searchIndex < ((self.modeText.count + self.searchResult.count) - self.getSongsLineCount() - 1) {
-                self.searchIndex += 1
-                self.renderWindow()
+            if PlayerPreferences.viewType == ViewType.Details {
+                if self.searchIndex < ((self.modeText.count + self.searchResult.count) - self.getSongsLineCount() - 1) {
+                    self.searchIndex += 1
+                    self.renderWindow()
+                }
+            }
+            else if PlayerPreferences.viewType == ViewType.Default {
+                if self.searchIndex < ((self.modeText.count + self.searchResult.count) - g_windowContentLineCount) {
+                    self.searchIndex += 1
+                    self.renderWindow()
+                }
             }
             return false
         })
@@ -234,42 +240,75 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             return false
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
-            var n: Int = (self.modeText.count - 1) - self.searchIndex
-            if n < 0 {
-                n = 0
+            if PlayerPreferences.viewType == ViewType.Details {
+                var n: Int = (self.modeText.count - 1) - self.searchIndex
+                if n < 0 {
+                    n = 0
+                }
+                else if n > g_windowContentLineCount {
+                    n = g_windowContentLineCount
+                }
+                let m: Int = n + (g_windowContentLineCount - n)/self.getSongsContentLineCount()
+                
+                if (self.searchIndex - m) >= 0 {
+                    self.searchIndex -= m
+                    self.renderWindow()
+                }
+                else {
+                    self.searchIndex = 0
+                    self.renderWindow()
+                }
             }
-            else if n > g_windowContentLineCount {
-                n = g_windowContentLineCount
-            }
-            let m: Int = n + (g_windowContentLineCount - n)/2
-            
-            if (self.searchIndex - m) >= 0 {
-                self.searchIndex -= m
-                self.renderWindow()
-            }
-            else {
-                self.searchIndex = 0
-                self.renderWindow()
+            else if PlayerPreferences.viewType == ViewType.Default {
+                var n: Int = (self.modeText.count - 1) - self.searchIndex
+                if n < 0 {
+                    n = 0
+                }
+                else if n > g_windowContentLineCount {
+                    n = g_windowContentLineCount
+                }
+                let m: Int = n + (g_windowContentLineCount - n)/self.getSongsContentLineCount()
+                
+                if (self.searchIndex - m) >= 0 {
+                    self.searchIndex -= m
+                    self.renderWindow()
+                }
+                else {
+                    self.searchIndex = 0
+                    self.renderWindow()
+                }
             }
             return false
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
-            var n: Int = self.modeText.count - self.searchIndex
-            if n < 0 {
-                n = 0
+            if PlayerPreferences.viewType == ViewType.Details {
+                var n: Int = self.modeText.count - self.searchIndex
+                if n < 0 {
+                    n = 0
+                }
+                else if n > g_windowContentLineCount {
+                    n = g_windowContentLineCount
+                }
+                let m: Int = n + (g_windowContentLineCount - n)/self.getSongsContentLineCount()
+                
+                if (self.searchIndex + m) >= ((self.modeText.count+self.searchResult.count) - self.getSongsLineCount() - 1) {
+                    self.searchIndex = (self.modeText.count+self.searchResult.count) - self.getSongsLineCount() - 1
+                    self.renderWindow()
+                }
+                else {
+                    self.searchIndex += m + ((n==0) ? 1 : 0)
+                    self.renderWindow()
+                }
             }
-            else if n > g_windowContentLineCount {
-                n = g_windowContentLineCount
-            }
-            let m: Int = n + (g_windowContentLineCount - n)/2
-            
-            if (self.searchIndex + m + ((n==0) ? 1 : 0)) >= ((self.modeText.count+self.searchResult.count) - self.getSongsLineCount()) {
-                self.searchIndex = ((self.modeText.count+self.searchResult.count)) - self.getSongsLineCount() - 1
-                self.renderWindow()
-            }
-            else {
-                self.searchIndex += m + ((n==0) ? 1 : 0)
-                self.renderWindow()
+            else if PlayerPreferences.viewType == ViewType.Default {
+                if (self.searchIndex + g_windowContentLineCount) >= ((self.modeText.count+self.searchResult.count) - g_windowContentLineCount) {
+                    self.searchIndex = (self.modeText.count+self.searchResult.count) - g_windowContentLineCount
+                    self.renderWindow()
+                }
+                else {
+                    self.searchIndex += g_windowContentLineCount
+                    self.renderWindow()
+                }
             }
         
             return false
