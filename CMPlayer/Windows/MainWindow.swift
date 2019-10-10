@@ -273,7 +273,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         //
         // Setup command processing
         //
-        self.commands = [PlayerCommand(commands: [["exit"],["quit"],["q"]], closure: { ([String]) -> Void in }),
+        self.commands = [PlayerCommand(commands: [["exit"],["quit"],["q"]], closure: self.onCommandExit),
                          PlayerCommand(commands: [["update"], ["cmplayer"]], closure: self.onCommandUpdate),
                          PlayerCommand(commands: [["set", "viewtype"]], closure: self.onCommandSetViewType),
                          PlayerCommand(commands: [["set", "theme"]], closure: self.onCommandSetColorTheme),
@@ -310,7 +310,8 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                          PlayerCommand(commands: [["rebuild songno"]], closure: self.onCommandRebuildSongNo),
                          PlayerCommand(commands: [["genre"]], closure: self.onCommandGenre),
                          PlayerCommand(commands: [["artist"]], closure: self.onCommandArtist),
-                         PlayerCommand(commands: [["pref"], ["preferences"]], closure: onCommandPreferences)]
+                         PlayerCommand(commands: [["pref"], ["preferences"]], closure: onCommandPreferences),
+                         PlayerCommand(commands: [["#"]], closure: self.onCommandAddSongToPlaylist)]
         
         
         //
@@ -449,39 +450,39 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             PlayerLog.ApplicationLog?.logInformation(title: "[MainWindow].processCommand(command:)", text: "Command NOT Reckognized: \(command)")
         }
         
-        return commandReturnValue
+        return self.commandReturnValue
+    }
+    
+    func onCommandExit(parts: [String]) -> Void {
+        self.commandReturnValue = true
     }
     
     ///
     /// Sets main window song bg color
     ///
     func onCommandSetColorTheme(parts: [String]) -> Void {
-        if parts.count == 3 {
-            if ( parts[2] == "blue" ) {
-                PlayerPreferences.colorTheme = ColorTheme.Blue
-                PlayerPreferences.savePreferences()
-            }
-            else if parts[2] == "black" {
-                PlayerPreferences.colorTheme = ColorTheme.Black
-                PlayerPreferences.savePreferences()
-            }
-            else if parts[2] == "default" {
-                PlayerPreferences.colorTheme = ColorTheme.Default
-                PlayerPreferences.savePreferences()
-            }
-            self.renderWindow()
+        if ( parts[0] == "blue" ) {
+            PlayerPreferences.colorTheme = ColorTheme.Blue
+            PlayerPreferences.savePreferences()
         }
+        else if parts[0] == "black" {
+            PlayerPreferences.colorTheme = ColorTheme.Black
+            PlayerPreferences.savePreferences()
+        }
+        else if parts[0] == "default" {
+            PlayerPreferences.colorTheme = ColorTheme.Default
+            PlayerPreferences.savePreferences()
+        }
+        self.renderWindow()
     }
     
     ///
     /// Sets ViewType on Main Window
     ///
     func onCommandSetViewType(parts: [String]) -> Void {
-        if parts.count == 3 {
-            PlayerPreferences.viewType = ViewType(rawValue: parts[2].lowercased() ) ?? ViewType.Default
-            PlayerPreferences.savePreferences()
-            self.renderFrame()
-        }
+        PlayerPreferences.viewType = ViewType(rawValue: parts[0].lowercased() ) ?? ViewType.Default
+        PlayerPreferences.savePreferences()
+        self.renderFrame()
     }
     
     ///
@@ -564,8 +565,8 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     /// parameter songNo: song number to add.
     ///
-    func onCommandAddSongToPlaylist(parts: [String], songNo: Int) -> Void {
-        if songNo > 0 {
+    func onCommandAddSongToPlaylist(parts: [String]) -> Void {
+        if let songNo = Int(parts[0]) {
             for se in g_songs {
                 if se.songNo == songNo {
                     g_playlist.append(se)
@@ -633,7 +634,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     func onCommandRemoveMusicRootPath(parts: [String]) -> Void {
         var i: Int = 0
         while i < PlayerPreferences.musicRootPath.count {
-            if PlayerPreferences.musicRootPath[i] == parts[2] {
+            if PlayerPreferences.musicRootPath[i] == parts[0] {
                 PlayerPreferences.musicRootPath.remove(at: i)
                 PlayerPreferences.savePreferences()
                 break
@@ -648,7 +649,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandSetCrossfadeTimeInSeconds(parts: [String]) -> Void {
-        if let ctis = Int(parts[2]) {
+        if let ctis = Int(parts[0]) {
             if isCrossfadeTimeValid(ctis) {
                 PlayerPreferences.crossfadeTimeInSeconds = ctis
                 PlayerPreferences.savePreferences()
@@ -662,7 +663,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandSetMusicFormats(parts: [String]) -> Void {
-        PlayerPreferences.musicFormats = parts[2]
+        PlayerPreferences.musicFormats = parts[0]
         PlayerPreferences.savePreferences()
     }
     
@@ -672,7 +673,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandGoTo(parts: [String]) -> Void {
-        let tp = parts[1].split(separator: ":" )
+        let tp = parts[0].split(separator: ":" )
         if tp.count == 2 {
             if let time1 = Int(tp[0]) {
                 if let time2 = Int(tp[1]) {
@@ -710,7 +711,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandInfoSong(parts: [String]) -> Void {
-        if let sno = Int(parts[1]) {
+        if let sno = Int(parts[0]) {
             if sno > 0 {
                 for s in g_songs {
                     if s.songNo == sno {
@@ -814,6 +815,10 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandInfo(parts: [String]) -> Void {
+        if parts.count == 1 {
+            self.onCommandInfoSong(parts: parts)
+            return
+        }
         self.isShowingTopWindow = true
         let wnd: InfoWindow = InfoWindow()
         g_lock.lock()
@@ -934,8 +939,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             }
         }
         
-        var nparts = reparseCurrentCommandArguments(parts)
-        nparts.removeFirst()
+        let nparts = reparseCurrentCommandArguments(parts)
         
         if nparts.count > 0 {
             self.isShowingTopWindow = true
@@ -961,9 +965,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             }
         }
         
-        var nparts = reparseCurrentCommandArguments(parts)
-        nparts.removeFirst()
-        nparts.removeFirst()
+        let nparts = reparseCurrentCommandArguments(parts)
         
         if nparts.count > 0 {
             self.isShowingTopWindow = true
@@ -989,9 +991,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             }
         }
         
-        var nparts = reparseCurrentCommandArguments(parts)
-        nparts.removeFirst()
-        nparts.removeFirst()
+        let nparts = reparseCurrentCommandArguments(parts)
         
         if nparts.count > 0 {
             self.isShowingTopWindow = true
@@ -1017,9 +1017,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             }
         }
         
-        var nparts = reparseCurrentCommandArguments(parts)
-        nparts.removeFirst()
-        nparts.removeFirst()
+        let nparts = reparseCurrentCommandArguments(parts)
         
         if nparts.count > 0 {
             self.isShowingTopWindow = true
@@ -1045,9 +1043,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             }
         }
         
-        var nparts = reparseCurrentCommandArguments(parts)
-        nparts.removeFirst()
-        nparts.removeFirst()
+        let nparts = reparseCurrentCommandArguments(parts)
         
         if nparts.count > 0 {
             self.isShowingTopWindow = true
@@ -1073,9 +1069,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             }
         }
         
-        var nparts = reparseCurrentCommandArguments(parts)
-        nparts.removeFirst()
-        nparts.removeFirst()
+        let nparts = reparseCurrentCommandArguments(parts)
         
         if nparts.count > 0 {
             self.isShowingTopWindow = true
