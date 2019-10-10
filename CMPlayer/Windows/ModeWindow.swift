@@ -187,7 +187,7 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     }
     
     ///
-    /// Returnes content line count
+    /// Returns content line count
     ///
     func getSongsLineCount() -> Int {
         if PlayerPreferences.viewType == ViewType.Default {
@@ -198,6 +198,9 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         }
     }
     
+    ///
+    /// Returns song content line count
+    ///
     func getSongsContentLineCount() -> Int {
         if PlayerPreferences.viewType == ViewType.Default {
             return 1
@@ -207,7 +210,6 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         }
     }
 
-    
     ///
     /// Runs AboutWindow keyboard input and feedback.
     ///

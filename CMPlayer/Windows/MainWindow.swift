@@ -16,14 +16,12 @@ import Cocoa
 /// Represents CMPlayer MainWindow.
 ///
 internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol {
-    
-    
     //
-    // Private properties/constants.
+    // Private properties/constants/variables.
     //
     private var quit: Bool = false
     private var currentCommand: String = ""
-    private let commandsExit: [String] = ["exit", "quit"]
+    private let commandsExit: [String] = ["exit", "quit", "q"]
     private let commandsUpdate: [String] = ["update cmplayer"]
     private let commandsSetViewType: [String] = ["set", "viewtype"]
     private let commandsSetBg: [String] = ["set", "theme"]
