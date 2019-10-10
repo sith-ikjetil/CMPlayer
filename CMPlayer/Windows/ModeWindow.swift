@@ -18,15 +18,17 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     ///
     /// Private properties/constants.
     ///
-    private var modeIndex: Int = 0
+    //private var modeIndex: Int = 0
     private var modeText: [String] = []
     private var inMode: Bool = false
+    private var searchResult: [SongEntry] = g_searchResult
+    private var searchIndex: Int = 0
     
     ///
     /// Shows this AboutWindow on screen.
     ///
     func showWindow() -> Void {
-        self.modeIndex = 0
+        self.searchIndex = 0
         self.updateModeText()
         
         g_tscpStack.append(self)
@@ -67,6 +69,8 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             }
             i += 1
         }
+        
+        self.modeText.append(" ");
     }
     
     ///
@@ -82,32 +86,101 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         MainWindow.renderHeader(showTime: false)
         
         let bgColor = getThemeBgColor()
+        let songNoColor = ConsoleColor.cyan
+        
         Console.printXY(1,3,":: MODE ::", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         Console.printXY(1,4,"mode is: \((!self.inMode) ? "off" : "on")", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        var index_screen_lines: Int = 5
-        var index_search: Int = modeIndex
-        let max = modeIndex + 21
-        while index_search < max {
-            if index_screen_lines == 22 {
-                break
+        if PlayerPreferences.viewType == ViewType.Default {
+            var index_screen_lines: Int = 5
+            var index_search: Int = searchIndex
+            let max = searchIndex + 21
+            while index_search < max {
+                if index_screen_lines == 22 {
+                    break
+                }
+                
+                if index_search > ((self.modeText.count + self.searchResult.count) - 1) {
+                    break
+                }
+                
+                if index_search < self.modeText.count {
+                    let mt = self.modeText[index_search]
+                    
+                    if mt.hasPrefix(" ::") {
+                        Console.printXY(1, index_screen_lines, mt, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    }
+                    else {
+                        Console.printXY(1, index_screen_lines, mt, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                    }
+                }
+                else {
+                    if index_search == self.modeText.count {
+                        index_screen_lines += 1
+                    }
+                    
+                    let se = self.searchResult[index_search-self.modeText.count]
+                
+                    Console.printXY(1, index_screen_lines, "\(se.songNo) ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                
+                    Console.printXY(10, index_screen_lines, "\(se.artist)", g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+
+                    Console.printXY(43, index_screen_lines, "\(se.title)", g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                
+                    Console.printXY(76, index_screen_lines, itsRenderMsToFullString(se.duration, false), g_fieldWidthDuration, .ignore, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                }
+                index_screen_lines += 1
+                index_search += 1
             }
-            
-            if index_search > modeText.count - 1 {
-                break
+        }
+        else if PlayerPreferences.viewType == ViewType.Details {
+            var index_screen_lines: Int = 5
+            var index_search: Int = searchIndex
+            let max = searchIndex + g_windowContentLineCount
+            while index_search < max {
+                if index_screen_lines >= 22 {
+                    break
+                }
+                
+                if index_search > ((self.modeText.count + self.searchResult.count) - 1) {
+                    break
+                }
+                
+                if index_search < self.modeText.count {
+                    let mt = self.modeText[index_search]
+                    
+                    if mt.hasPrefix(" ::") {
+                        Console.printXY(1, index_screen_lines, mt, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    }
+                    else {
+                        Console.printXY(1, index_screen_lines, mt, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                    }
+                    
+                    index_screen_lines += 1
+                    index_search += 1
+                }
+                else {
+                    let song = self.searchResult[index_search-self.modeText.count]
+                
+                    Console.printXY(1, index_screen_lines, String(song.songNo)+" ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, songNoColor, ConsoleColorModifier.bold)
+                    Console.printXY(1, index_screen_lines+1, " ", g_fieldWidthSongNo+1, .right, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    
+                    Console.printXY(10, index_screen_lines, song.artist, g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    Console.printXY(10, index_screen_lines+1, song.albumName, g_fieldWidthArtist, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    
+                    Console.printXY(43, index_screen_lines, song.title, g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    Console.printXY(43, index_screen_lines+1, song.genre, g_fieldWidthTitle, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    
+                    let timeString: String = itsRenderMsToFullString(song.duration, false)
+                    let endTimePart: String = String(timeString[timeString.index(timeString.endIndex, offsetBy: -5)..<timeString.endIndex])
+                    Console.printXY(76, index_screen_lines, endTimePart, g_fieldWidthDuration, .ignore, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    
+                    Console.printXY(76, index_screen_lines+1, " ", g_fieldWidthDuration, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                    
+                    index_screen_lines += 2
+                    index_search += 1
+                }
             }
-            
-            let se = modeText[index_search]
-            
-            if !se.hasPrefix(" ::") {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
-            }
-            else {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-            }
-            
-            index_screen_lines += 1
-            index_search += 1
         }
         
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
@@ -117,48 +190,88 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     }
     
     ///
+    /// Returnes content line count
+    ///
+    func getSongsLineCount() -> Int {
+        if PlayerPreferences.viewType == ViewType.Default {
+            return g_windowContentLineCount
+        }
+        else {
+            return g_windowContentLineCount / 2
+        }
+    }
+    
+    func getSongsContentLineCount() -> Int {
+        if PlayerPreferences.viewType == ViewType.Default {
+            return 1
+        }
+        else {
+            return 2
+        }
+    }
+    
+    ///
     /// Runs AboutWindow keyboard input and feedback.
     ///
     func run() -> Void {
-        self.modeIndex = 0
+        
+        self.searchIndex = 0
+        //self.modeIndex = 0
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
-            if (self.modeIndex + 17) < self.modeText.count {
-                self.modeIndex += 1
+            if self.searchIndex < ((self.modeText.count + self.searchResult.count) - self.getSongsLineCount() - 1) {
+                self.searchIndex += 1
                 self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_UP.rawValue, closure: { () -> Bool in
-            if self.modeIndex > 0 {
-                self.modeIndex -= 1
+            if self.searchIndex >= 1 {
+                self.searchIndex -= 1
                 self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
-            if self.modeIndex > 0 && self.modeText.count > g_windowContentLineCount{
-                if self.modeIndex - g_windowContentLineCount > 0 {
-                    self.modeIndex -= g_windowContentLineCount
-                }
-                else {
-                    self.modeIndex = 0
-                }
+            var n: Int = (self.modeText.count - 1) - self.searchIndex
+            if n < 0 {
+                n = 0
+            }
+            else if n > g_windowContentLineCount {
+                n = g_windowContentLineCount
+            }
+            let m: Int = n + (g_windowContentLineCount - n)/2
+            
+            if (self.searchIndex - m) >= 0 {
+                self.searchIndex -= m
+                self.renderWindow()
+            }
+            else {
+                self.searchIndex = 0
                 self.renderWindow()
             }
             return false
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
-            if self.modeIndex >= 0 && self.modeText.count > g_windowContentLineCount {
-                if self.modeIndex + g_windowContentLineCount < self.modeText.count - g_windowContentLineCount {
-                    self.modeIndex += g_windowContentLineCount
-                }
-                else {
-                    self.modeIndex = self.modeText.count - g_windowContentLineCount
-                }
+            var n: Int = self.modeText.count - self.searchIndex
+            if n < 0 {
+                n = 0
+            }
+            else if n > g_windowContentLineCount {
+                n = g_windowContentLineCount
+            }
+            let m: Int = n + (g_windowContentLineCount - n)/2
+            
+            if (self.searchIndex + m + ((n==0) ? 1 : 0)) >= ((self.modeText.count+self.searchResult.count) - self.getSongsLineCount()) {
+                self.searchIndex = ((self.modeText.count+self.searchResult.count)) - self.getSongsLineCount() - 1
                 self.renderWindow()
             }
+            else {
+                self.searchIndex += m + ((n==0) ? 1 : 0)
+                self.renderWindow()
+            }
+        
             return false
         })
         keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
