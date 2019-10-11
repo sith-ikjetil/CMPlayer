@@ -1,2 +1,2 @@
 # CMPlayer
-Check out this music player for macOS on it's web page http://www.cmplayer.org
+This is a console music player for macOS. Find it also downloadable on it's web page http://www.cmplayer.org
