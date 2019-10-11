@@ -54,6 +54,7 @@ internal class PlayerPreferences {
     //
     static let preferencesFilename: String = "CMPlayer.Preferences.xml"
     static var musicRootPath: [String] = []
+    static var exclusionPaths: [String] = []
     static var musicFormats: String = "mp3;mp4;m4a;wav"
     static var autoplayOnStartup: Bool = true
     static var crossfadeSongs: Bool = true
@@ -119,6 +120,14 @@ internal class PlayerPreferences {
                         self.musicRootPath.append(path)
                     }
                 }
+                
+                let xeExclusionPaths = xeGeneral.elements(forName: "exclusionPath")
+                for p in xeExclusionPaths {
+                    let path = p.stringValue ?? ""
+                    if path.count > 0 {
+                        self.exclusionPaths.append(path)
+                    }
+                }
             }
             
             // log
@@ -182,6 +191,12 @@ internal class PlayerPreferences {
             let xeMusicRootPath: XMLElement = XMLElement(name: "musicRootPath")
             xeMusicRootPath.setStringValue(path, resolvingEntities: true)
             xeGeneral.addChild(xeMusicRootPath)
+        }
+        
+        for path in self.exclusionPaths {
+            let xeExclusionPath: XMLElement = XMLElement(name: "exclusionPath")
+            xeExclusionPath.setStringValue(path, resolvingEntities: true)
+            xeGeneral.addChild(xeExclusionPath)
         }
         
         let xnMusicFormats: XMLNode = XMLNode(kind: XMLNode.Kind.attribute)

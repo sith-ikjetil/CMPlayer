@@ -298,7 +298,10 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                          PlayerCommand(commands: [["repaint","redraw"]], closure: self.onCommandRepaint),
                          PlayerCommand(commands: [["add", "mrp"]], closure: self.onCommandAddMusicRootPath),
                          PlayerCommand(commands: [["remove", "mrp"]], closure: self.onCommandRemoveMusicRootPath),
-                         PlayerCommand(commands: [["clear mrp"]], closure: self.onCommandClearMusicRootPath),
+                         PlayerCommand(commands: [["clear", "mrp"]], closure: self.onCommandClearMusicRootPath),
+                         PlayerCommand(commands: [["add", "ep"]], closure: self.onCommandAddExclusionPath),
+                         PlayerCommand(commands: [["remove", "ep"]], closure: self.onCommandRemoveExclusionPath),
+                         PlayerCommand(commands: [["clear", "ep"]], closure: self.onCommandClearExclusionPath),
                          PlayerCommand(commands: [["set", "cft"]], closure: self.onCommandSetCrossfadeTimeInSeconds),
                          PlayerCommand(commands: [["set", "mf"]], closure: self.onCommandSetMusicFormats),
                          PlayerCommand(commands: [["enable", "crossfade"]], closure: self.onCommandEnableCrossfade),
@@ -628,6 +631,16 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     }
     
     ///
+    /// Add path to exclusion paths.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandAddExclusionPath(parts: [String]) -> Void {
+        PlayerPreferences.exclusionPaths.append(parts[0])
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
     /// Remove root path.
     ///
     /// parameter parts: command array.
@@ -637,6 +650,23 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         while i < PlayerPreferences.musicRootPath.count {
             if PlayerPreferences.musicRootPath[i] == parts[0] {
                 PlayerPreferences.musicRootPath.remove(at: i)
+                PlayerPreferences.savePreferences()
+                break
+            }
+            i += 1
+        }
+    }
+    
+    ///
+    /// Remove exclustion path.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandRemoveExclusionPath(parts: [String]) -> Void {
+        var i: Int = 0
+        while i < PlayerPreferences.exclusionPaths.count {
+            if PlayerPreferences.exclusionPaths[i] == parts[0] {
+                PlayerPreferences.exclusionPaths.remove(at: i)
                 PlayerPreferences.savePreferences()
                 break
             }
@@ -751,6 +781,16 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     ///
     func onCommandClearMusicRootPath(parts: [String]) -> Void {
         PlayerPreferences.musicRootPath.removeAll()
+        PlayerPreferences.savePreferences()
+    }
+    
+    ///
+    /// Clear music root paths.
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandClearExclusionPath(parts: [String]) -> Void {
+        PlayerPreferences.exclusionPaths.removeAll()
         PlayerPreferences.savePreferences()
     }
     

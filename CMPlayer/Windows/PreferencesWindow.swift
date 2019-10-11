@@ -61,6 +61,17 @@ internal class PreferencesWindow : TerminalSizeHasChangedProtocol, PlayerWindowP
             }
         }
         
+        self.preferencesText.append(" Exclusion Paths")
+        if PlayerPreferences.exclusionPaths.count == 0 {
+            self.preferencesText.append(" :: ")
+        }
+        else {
+            for path in PlayerPreferences.exclusionPaths
+            {
+                self.preferencesText.append(" :: \(path)")
+            }
+        }
+        
         self.preferencesText.append(" Music Formats")
         self.preferencesText.append(" :: \(PlayerPreferences.musicFormats)")
         self.preferencesText.append(" Enable Autoplay On Startup")
