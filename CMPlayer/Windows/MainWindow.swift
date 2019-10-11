@@ -282,14 +282,13 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                          PlayerCommand(commands: [["replay"]], closure: self.onCommandReplay),
                          PlayerCommand(commands: [["play"]], closure: self.onCommandPlay),
                          PlayerCommand(commands: [["pause"]], closure: self.onCommandPause),
-                         PlayerCommand(commands: [["pause"]], closure: self.onCommandPause),
                          PlayerCommand(commands: [["resume"]], closure: self.onCommandResume),
-                         PlayerCommand(commands: [["search"]], closure: self.onCommandSearch),
                          PlayerCommand(commands: [["search", "artist"]], closure: self.onCommandSearchArtist),
                          PlayerCommand(commands: [["search", "title"]], closure: self.onCommandSearchTitle),
                          PlayerCommand(commands: [["search", "album"]], closure: self.onCommandSearchAlbum),
                          PlayerCommand(commands: [["search", "genre"]], closure: self.onCommandSearchGenre),
                          PlayerCommand(commands: [["search", "year"]], closure: self.onCommandSearchYear),
+                         PlayerCommand(commands: [["search"]], closure: self.onCommandSearch),
                          PlayerCommand(commands: [["mode","off"], ["clear","mode"], ["mo"], ["cm"]], closure: self.onCommandClearMode),
                          PlayerCommand(commands: [["about"]], closure: self.onCommandAbout),
                          PlayerCommand(commands: [["year"]], closure: self.onCommandYear),
@@ -302,12 +301,12 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                          PlayerCommand(commands: [["clear mrp"]], closure: self.onCommandClearMusicRootPath),
                          PlayerCommand(commands: [["set", "cft"]], closure: self.onCommandSetCrossfadeTimeInSeconds),
                          PlayerCommand(commands: [["set", "mf"]], closure: self.onCommandSetMusicFormats),
-                         PlayerCommand(commands: [["enable crossfade"]], closure: self.onCommandEnableCrossfade),
-                         PlayerCommand(commands: [["disable crossfade"]], closure: self.onCommandDisableCrossfade),
-                         PlayerCommand(commands: [["enable aos"]], closure: self.onCommandEnableAutoPlayOnStartup),
-                         PlayerCommand(commands: [["disable aos"]], closure: self.onCommandDisableAutoPlayOnStartup),
+                         PlayerCommand(commands: [["enable", "crossfade"]], closure: self.onCommandEnableCrossfade),
+                         PlayerCommand(commands: [["disable", "crossfade"]], closure: self.onCommandDisableCrossfade),
+                         PlayerCommand(commands: [["enable", "aos"]], closure: self.onCommandEnableAutoPlayOnStartup),
+                         PlayerCommand(commands: [["disable", "aos"]], closure: self.onCommandDisableAutoPlayOnStartup),
                          PlayerCommand(commands: [["reinitialize"]], closure: self.onCommandReinitialize),
-                         PlayerCommand(commands: [["rebuild songno"]], closure: self.onCommandRebuildSongNo),
+                         PlayerCommand(commands: [["rebuild", "songno"]], closure: self.onCommandRebuildSongNo),
                          PlayerCommand(commands: [["genre"]], closure: self.onCommandGenre),
                          PlayerCommand(commands: [["artist"]], closure: self.onCommandArtist),
                          PlayerCommand(commands: [["pref"], ["preferences"]], closure: onCommandPreferences),
@@ -491,16 +490,18 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandReplay(parts: [String]) -> Void {
-        g_lock.lock()
-       
         if g_player.audioPlayerActive == 1 {
+            if ( !g_player.audio1!.isPlaying ) {
+                g_player.resume()
+            }
             g_player.audio1?.currentTime = TimeInterval(exactly: 0.0)!
         }
         else if g_player.audioPlayerActive == 2 {
+            if ( !g_player.audio1!.isPlaying ) {
+                g_player.resume()
+            }
             g_player.audio2?.currentTime = TimeInterval(exactly: 0.0)!
         }
-    
-        g_lock.unlock()
     }
     
     ///
@@ -622,7 +623,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// parameter parts: command array.
     ///
     func onCommandAddMusicRootPath(parts: [String]) -> Void {
-        PlayerPreferences.musicRootPath.append(parts[2])
+        PlayerPreferences.musicRootPath.append(parts[0])
         PlayerPreferences.savePreferences()
     }
     
