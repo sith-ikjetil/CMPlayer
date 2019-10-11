@@ -55,6 +55,11 @@ internal class SongEntry {
             throw SongEntryError.PathNotExist
         }
         
+        guard !isPathInExclusionPath(path: url!.path) else {
+            PlayerLog.ApplicationLog?.logError(title: "[SongEntry].init(songNo:,artist:,albumName:,title:,duration:,url:,genre:,recordingYear:,trackNo:)", text: "url in exclusion path:\(url!.path)}")
+            throw SongEntryError.PathInExclusionPath
+        }
+        
         guard duration > 0 else {
             PlayerLog.ApplicationLog?.logWarning(title: "[SongEntry].init(path:songNo:)", text: "Duration was 0. File: \(url!.path)")
             throw SongEntryError.DurationIsZero
@@ -131,6 +136,11 @@ internal class SongEntry {
         guard isPathInMusicRootPath(path: path!.path) else {
             PlayerLog.ApplicationLog?.logError(title: "[SongEntry].init(path:,songNo:)", text: "path not in music root path: \(path!.path)")
             throw SongEntryError.PathNotExist
+        }
+        
+        guard !isPathInExclusionPath(path: path!.path) else {
+            PlayerLog.ApplicationLog?.logError(title: "[SongEntry].init(path:,songNo:)", text: "url in exclusion path:\(path!.path)}")
+            throw SongEntryError.PathInExclusionPath
         }
         
         self.songNo = songNo
