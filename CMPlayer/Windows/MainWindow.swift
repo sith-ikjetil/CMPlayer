@@ -313,6 +313,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                          PlayerCommand(commands: [["genre"]], closure: self.onCommandGenre),
                          PlayerCommand(commands: [["artist"]], closure: self.onCommandArtist),
                          PlayerCommand(commands: [["pref"], ["preferences"]], closure: onCommandPreferences),
+                         PlayerCommand(commands: [["restart"]], closure: onCommandRestart),
                          PlayerCommand(commands: [["#"]], closure: self.onCommandAddSongToPlaylist)]
         
         
@@ -455,7 +456,25 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         return self.commandReturnValue
     }
     
+    ///
+    /// Exits the application
+    ///
+    /// parameter parts: command array.
+    ///
     func onCommandExit(parts: [String]) -> Void {
+        self.commandReturnValue = true
+    }
+    
+    ///
+    /// Restarts the application
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandRestart(parts: [String]) -> Void {
+        let fname:String = CommandLine.arguments.first!
+        
+        let _ = NSWorkspace.shared.openFile(fname)
+        
         self.commandReturnValue = true
     }
     
