@@ -96,13 +96,14 @@ internal class ConsoleKeyboardHandler {
                             b91 = false
                             key += 300 // WE HAVE ARROW KEYS
                         }
-                        
-                        let ch: Character = Character(c)
-                        if (ch.isLetter || ch.isNumber || ch.isWhitespace || ch.isPunctuation || ch.isMathSymbol) && !ch.isNewline {
-                            for handler in self.characterKeyHandlers {
-                                if handler(ch) {
-                                    doRun = false
-                                    break;
+                        else {
+                            let ch: Character = Character(c)
+                            if (ch.isLetter || ch.isNumber || ch.isWhitespace || ch.isPunctuation || ch.isMathSymbol) && !ch.isNewline {
+                                for handler in self.characterKeyHandlers {
+                                    if handler(ch) {
+                                        doRun = false
+                                        break;
+                                    }
                                 }
                             }
                         }
