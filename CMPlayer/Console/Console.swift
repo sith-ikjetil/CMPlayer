@@ -224,6 +224,7 @@ internal class Console {
         Console.echoOff()
         
         signal(SIGTSTP,SIG_IGN)
+        signal(SIGINT,SIG_IGN)
         
         atexit( {
             Console.showCursor()
