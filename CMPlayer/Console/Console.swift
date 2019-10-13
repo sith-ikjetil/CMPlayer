@@ -42,6 +42,7 @@ internal class Console {
     // Private properties/constants.
     //
     static private let concurrentQueue1 = DispatchQueue(label: "cqueue.console.music.player.macos.1.console", attributes: .concurrent)
+    //static private let concurrentQueue2 = DispatchQueue(label: "cqueue.console.music.player.macos.2.console", attributes: .concurrent)
     //static private let sigintSrcSIGINT = DispatchSource.makeSignalSource(signal: Int32(SIGINT), queue: Console.concurrentQueue1)
     //static private let sigintSrcSIGQUIT = DispatchSource.makeSignalSource(signal: Int32(SIGQUIT), queue: Console.concurrentQueue1)
     //static private let sigintSrcSIGILL = DispatchSource.makeSignalSource(signal: Int32(SIGILL), queue: Console.concurrentQueue1)
@@ -59,7 +60,7 @@ internal class Console {
     //static private let sigintSrcSIGTERM = DispatchSource.makeSignalSource(signal: Int32(SIGTERM), queue: Console.concurrentQueue1)
     //static private let sigintSrcSIGURG = DispatchSource.makeSignalSource(signal: Int32(SIGURG), queue: Console.concurrentQueue1)
     //static private let sigintSrcSIGSTOP = DispatchSource.makeSignalSource(signal: Int32(SIGSTOP), queue: Console.concurrentQueue1)
-    //static private let sigintSrcSIGTSTP = DispatchSource.makeSignalSource(signal: Int32(SIGTSTP), queue: Console.concurrentQueue1)
+    //static private let sigintSrcSIGTSTP = DispatchSource.makeSignalSource(signal: Int32(SIGTSTP), queue: Console.concurrentQueue2)
     //static private let sigintSrcSIGCONT = DispatchSource.makeSignalSource(signal: Int32(SIGCONT), queue: Console.concurrentQueue1)
     //static private let sigintSrcSIGCHLD = DispatchSource.makeSignalSource(signal: Int32(SIGCHLD), queue: Console.concurrentQueue1)
     //static private let sigintSrcSIGTTIN = DispatchSource.makeSignalSource(signal: Int32(SIGTTIN), queue: Console.concurrentQueue1)
@@ -221,6 +222,8 @@ internal class Console {
         
         Console.hideCursor()
         Console.echoOff()
+        
+        signal(SIGTSTP,SIG_IGN)
         
         atexit( {
             Console.showCursor()
