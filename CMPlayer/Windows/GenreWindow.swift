@@ -104,7 +104,7 @@ internal class GenreWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
         
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
-        Console.printXY(1,24,"Genre Count: \(g_genres.count.itsToString())", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"\(g_genres.count.itsToString()) Genres", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.gotoXY(80,1)
         print("")

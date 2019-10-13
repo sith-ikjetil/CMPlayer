@@ -180,7 +180,7 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         }
         
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
-        Console.printXY(1,24,"Songs: \(g_searchResult.count.itsToString())", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"\(g_searchResult.count.itsToString()) Songs", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.gotoXY(80,1)
         print("")

@@ -386,7 +386,7 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
             Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         }
         
-        Console.printXY(1,24,"Songs Found: \(self.searchResult.count.itsToString())",80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24,"\(self.searchResult.count.itsToString()) Songs",80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.gotoXY(80,1)
         print("")
