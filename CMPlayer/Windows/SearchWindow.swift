@@ -380,7 +380,7 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
         }
         
         if self.searchResult.count > 0 {
-            Console.printXY(1,23,"PRESS 'SPACEBAR' TO SET SEARCH MODE. PRESS ANY OTHER KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1,23,"PRESS 'SPACEBAR' TO SET MODE. PRESS ANY OTHER KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         }
         else {
             Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
