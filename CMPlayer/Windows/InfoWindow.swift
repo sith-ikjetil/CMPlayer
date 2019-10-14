@@ -44,6 +44,7 @@ internal class InfoWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
     }
     
@@ -90,8 +91,6 @@ internal class InfoWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// Renders screen output. Does clear screen first.
     ///
     func renderWindow() -> Void {
-        Console.clearScreenCurrentTheme()
-        
         if g_rows < 24 || g_cols < 80 {
             return
         }
@@ -100,6 +99,7 @@ internal class InfoWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         
         let bgColor = getThemeBgColor()
         Console.printXY(1,3,":: SONG INFORMATION ::", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,4," ", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = infoIndex
@@ -127,6 +127,7 @@ internal class InfoWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         }
         
         Console.printXY(1,23,"PRESS ANY KEY TO EXIT", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+        Console.printXY(1,24," ", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         Console.gotoXY(80,1)
         print("")
@@ -136,6 +137,7 @@ internal class InfoWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// Runs HelpWindow keyboard input and feedback.
     ///
     func run() -> Void {
+        Console.clearScreenCurrentTheme()
         self.infoIndex = 0
         self.renderWindow()
         

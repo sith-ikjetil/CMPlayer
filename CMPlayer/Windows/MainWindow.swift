@@ -39,7 +39,6 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     ///
     func showWindow() -> Void {
         g_tscpStack.append(self)
-        self.renderWindow()
         self.run()
         g_tscpStack.removeLast()
     }
@@ -268,6 +267,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// Runs MainWindow keyboard input and feedback. Delegation to other windows and command processing.
     ///
     func run() -> Void {
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
         
         //

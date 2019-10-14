@@ -65,7 +65,6 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     func showWindow() -> Void {
         self.helpIndex = 0
         g_tscpStack.append(self)
-        self.renderWindow()
         self.run()
         g_tscpStack.removeLast()
     }
@@ -74,6 +73,7 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
     }
     
@@ -81,8 +81,6 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// Renders screen output. Does clear screen first.
     ///
     func renderWindow() -> Void {
-        Console.clearScreenCurrentTheme()
-        
         if g_rows < 24 || g_cols < 80 {
             return
         }
@@ -91,6 +89,7 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         
         let bgColor = getThemeBgColor()
         Console.printXY(1,3,":: HELP ::", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.yellow, ConsoleColorModifier.bold)
+        Console.printXY(1,4," ", 80, .center, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
         
         var index_screen_lines: Int = 5
         var index_search: Int = helpIndex
@@ -107,10 +106,10 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             let se = helpText[index_search]
             
             if index_search % 2 == 0 {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             }
             else {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             }
             
             index_screen_lines += 1
@@ -129,6 +128,7 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// Runs HelpWindow keyboard input and feedback.
     ///
     func run() -> Void {
+        Console.clearScreenCurrentTheme()
         self.helpIndex = 0
         self.renderWindow()
         

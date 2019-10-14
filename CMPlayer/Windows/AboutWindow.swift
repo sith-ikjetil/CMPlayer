@@ -49,6 +49,7 @@ internal class AboutWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
     }
     
@@ -56,8 +57,6 @@ internal class AboutWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
     /// Renders screen output. Does clear screen first.
     ///
     func renderWindow() -> Void {
-        Console.clearScreenCurrentTheme()
-        
         if g_rows < 24 || g_cols < 80 {
             return
         }
@@ -83,7 +82,7 @@ internal class AboutWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
     
             let se = self.aboutText[index_search]
     
-            Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+            Console.printXY(1, index_screen_lines, se, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
     
             index_screen_lines += 1
             index_search += 1
@@ -99,7 +98,9 @@ internal class AboutWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
     /// Runs AboutWindow keyboard input and feedback.
     ///
     func run() -> Void {
+        Console.clearScreenCurrentTheme()
         self.aboutIndex = 0
+        self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in

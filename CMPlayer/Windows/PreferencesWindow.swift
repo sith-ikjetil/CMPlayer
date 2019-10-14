@@ -41,6 +41,7 @@ internal class PreferencesWindow : TerminalSizeHasChangedProtocol, PlayerWindowP
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
     }
     
@@ -90,8 +91,6 @@ internal class PreferencesWindow : TerminalSizeHasChangedProtocol, PlayerWindowP
     /// Renders screen output. Does clear screen first.
     ///
     func renderWindow() -> Void {
-        Console.clearScreenCurrentTheme()
-        
         if g_rows < 24 || g_cols < 80 {
             return
         }
@@ -116,10 +115,10 @@ internal class PreferencesWindow : TerminalSizeHasChangedProtocol, PlayerWindowP
             let se = preferencesText[index_search]
             
             if se.hasPrefix(" ::") {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.white, ConsoleColorModifier.bold)
             }
             else {
-                Console.printXY(1, index_screen_lines, se, se.count, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+                Console.printXY(1, index_screen_lines, se, 80, .left, " ", bgColor, ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
             }
             
             index_screen_lines += 1
@@ -136,7 +135,9 @@ internal class PreferencesWindow : TerminalSizeHasChangedProtocol, PlayerWindowP
     /// Runs HelpWindow keyboard input and feedback.
     ///
     func run() -> Void {
+        Console.clearScreenCurrentTheme()
         self.preferencesIndex = 0
+        self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in

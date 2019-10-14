@@ -43,6 +43,7 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
     }
     
@@ -77,8 +78,6 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// Renders screen output. Does clear screen first.
     ///
     func renderWindow() -> Void {
-        Console.clearScreenCurrentTheme()
-        
         if g_rows < 24 || g_cols < 80 {
             return
         }
@@ -214,7 +213,7 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     /// Runs AboutWindow keyboard input and feedback.
     ///
     func run() -> Void {
-        
+        Console.clearScreenCurrentTheme()
         self.searchIndex = 0
         //self.modeIndex = 0
         
@@ -295,6 +294,9 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                 
                 if (self.searchIndex + m) >= ((self.modeText.count+self.searchResult.count) - self.getSongsLineCount() - 1) {
                     self.searchIndex = (self.modeText.count+self.searchResult.count) - self.getSongsLineCount() - 1
+                    if self.searchIndex < 0 {
+                        self.searchIndex = 0
+                    }
                     self.renderWindow()
                 }
                 else {
@@ -305,6 +307,9 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             else if PlayerPreferences.viewType == ViewType.Default {
                 if (self.searchIndex + g_windowContentLineCount) >= ((self.modeText.count+self.searchResult.count) - g_windowContentLineCount) {
                     self.searchIndex = (self.modeText.count+self.searchResult.count) - g_windowContentLineCount
+                    if self.searchIndex < 0 {
+                        self.searchIndex = 0
+                    }
                     self.renderWindow()
                 }
                 else {

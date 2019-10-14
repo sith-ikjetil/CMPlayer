@@ -194,6 +194,7 @@ internal class InitializeWindow : TerminalSizeHasChangedProtocol, PlayerWindowPr
     /// Runs HelpWindow keyboard input and feedback.
     ///
     func run() -> Void {
+        Console.clearScreenCurrentTheme()
         while !self.isFinished {
             self.renderWindow()
     

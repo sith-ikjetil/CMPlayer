@@ -32,7 +32,6 @@ internal class SetupWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
     ///
     func showWindow() -> Void {
         g_tscpStack.append(self)
-        self.renderWindow()
         self.run()
         g_tscpStack.removeLast()
     }
@@ -41,6 +40,7 @@ internal class SetupWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
     /// TerminalSizeChangedProtocol method
     ///
     func terminalSizeHasChanged() -> Void {
+        Console.clearScreen()
         self.renderWindow()
     }
     
@@ -50,8 +50,6 @@ internal class SetupWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
     /// parameter path: Path to render on screen.
     ///
     func renderWindow() -> Void {
-        Console.clearScreen()
-        
         if g_rows < 24 || g_cols < 80 {
             return
         }
@@ -78,6 +76,9 @@ internal class SetupWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
     /// returns: Bool. True if path entered, false otherwise.
     ///
     func run() -> Void {
+        Console.clearScreen()
+        self.renderWindow()
+        
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_BACKSPACE.rawValue, closure: { () -> Bool in
             if self.path.count > 0 {
