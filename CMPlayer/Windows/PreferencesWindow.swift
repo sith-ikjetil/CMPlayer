@@ -154,6 +154,30 @@ internal class PreferencesWindow : TerminalSizeHasChangedProtocol, PlayerWindowP
             }
             return false
         })
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
+            if self.preferencesIndex > 0 && self.preferencesText.count > g_windowContentLineCount {
+                if self.preferencesIndex - g_windowContentLineCount > 0 {
+                    self.preferencesIndex -= g_windowContentLineCount
+                }
+                else {
+                    self.preferencesIndex = 0
+                }
+                self.renderWindow()
+            }
+            return false
+        })
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
+            if self.preferencesIndex >= 0 && self.preferencesText.count > g_windowContentLineCount {
+                if self.preferencesIndex + g_windowContentLineCount < self.preferencesText.count - g_windowContentLineCount {
+                    self.preferencesIndex += g_windowContentLineCount
+                }
+                else {
+                    self.preferencesIndex = self.preferencesText.count - g_windowContentLineCount
+                }
+                self.renderWindow()
+            }
+            return false
+        })
         keyHandler.addUnknownKeyHandler(closure: { (key: UInt32) -> Bool in
             return true
         })
