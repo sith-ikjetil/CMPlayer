@@ -52,7 +52,7 @@ internal class SongEntry {
         
         guard isPathInMusicRootPath(path: url!.path) else {
             PlayerLog.ApplicationLog?.logError(title: "[SongEntry].init(songNo:,artist:,albumName:,title:,duration:,url:,genre:,recordingYear:,trackNo:)", text: "url not in music root path:\(url!.path)}")
-            throw SongEntryError.PathNotExist
+            throw SongEntryError.PathNotInMusicRootPath
         }
         
         guard !isPathInExclusionPath(path: url!.path) else {
@@ -135,7 +135,7 @@ internal class SongEntry {
         
         guard isPathInMusicRootPath(path: path!.path) else {
             PlayerLog.ApplicationLog?.logError(title: "[SongEntry].init(path:,songNo:)", text: "path not in music root path: \(path!.path)")
-            throw SongEntryError.PathNotExist
+            throw SongEntryError.PathNotInMusicRootPath
         }
         
         guard !isPathInExclusionPath(path: path!.path) else {

@@ -74,6 +74,7 @@ internal class PlayerLibrary {
         if FileManager.default.fileExists(atPath: fileUrl.path) {
             do {
                 self.dictionary.removeAll()
+                self.library.removeAll()
                 
                 let xd: XMLDocument = try XMLDocument(contentsOf: fileUrl)
                 let xeSongLibrary = xd.rootElement()!
@@ -123,7 +124,7 @@ internal class PlayerLibrary {
                         self.nextSongNo = songNo + 1
                     }
                     
-                    if isPathInMusicRootPath(path: url) && !isPathInExclusionPath(path: url) {
+                    //if isPathInMusicRootPath(path: url) && !isPathInExclusionPath(path: url) {
                         do
                         {
                             let se = try SongEntry(songNo: songNo, artist: artist, albumName: albumName, title: title, duration: duration, url: URL(fileURLWithPath: url), genre: genre, recordingYear: recordingYear, trackNo: trackNo)
@@ -135,7 +136,7 @@ internal class PlayerLibrary {
                         catch {
                             
                         }
-                    }
+                    //}
                 }
             }
             catch {

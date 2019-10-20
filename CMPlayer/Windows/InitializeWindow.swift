@@ -107,6 +107,11 @@ internal class InitializeWindow : TerminalSizeHasChangedProtocol, PlayerWindowPr
     func findSongs(path: String) -> [String]
     {
         var results: [String] = []
+        
+        if !isPathInMusicRootPath(path: path) || isPathInExclusionPath(path: path) {
+            return results
+        }
+        
         do
         {
             let result = try FileManager.default.contentsOfDirectory(atPath: path)
