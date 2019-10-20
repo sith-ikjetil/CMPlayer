@@ -20,6 +20,7 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
     //
     private var searchIndex: Int = 0
     private var partsYear: [String] = []
+    private var modeOff: Bool = false
     
     //
     // Public properties/variables/constants
@@ -41,11 +42,11 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
     /// Perform narrow search from arguments.
     ///
     func performNarrowSearch(terms: [String], type: SearchType) -> Void {
-        for t in g_searchType {
-            if t == type {
-                return  // Can only search for type once
-            }
-        }
+        //for t in g_searchType {
+        //    if t == type {
+        //        return  // Can only search for type once
+        //    }
+        //}
         
         self.searchResult.removeAll(keepingCapacity: false)
         self.partsYear.removeAll()
@@ -169,7 +170,14 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
     /// parameter terms: Array of search terms.
     ///
     func performSearch(terms: [String], type: SearchType) -> Void {
-        if g_searchResult.count > 0 {
+        for t in g_searchType {
+            if t == type {
+                modeOff = true
+                break;
+            }
+        }
+        
+        if !modeOff && g_searchResult.count > 0 {
             performNarrowSearch(terms: terms, type: type)
             return
         }
@@ -513,6 +521,16 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_SPACEBAR.rawValue, closure: { () -> Bool in
             if self.searchResult.count > 0 {
+                
+                if self.modeOff {
+                    g_lock.lock()
+                    g_searchType.removeAll()
+                    g_searchResult.removeAll()
+                    g_modeSearch.removeAll()
+                    g_modeSearchStats.removeAll()
+                    g_lock.unlock()
+                }
+                
                 if  self.type == SearchType.ArtistOrTitle ||
                     self.type == SearchType.Artist ||
                     self.type == SearchType.Title ||
