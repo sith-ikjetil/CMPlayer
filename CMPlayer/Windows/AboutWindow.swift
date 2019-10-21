@@ -38,7 +38,7 @@ internal class AboutWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
         self.aboutIndex = 0
         
         g_tscpStack.append(self)
-        
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
         self.run()
         

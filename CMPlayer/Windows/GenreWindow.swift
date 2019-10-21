@@ -29,7 +29,7 @@ internal class GenreWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
         self.updateGenreText()
         
         g_tscpStack.append(self)
-        
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
         self.run()
         

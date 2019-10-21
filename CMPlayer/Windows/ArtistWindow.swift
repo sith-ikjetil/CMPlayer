@@ -30,7 +30,7 @@ internal class ArtistWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
         self.updateArtistText()
         
         g_tscpStack.append(self)
-        
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
         self.run()
         

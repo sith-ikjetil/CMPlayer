@@ -29,7 +29,7 @@ internal class YearWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         self.updateRecordingYearsText()
         
         g_tscpStack.append(self)
-        
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
         self.run()
         

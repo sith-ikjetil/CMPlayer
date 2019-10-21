@@ -33,6 +33,7 @@ internal class ModeWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         
         g_tscpStack.append(self)
         
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
         self.run()
         

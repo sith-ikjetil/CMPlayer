@@ -67,6 +67,7 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     func showWindow() -> Void {
         self.helpIndex = 0
         g_tscpStack.append(self)
+        Console.clearScreenCurrentTheme()
         self.run()
         g_tscpStack.removeLast()
     }

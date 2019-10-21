@@ -33,7 +33,7 @@ internal class InfoWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         self.updateInfoText()
         
         g_tscpStack.append(self)
-        
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
         self.run()
         

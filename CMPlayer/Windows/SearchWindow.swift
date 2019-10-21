@@ -303,6 +303,7 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
     ///
     func showWindow() -> Void {
         g_tscpStack.append(self)
+        Console.clearScreenCurrentTheme()
         self.renderWindow()
         self.run()
         g_tscpStack.removeLast()
