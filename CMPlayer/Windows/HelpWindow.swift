@@ -21,9 +21,9 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     private var helpIndex: Int = 0
     private let helpText: [String] = [" exit, quit, q", " :: exits application",
                                       " next, skip, n, s, 'TAB'-key", " :: plays next song",
-                                      " play, pl", " :: plays music",
+                                      " play, p", " :: plays music",
                                       " pause, p", " :: pauses music",
-                                      " resume, r", " :: resumes music playback",
+                                      //" resume", " :: resumes music playback",
                                       " search [<words>]", " :: searches artist and title for a match. case insensitive",
                                       " search artist [<words>]", " :: searches artist for a match. case insensitive",
                                       " search title [<words>]", " :: searches title for a match. case insensitive",

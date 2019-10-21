@@ -280,9 +280,9 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                          PlayerCommand(commands: [["next"], ["skip"], ["n"], ["s"]], closure: self.onCommandNextSong),
                          PlayerCommand(commands: [["help"], ["?"]], closure: self.onCommandHelp),
                          PlayerCommand(commands: [["replay"]], closure: self.onCommandReplay),
-                         PlayerCommand(commands: [["play"], ["pl"]], closure: self.onCommandPlay),
-                         PlayerCommand(commands: [["pause"], ["p"]], closure: self.onCommandPause),
-                         PlayerCommand(commands: [["resume"], ["r"]], closure: self.onCommandResume),
+                         PlayerCommand(commands: [["play"]], closure: self.onCommandPlay),
+                         PlayerCommand(commands: [["pause"]], closure: self.onCommandPause),
+                         PlayerCommand(commands: [["resume"]], closure: self.onCommandResume),
                          PlayerCommand(commands: [["search", "artist"]], closure: self.onCommandSearchArtist),
                          PlayerCommand(commands: [["search", "title"]], closure: self.onCommandSearchTitle),
                          PlayerCommand(commands: [["search", "album"]], closure: self.onCommandSearchAlbum),
@@ -312,8 +312,9 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                          PlayerCommand(commands: [["rebuild", "songno"]], closure: self.onCommandRebuildSongNo),
                          PlayerCommand(commands: [["genre"]], closure: self.onCommandGenre),
                          PlayerCommand(commands: [["artist"]], closure: self.onCommandArtist),
-                         PlayerCommand(commands: [["pref"], ["preferences"]], closure: onCommandPreferences),
-                         PlayerCommand(commands: [["restart"]], closure: onCommandRestart),
+                         PlayerCommand(commands: [["pref"], ["preferences"]], closure: self.onCommandPreferences),
+                         PlayerCommand(commands: [["restart"]], closure: self.onCommandRestart),
+                         PlayerCommand(commands: [["p"]], closure: self.onCommandPlayOrPause),
                          PlayerCommand(commands: [["#"]], closure: self.onCommandAddSongToPlaylist)]
         
         
@@ -561,6 +562,37 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     ///
     func onCommandPause(parts: [String]) -> Void {
         g_player.pause()
+    }
+    
+    ///
+    /// Play or pause playback
+    ///
+    /// parameter parts: command array.
+    ///
+    func onCommandPlayOrPause(parts: [String]) -> Void {
+        if g_player.audioPlayerActive == -1 {
+            self.onCommandPlay(parts: parts)
+        }
+        else if g_player.audioPlayerActive == 1 {
+            if let player = g_player.audio1 {
+                if player.isPlaying {
+                    self.onCommandPause(parts: parts)
+                }
+                else {
+                    self.onCommandPlay(parts: parts)
+                }
+            }
+        }
+        else if g_player.audioPlayerActive == 2 {
+            if let player = g_player.audio2 {
+                if player.isPlaying {
+                    self.onCommandPause(parts: parts)
+                }
+                else {
+                    self.onCommandPlay(parts: parts)
+                }
+            }
+        }
     }
     
     ///
