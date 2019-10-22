@@ -22,6 +22,7 @@ internal enum ConsoleKey : UInt32 {
     case KEY_RIGHT = 367
     case KEY_LEFT = 368
     case KEY_HTAB = 9
+    case KEY_SHIFT_HTAB = 390
     case KEY_SPACEBAR = 32
     case KEY_EOF = 0
 }

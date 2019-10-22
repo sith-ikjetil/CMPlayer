@@ -315,6 +315,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                          PlayerCommand(commands: [["pref"], ["preferences"]], closure: self.onCommandPreferences),
                          PlayerCommand(commands: [["restart"]], closure: self.onCommandRestart),
                          PlayerCommand(commands: [["p"]], closure: self.onCommandPlayOrPause),
+                         PlayerCommand(commands: [["prev"]], closure: self.onCommandPrev),
                          PlayerCommand(commands: [["#"]], closure: self.onCommandAddSongToPlaylist)]
         
         
@@ -394,6 +395,10 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_HTAB.rawValue, closure: { () -> Bool in
             _ = self.processCommand(command: "skip")
+            return false
+        })
+        keyHandler.addKeyHandler(key: ConsoleKey.KEY_SHIFT_HTAB.rawValue, closure: { () -> Bool in
+            _ = self.processCommand(command: "prev")
             return false
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_ENTER.rawValue, closure: { () -> Bool in
@@ -496,6 +501,12 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             PlayerPreferences.savePreferences()
         }
         self.renderWindow()
+    }
+    
+    func onCommandPrev(parts: [String]) {
+        g_lock.lock()
+        g_player.prev()
+        g_lock.unlock()
     }
     
     ///

@@ -26,6 +26,7 @@ internal class Player {
     var durationAudioPlayer1: UInt64 = 0
     var durationAudioPlayer2: UInt64 = 0
     var isPaused: Bool = false
+    var isPrev: Bool = false
     
     //
     // Private properties/constants.
@@ -216,6 +217,21 @@ internal class Player {
     }
     
     ///
+    /// Plays previous song
+    ///
+    func prev() {
+        guard g_playedSongs.count > 0 else {
+            return
+        }
+        
+        self.isPrev = true
+    
+        self.skip(play: true, crossfade: false)
+        
+        self.isPrev = false
+    }
+    
+    ///
     /// Skips audio playback to next item in playlist.
     ///
     /// parameter crossfade: True if skip should crossfade. False otherwise.
@@ -225,7 +241,18 @@ internal class Player {
             return
         }
         
-        g_playlist.removeFirst()
+        if self.isPrev && g_playedSongs.count > 0 {
+            g_playlist.insert( g_playedSongs.last!, at: 0)
+            g_playedSongs.removeLast()
+        }
+        else {
+            let pse = g_playlist.removeFirst()
+            g_playedSongs.append(pse)
+            while g_playedSongs.count > 100 {
+                g_playedSongs.remove(at: 0)
+            }
+        }
+        
         if g_playlist.count < 2 {
             if g_modeSearch.count > 0 && g_searchResult.count > 0 {
                 let s = g_searchResult.randomElement()!

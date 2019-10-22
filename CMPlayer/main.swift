@@ -19,7 +19,7 @@ internal let g_fieldWidthArtist: Int = 33
 internal let g_fieldWidthTitle: Int = 33
 internal let g_fieldWidthDuration: Int = 5
 internal let g_player: Player = Player()
-internal let g_versionString: String = "1.9.1.21"
+internal let g_versionString: String = "1.9.1.22"
 internal let g_lock = NSLock()
 internal let g_windowContentLineCount = 17
 
@@ -27,6 +27,7 @@ internal let g_windowContentLineCount = 17
 // Global variables/properties
 //
 internal var g_songs: [SongEntry] = []
+internal var g_playedSongs: [SongEntry] = []
 internal var g_playlist: [SongEntry] = []
 internal var g_genres: [String: [SongEntry]] = [:]
 internal var g_artists: [String: [SongEntry]] = [:]
