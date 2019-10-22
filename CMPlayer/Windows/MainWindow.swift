@@ -393,7 +393,7 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             return false
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_HTAB.rawValue, closure: { () -> Bool in
-            self.onCommandNextSong(parts: [])
+            _ = self.processCommand(command: "skip")
             return false
         })
         keyHandler.addKeyHandler(key: ConsoleKey.KEY_ENTER.rawValue, closure: { () -> Bool in
