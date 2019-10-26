@@ -77,6 +77,8 @@ internal class Player {
             return
         }
         
+        PlayerLog.ApplicationLog?.logInformation(title: "[Player].play", text: "Playing index \(playlistIndex), file \(g_playlist[playlistIndex].fileURL?.path ?? "--unknown")")
+        
         self.audioPlayerActive = player
         if player == 1 {
             if self.audio1 == nil {
