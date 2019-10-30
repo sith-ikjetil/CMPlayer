@@ -30,6 +30,8 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     private var addendumText: String = ""
     private var updateFileName: String = ""
     private var isTooSmall: Bool = false
+    private var showCursor: Bool = false
+    private var cursorTimeout: UInt64 = 0
     var exitValue: Int32 = 0
     
     ///
@@ -169,10 +171,16 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
     func renderCommandLine() -> Void
     {
         var text = self.currentCommand
-        if text.count > 77 {
-            text = String(text[text.index(text.endIndex, offsetBy: -77)..<text.endIndex])
+        if text.count > 76 {
+            text = String(text[text.index(text.endIndex, offsetBy: -76)..<text.endIndex])
         }
-        Console.printXY(1,23,">: " + text, 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
+        
+        var cursor = ""
+        if self.showCursor {
+            cursor = "_"
+        }
+        
+        Console.printXY(1,23,">: \(text)\(cursor)", 80, .left, " ", getThemeBgColor(), ConsoleColorModifier.none, ConsoleColor.cyan, ConsoleColorModifier.bold)
     }
     
     ///
@@ -377,6 +385,14 @@ internal class MainWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                 let second: Double = 1_000_000
                 usleep(useconds_t(0.150 * second))
                 MainWindow.timeElapsedMs += 150
+                self.cursorTimeout += 150
+                if self.cursorTimeout >= 600 {
+                    self.cursorTimeout = 0
+                    self.showCursor = true
+                }
+                else {
+                    self.showCursor = false
+                }
             }
         }
         
