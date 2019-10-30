@@ -39,7 +39,7 @@ internal class Player {
     func initialize() -> Void {
         PlayerDirectories.ensureDirectoriesExistence()
         PlayerPreferences.ensureLoadPreferences()
-        PlayerLog.ApplicationLog = PlayerLog(autoSave: true, loadOldLog: (PlayerPreferences.logApplicationStartLoadType == LogApplicationStartLoadType.LoadOldLog))
+        PlayerLog.ApplicationLog = PlayerLog(autoSave: false, loadOldLog: (PlayerPreferences.logApplicationStartLoadType == LogApplicationStartLoadType.DoNotLoadOldLog))
         
         PlayerLog.ApplicationLog?.logInformation(title: "CMPlayer", text: "Application Started.")
         
