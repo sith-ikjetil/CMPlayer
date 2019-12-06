@@ -70,7 +70,7 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
             }
         }
         else if type == SearchType.RecordedYear {
-            let currentYear = Calendar.current.component(.year, from: Date())
+            let currentYear = Calendar.current.component(.year, from: Date()) + 1
             var index: Int = 0
             for year in terms {
                 let yearsSubs = year.split(separator: "-")
@@ -204,7 +204,7 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
             }
         }
         else if type == SearchType.RecordedYear {
-            let currentYear = Calendar.current.component(.year, from: Date())
+            let currentYear = Calendar.current.component(.year, from: Date()) + 1
             var index: Int = 0
             for year in terms {
                 let yearsSubs = year.split(separator: "-")
