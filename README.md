@@ -1,5 +1,5 @@
 # CMPlayer
-License: **GPL-3.0-or-later**
+License: **GPL-3.0-or-later**  
 This is a console music player for macOS. Find it also downloadable on it's web page http://www.cmplayer.org
 
 The following commands are possible as of this writing:
