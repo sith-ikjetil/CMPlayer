@@ -62,7 +62,7 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                                       " restart", " :: restarts the application. picks up changes when files are removed or added"]
     
     ///
-    /// Shows this HelpWindow on screen.
+    /// Shows this HelpWindow on screen.q
     ///
     func showWindow() -> Void {
         self.helpIndex = 0

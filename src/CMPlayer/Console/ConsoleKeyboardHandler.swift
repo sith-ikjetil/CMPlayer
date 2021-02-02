@@ -118,6 +118,9 @@ internal class ConsoleKeyboardHandler {
         }
     }
     
+    private var inKey27: Bool = false
+    private var inKey79: Bool = false
+    
     ///
     /// Processes a keystroke from getchar()
     ///
@@ -126,6 +129,22 @@ internal class ConsoleKeyboardHandler {
     /// returns: True if eventhandler processed the keystroke and eventhandler returned true. False if no eventhandler processed the key. Also false if eventhandler returned false.
     ///
     func processKey(key: UInt32) -> Bool {
+        if !inKey27 {
+            if key == 27 {
+                inKey27 = true
+                return false;
+            }
+        }
+        if !inKey79 {
+            if key == 79 {
+                inKey79 = true;
+                return false;
+            }
+        }
+        
+        inKey27 = false
+        inKey79 = false
+        
         var hit: Bool = false
         for kh in self.keyHandlers {
             if kh.key == key {

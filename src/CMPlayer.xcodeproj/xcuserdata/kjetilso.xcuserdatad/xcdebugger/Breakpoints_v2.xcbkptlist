@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4CB998D1-3AE1-4CD2-B5B2-55AFB83E1618"
-            shouldBeEnabled = "Yes"
+            uuid = "F5FE6014-2A85-4633-A53B-A632A2E789BA"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CMPlayer/Console/ConsoleKeyboardHandler.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "run()"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "processKey(key:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
