@@ -440,7 +440,7 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
         self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_DOWN1.rawValue, ConsoleKey.KEY_DOWN2.rawValue], closure: { () -> Bool in
             if PlayerPreferences.viewType == ViewType.Details {
                 if self.searchIndex < (self.searchResult.count - self.getSongsLineCount() - 1) {
                     self.searchIndex += 1
@@ -455,14 +455,14 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_UP.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_UP1.rawValue, ConsoleKey.KEY_UP2.rawValue], closure: { () -> Bool in
             if self.searchIndex >= 1 {
                 self.searchIndex -= 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_LEFT1.rawValue, ConsoleKey.KEY_LEFT2.rawValue], closure: { () -> Bool in
             if PlayerPreferences.viewType == ViewType.Details {
                 let m: Int = (g_windowContentLineCount)/self.getSongsContentLineCount()
                 
@@ -489,7 +489,7 @@ internal class SearchWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoc
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_RIGHT1.rawValue, ConsoleKey.KEY_RIGHT2.rawValue], closure: { () -> Bool in
             if PlayerPreferences.viewType == ViewType.Details {
                 let m: Int = (g_windowContentLineCount)/self.getSongsContentLineCount()
                 

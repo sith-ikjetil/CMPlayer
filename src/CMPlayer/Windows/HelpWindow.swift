@@ -56,7 +56,7 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
                                       " reinitialize", " :: reinitializes library and should be called after mrp paths are changed",
                                       " info", " :: shows information about first song in playlist",
                                       " info <song no>", " :: show information about song with given song number",
-                                      " update cmplayer", " :: updates cmplayer if new version is found online",
+                                      //" update cmplayer", " :: updates cmplayer if new version is found online",
                                       " set viewtype <type>", " :: sets view type. can be 'default' or 'details'",
                                       " set theme <color>", " :: sets theme color. color can be 'default', 'blue' or 'black'",
                                       " restart", " :: restarts the application. picks up changes when files are removed or added"]
@@ -136,21 +136,21 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
         self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_DOWN1.rawValue, ConsoleKey.KEY_DOWN2.rawValue], closure: { () -> Bool in
             if (self.helpIndex + 17) < self.helpText.count {
                 self.helpIndex += 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_UP.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_UP1.rawValue, ConsoleKey.KEY_UP2.rawValue], closure: { () -> Bool in
             if self.helpIndex > 0 {
                 self.helpIndex -= 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_LEFT1.rawValue, ConsoleKey.KEY_LEFT2.rawValue], closure: { () -> Bool in
             if self.helpIndex > 0  && self.helpText.count > g_windowContentLineCount {
                 if self.helpIndex - g_windowContentLineCount > 0 {
                     self.helpIndex -= g_windowContentLineCount
@@ -162,7 +162,7 @@ internal class HelpWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtocol
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_RIGHT1.rawValue, ConsoleKey.KEY_RIGHT2.rawValue], closure: { () -> Bool in
             if self.helpIndex >= 0  && self.helpText.count > g_windowContentLineCount {
                 if self.helpIndex + g_windowContentLineCount < self.helpText.count - g_windowContentLineCount {
                     self.helpIndex += g_windowContentLineCount

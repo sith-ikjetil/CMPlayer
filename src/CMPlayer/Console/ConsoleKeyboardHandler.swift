@@ -44,6 +44,20 @@ internal class ConsoleKeyboardHandler {
     }
     
     ///
+    /// Adds a closure keyboard handler to input keys from getchar()
+    ///
+    /// parameter key: getchar return value.
+    /// parameter closure: A Keyboard handler for key pressed.
+    ///
+    /// returns: True if ConsoleKeyboardHandler should stop processing keys and return from run. False otherwise.
+    ///
+    func addKeyHandler(key: [UInt32], closure: @escaping () -> Bool) {
+        for k in key {
+            self.keyHandlers[k] = closure
+        }
+    }
+    
+    ///
     /// Adds a closure keyboard handler for given key from getchar() that is not processed with addKeyHandler handler.
     ///
     /// parameter closure: A Closure for handling key pressed.

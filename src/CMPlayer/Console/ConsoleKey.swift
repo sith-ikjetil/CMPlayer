@@ -17,10 +17,14 @@ import Foundation
 internal enum ConsoleKey : UInt32 {
     case KEY_BACKSPACE = 127
     case KEY_ENTER = 10
-    case KEY_UP = 65 //365
-    case KEY_DOWN = 66 //366
-    case KEY_RIGHT = 67 //367
-    case KEY_LEFT = 68 //368
+    case KEY_UP1 = 65
+    case KEY_UP2 = 365
+    case KEY_DOWN1 = 66
+    case KEY_DOWN2 = 366
+    case KEY_RIGHT1 = 67
+    case KEY_RIGHT2 = 367
+    case KEY_LEFT1 = 68
+    case KEY_LEFT2 = 368
     case KEY_HTAB = 9
     case KEY_SHIFT_HTAB = 390
     case KEY_SPACEBAR = 32

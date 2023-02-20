@@ -103,21 +103,21 @@ internal class AboutWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
         self.renderWindow()
         
         let keyHandler: ConsoleKeyboardHandler = ConsoleKeyboardHandler()
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_DOWN.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_DOWN1.rawValue, ConsoleKey.KEY_DOWN2.rawValue], closure: { () -> Bool in
             if (self.aboutIndex + 17) < self.aboutText.count {
                 self.aboutIndex += 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_UP.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_UP1.rawValue, ConsoleKey.KEY_UP2.rawValue], closure: { () -> Bool in
             if self.aboutIndex > 0 {
                 self.aboutIndex -= 1
                 self.renderWindow()
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_LEFT.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_LEFT1.rawValue, ConsoleKey.KEY_LEFT2.rawValue], closure: { () -> Bool in
             if self.aboutIndex > 0 && self.aboutText.count > g_windowContentLineCount {
                 if self.aboutIndex - g_windowContentLineCount > 0 {
                     self.aboutIndex -= g_windowContentLineCount
@@ -129,7 +129,7 @@ internal class AboutWindow : TerminalSizeHasChangedProtocol, PlayerWindowProtoco
             }
             return false
         })
-        keyHandler.addKeyHandler(key: ConsoleKey.KEY_RIGHT.rawValue, closure: { () -> Bool in
+        keyHandler.addKeyHandler(key: [ConsoleKey.KEY_RIGHT1.rawValue, ConsoleKey.KEY_RIGHT2.rawValue], closure: { () -> Bool in
             if self.aboutIndex >= 0 && self.aboutText.count > g_windowContentLineCount {
                 if self.aboutIndex + g_windowContentLineCount < self.aboutText.count - g_windowContentLineCount {
                     self.aboutIndex += g_windowContentLineCount
