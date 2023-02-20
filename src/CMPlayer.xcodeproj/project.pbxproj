@@ -171,9 +171,9 @@
 		D0FD9B56234215D700FB5A40 /* Log */ = {
 			isa = PBXGroup;
 			children = (
+				D0FD9B5B2342167600FB5A40 /* PlayerLogEntry.swift */,
 				D0FD9B57234215EB00FB5A40 /* PlayerLog.swift */,
 				D0FD9B592342165500FB5A40 /* PlayerLogEntryType.swift */,
-				D0FD9B5B2342167600FB5A40 /* PlayerLogEntry.swift */,
 			);
 			path = Log;
 			sourceTree = "<group>";
@@ -395,6 +395,7 @@
 				DEVELOPMENT_TEAM = P788A4MVAS;
 				INFOPLIST_FILE = "$(SRCROOT)/CMPlayer/Info.plist";
 				MARKETING_VERSION = 1.0.0.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = no.ikjetil.cmplayer;
 				PRODUCT_NAME = CMPlayer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
